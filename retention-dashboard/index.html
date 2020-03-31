@@ -7,30 +7,33 @@
   <link rel="stylesheet" type="text/css" href="/style.css" />
 
   <!-- Load required Bootstrap and BootstrapVue CSS -->
-  <link type="text/css" rel="stylesheet" href="http://unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
-  <link type="text/css" rel="stylesheet" href="http://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css" />
+  <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
+  <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css" />
 
   <!-- Load polyfills to support older browsers -->
   <script src="http://polyfill.io/v3/polyfill.min.js?features=es2015%2CIntersectionObserver" crossorigin="anonymous"></script>
 
   <!-- Load Vue followed by BootstrapVue -->
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-  <script src="http://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"></script>
+  <script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"></script>
 
   <!-- Load the following for BootstrapVueIcons support -->
-  <script src="http://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue-icons.min.js"></script>
+  <script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue-icons.min.js"></script>
+
+  <!-- Load VueX -->
+  <script src="https://unpkg.com/vuex"></script>
 
 
   <script type="text/x-template" id="leftnav-template">
     <ul>
-      <li>File one</li>
-      <li>File two</li>
-      <li>File three</li>
+      <li><a href="#" @click.prevent="selectPage('one.csv')">File one</a></li>
+      <li><a href="#" @click.prevent="selectPage('two.csv')">File two</a></li>
+      <li><a href="#" @click.prevent="selectPage('three.csv')">File three</a></li>
     </ul>
   </script>
   <script type="text/x-template" id="filedisplay-template">
     <div>
-      <h1>Display of File One</h1>
+      <h1>Display of {{ filename }}</h1>
       <b-table :items="items" :fields="fields"></b-table>
     </div>
   </script>
@@ -44,8 +47,32 @@
 </div>
 
 <script>
+  const store = new Vuex.Store({
+    state: {
+      current_file: "one.csv"
+    },
+    mutations: {
+      set_file (state, value){
+        state.current_file = value;
+      }
+    },
+    actions: {
+      set_file ({ commit, state }, value) {
+        commit('set_file', value)
+      }
+    }
+  });
+
   Vue.component("leftnav", {
-    template: "#leftnav-template"
+    template: "#leftnav-template",
+    mounted() {
+
+    },
+    methods: {
+      selectPage(page){
+        this.$store.dispatch('set_file', page);
+      }
+    }
   });
 
   Vue.component("filedisplay", {
@@ -79,11 +106,16 @@
         ]
       }
     },
+    computed: {
+      filename (){
+        return this.$store.state.current_file;
+      }
+    }
   });
 
   var app = new Vue({
     el: '#app',
-
+    store
   })
 </script>
 </body>
