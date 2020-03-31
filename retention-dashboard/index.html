@@ -23,6 +23,12 @@
   <!-- Load VueX -->
   <script src="https://unpkg.com/vuex"></script>
 
+  <!--  Load Axios-->
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+  <!-- Load PapaParse CSV parser -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.1.0/papaparse.min.js"></script>
+
 
   <script type="text/x-template" id="leftnav-template">
     <ul>
@@ -49,7 +55,7 @@
 <script>
   const store = new Vuex.Store({
     state: {
-      current_file: "one.csv"
+      current_file: ""
     },
     mutations: {
       set_file (state, value){
@@ -81,34 +87,53 @@
       return {
         fields: [
           {
-            key: 'col1',
+            key: 'has_issue',
             label: "Has retention issue",
             sortable: true
           },
           {
-            key: 'col2',
+            key: 'score',
             label: 'Retention Score',
             sortable: true
           },
           {
-            key: 'col3',
+            key: 'comments',
             label: 'Comments'}
         ],
-        items: [
-          {col1: "yes", col2: 21.2, col3: "longer string of text"},
-          {col1: "no", col2: 79.1, col3: "longer string of text"},
-          {col1: "yes", col2: 21.2, col3: "longer string of text"},
-          {col1: "yes", col2: 41.2, col3: "longer string of text"},
-          {col1: "no", col2: 1.0, col3: "longer string of text"},
-          {col1: "yes", col2: 21.2, col3: "longer string of text"},
-          {col1: "no", col2: 21.2, col3: "longer string of text"},
-
-        ]
+        items: [],
+        csv_data: ""
       }
     },
     computed: {
       filename (){
         return this.$store.state.current_file;
+      }
+    },
+    methods: {
+      load_file(filename){
+        var vue = this;
+        axios.get('/data/' + filename)
+          .then(function(response){
+            vue.csv_data = response.data;
+          })
+        .catch(function (error) {
+          console.log(error)
+        })
+      }
+    },
+    mounted: function(){
+      this.$store.watch(
+              state => state.current_file,
+              (file) => {
+                this.load_file(file)
+              }
+      )
+      this.$store.dispatch('set_file', "one.csv");
+    },
+    watch: {
+      csv_data: function (csv){
+        var parsed_csv = Papa.parse(csv, {header: true});
+        this.items = parsed_csv.data;
       }
     }
   });

@@ -1,0 +1,10 @@
+has_issue,score,comments
+true,3,"Lorem ipsum dolor"
+false,95,"This is my new comment"
+true,12,"eros bibendum elit, nec luctus"
+true,21,"This is my test comment"
+false,3,"This is a comment"
+false,75," eu tempor congue, eros"
+false,13,"habitasse platea dictumst"
+true,75,"This is my comment"
+true,21,"mauris eu nibh euismod gravida"
