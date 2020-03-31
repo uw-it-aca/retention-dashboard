@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+<meta content="utf-8" http-equiv="encoding">
+<head>
+  <title>Retention Dashboard</title>
+  <link rel="stylesheet" type="text/css" href="/style.css" />
+
+  <!-- Load required Bootstrap and BootstrapVue CSS -->
+  <link type="text/css" rel="stylesheet" href="http://unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
+  <link type="text/css" rel="stylesheet" href="http://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css" />
+
+  <!-- Load polyfills to support older browsers -->
+  <script src="http://polyfill.io/v3/polyfill.min.js?features=es2015%2CIntersectionObserver" crossorigin="anonymous"></script>
+
+  <!-- Load Vue followed by BootstrapVue -->
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="http://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"></script>
+
+  <!-- Load the following for BootstrapVueIcons support -->
+  <script src="http://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue-icons.min.js"></script>
+
+
+  <script type="text/x-template" id="leftnav-template">
+    <ul>
+      <li>File one</li>
+      <li>File two</li>
+      <li>File three</li>
+    </ul>
+  </script>
+  <script type="text/x-template" id="filedisplay-template">
+    <div>
+      <h1>Display of File One</h1>
+      <b-table :items="items" :fields="fields"></b-table>
+    </div>
+  </script>
+</head>
+<body>
+<div id="app">
+  <leftnav></leftnav>
+  <hr />
+  <filedisplay></filedisplay>
+
+</div>
+
+<script>
+  Vue.component("leftnav", {
+    template: "#leftnav-template"
+  });
+
+  Vue.component("filedisplay", {
+    template: "#filedisplay-template",
+    data: function() {
+      return {
+        fields: [
+          {
+            key: 'col1',
+            label: "Has retention issue",
+            sortable: true
+          },
+          {
+            key: 'col2',
+            label: 'Retention Score',
+            sortable: true
+          },
+          {
+            key: 'col3',
+            label: 'Comments'}
+        ],
+        items: [
+          {col1: "yes", col2: 21.2, col3: "longer string of text"},
+          {col1: "no", col2: 79.1, col3: "longer string of text"},
+          {col1: "yes", col2: 21.2, col3: "longer string of text"},
+          {col1: "yes", col2: 41.2, col3: "longer string of text"},
+          {col1: "no", col2: 1.0, col3: "longer string of text"},
+          {col1: "yes", col2: 21.2, col3: "longer string of text"},
+          {col1: "no", col2: 21.2, col3: "longer string of text"},
+
+        ]
+      }
+    },
+  });
+
+  var app = new Vue({
+    el: '#app',
+
+  })
+</script>
+</body>
+</html>
