@@ -1,0 +1,12 @@
+
+// top banner styles
+html {background-color: red;}
+
+.rd-app-banner {
+  background-color: #4b2e83;
+  border-bottom: 1px solid #999;
+  color: #fff;
+  font-size: 0.75rem;
+  height: 30px;
+}
+  
