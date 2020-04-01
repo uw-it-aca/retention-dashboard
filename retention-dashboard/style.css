@@ -6,14 +6,14 @@ html {
 .rd-app-banner {
   align-items: center;
   background-color: #4b2e83;
-  background-image: url(/static/img/w-logo-white.png);
-  background-position: left bottom;
+  background-image: url(/static/img/uw-logo-white.png);
+  background-position: left 18px;
   background-repeat: no-repeat;
-  background-size: 45px;
-  border-bottom: 1px solid #999;
+  background-size: 60px;
+  border-bottom: 3px solid #d1d1d1;
   color: #fff;
   font-size: 0.75rem;
-  min-height: 40px;
+  min-height: 60px;
 }
 
 .rd-app-banner a {
@@ -26,10 +26,10 @@ html {
 }
 
 .rd-app-title {
-  display: inline;
   font-size: 2rem;
   margin-bottom: 0;
-  margin-left: 40px;
+  margin-left: 55px;
+  padding-top: 12px;
 }
 
 .rd-login-info {
@@ -47,6 +47,43 @@ html {
 .rd-page-header {
   font-size: 2rem;
   padding: 1.5rem 0;
+}
+
+
+/* footer styles */
+
+.rd-footer {
+  background-color: #4b2e83;
+  border-top: 3px solid #d1d1d1;
+  color: #fff;
+  font-size: 0.75rem;
+  min-height: 100px;
+  min-width: 100%;
+  padding: 1.5rem 0;
+  text-align: center;
+}
+
+.rd-footer-wordmark {
+  background: url('/static/img/uw-sprite.svg') no-repeat 0 -434px transparent;
+  display: inline-block;
+  margin-bottom: 1rem;
+  min-height: 16px;
+  overflow: hidden;
+  text-indent: -9999px;
+  width: 335px;
+  }
+
+.rd-footer-links {
+  font-size: 0.8725rem;
+  padding: 0.5rem 0;
+}
+
+.rd-footer a {
+  color: #fff;
+}
+
+.rd-footer a:hover,.rd-footer a:focus {
+  color: #e8e3d3;
 }
 
 
