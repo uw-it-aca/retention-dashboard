@@ -34,12 +34,16 @@
   <script type="text/x-template" id="default-template">
     <b-container fluid>
       <b-row class="rd-app-banner">
-        <h2 id="rd_navbar_header" class="sr-only">
-          Main Navigation
-        </h2>
-      </b-row>
-      <b-row>
-        <leftnav />
+        <b-col cols="3" sm="9" lg="10">
+          <h1 class="rd-app-title"><span class="hide-lg">Student Retention Dashboard</span></h1>
+        </b-col>
+        <b-col>
+          <h2 id="rd_login_header" class="sr-only">Your information</h2>
+          <div aria-labelledby="rd_login_header" class="rd-login-info">
+            <div>Welcome, </span><span id="netid">{{ netid }}</div>
+            <a href="/saml/logout" tabindex="0" class="rd-logout-link">Sign out</a>
+          </div>
+        </b-col>
       </b-row>
       <b-row>
         <filedisplay />
@@ -49,21 +53,28 @@
 
   <script type="text/x-template" id="leftnav-template">
     <div>
-      <ul>
-        <li><a href="#" @click.prevent="selectPage('one.csv')">File one</a></li>
-        <li><a href="#" @click.prevent="selectPage('two.csv')">File two</a></li>
-        <li><a href="#" @click.prevent="selectPage('three.csv')">File three</a></li>
-      </ul>
+      <b-nav pills>
+        <b-nav-item-dropdown
+          id="file-dropdown"
+          :text="'File:' + ' ' + filename"
+          toggle-class="nav-link-custom"
+          right
+        >
+          <b-dropdown-item href="#" @click.prevent="selectPage('one.csv')">File One</b-dropdown-item>
+          <b-dropdown-item href="#" @click.prevent="selectPage('two.csv')">File Two</b-dropdown-item>
+          <b-dropdown-item href="#" @click.prevent="selectPage('three.csv')">File Three</b-dropdown-item>
+        </b-nav-item-dropdown>
+      </b-nav>
     </div>
   </script>
 
   <script type="text/x-template" id="filedisplay-template">
     <b-container fluid>
-      <h1>Display of {{ filename }}</h1>
+      <span class="rd-file-select"><leftnav /></span>
       <b-table :items="items" :fields="fields"></b-table>
     </b-container>
   </script>
-  
+
 </head>
 <body>
 
@@ -91,10 +102,12 @@
       Vue.component("structure", {
         template: "#default-template",
         data(){
-          return {};
+          return {
+            netid: '',
+          };
         },
         mounted() {
-
+          this.netid = window.user_netid;
         },
         methods: {
 
@@ -104,7 +117,14 @@
       Vue.component("leftnav", {
         template: "#leftnav-template",
         data(){
-          return {};
+          return {
+
+          };
+        },
+        computed: {
+          filename (){
+            return this.$store.state.current_file;
+          }
         },
         mounted() {
 
