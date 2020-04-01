@@ -31,14 +31,32 @@
   <!-- Load PapaParse CSV parser -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.1.0/papaparse.min.js"></script>
 
+  <script type="text/x-template" id="default-template">
+    <b-container fluid>
+      <b-row class="rd-app-banner">
+        <h2 id="rd_navbar_header" class="sr-only">
+          Main Navigation
+        </h2>
+      </b-row>
+      <b-row>
+        <leftnav />
+      </b-row>
+      <b-row>
+        <filedisplay />
+      </b-row>
+    </b-container>
+  </script>
 
   <script type="text/x-template" id="leftnav-template">
-    <ul>
-      <li><a href="#" @click.prevent="selectPage('one.csv')">File one</a></li>
-      <li><a href="#" @click.prevent="selectPage('two.csv')">File two</a></li>
-      <li><a href="#" @click.prevent="selectPage('three.csv')">File three</a></li>
-    </ul>
+    <div>
+      <ul>
+        <li><a href="#" @click.prevent="selectPage('one.csv')">File one</a></li>
+        <li><a href="#" @click.prevent="selectPage('two.csv')">File two</a></li>
+        <li><a href="#" @click.prevent="selectPage('three.csv')">File three</a></li>
+      </ul>
+    </div>
   </script>
+
   <script type="text/x-template" id="filedisplay-template">
     <div>
       <h1>Display of {{ filename }}</h1>
@@ -48,19 +66,8 @@
 </head>
 <body>
 
-  <div>
-    <div class="rd-app-banner">
-      <h2 id="rd_navbar_header" class="sr-only">
-        Main Navigation
-      </h2>
-    </div>
-    <div>
-      <div id="app">
-        <leftnav></leftnav>
-        <hr />
-        <filedisplay></filedisplay>
-      </div>
-    </div>
+  <div id="app">
+    <structure></structure>
   </div>
 
     <script>
@@ -80,8 +87,24 @@
         }
       });
 
+      Vue.component("structure", {
+        template: "#default-template",
+        data(){
+          return {};
+        },
+        mounted() {
+
+        },
+        methods: {
+
+        }
+      });
+      
       Vue.component("leftnav", {
         template: "#leftnav-template",
+        data(){
+          return {};
+        },
         mounted() {
 
         },
