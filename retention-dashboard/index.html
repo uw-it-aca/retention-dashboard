@@ -40,7 +40,7 @@
         <b-col>
           <h2 id="rd_login_header" class="sr-only">Your information</h2>
           <div aria-labelledby="rd_login_header" class="rd-login-info">
-            <div>Welcome, </span><span id="netid">{{ netid }}</div>
+            <div>Welcome, </span><span id="netid">{{ netid }}</span></div>
             <a href="/saml/logout" tabindex="0" class="rd-logout-link">Sign out</a>
           </div>
         </b-col>
@@ -80,7 +80,21 @@
   <script type="text/x-template" id="filedisplay-template">
     <b-container fluid>
       <span class="rd-file-select"><leftnav /></span>
-      <b-table :items="items" :fields="fields"></b-table>
+      <b-pagination
+              v-model="currentPage"
+              :total-rows="rows"
+              :per-page="perPage"
+              aria-controls="data-table"
+      ></b-pagination>
+      <b-table
+              id="data-table"
+              :items="items"
+              :fields="fields"
+              :per-page= "perPage"
+              :current-page="currentPage"
+      >
+
+      </b-table>
     </b-container>
   </script>
 
@@ -151,26 +165,51 @@
           return {
             fields: [
               {
-                key: 'has_issue',
-                label: "Has retention issue",
+                key: 'student_name',
+                label: "Student Name",
                 sortable: true
               },
               {
-                key: 'score',
-                label: 'Retention Score',
+                key: 'email',
+                label: 'Email',
+              },
+              {
+                key: 'netid',
+                label: 'UWNetid',
+              },
+              {
+                key: 'pre-major',
+                label: 'Pre-Major Status',
                 sortable: true
               },
               {
-                key: 'comments',
-                label: 'Comments'}
+                key: 'activity_score',
+                label: 'Activity Score',
+                sortable: true
+              },
+              {
+                key: 'assignments',
+                label: 'Assignments',
+                sortable: true
+              },
+              {
+                key: 'grades',
+                label: 'Grades',
+                sortable: true
+              }
             ],
             items: [],
-            csv_data: ""
+            csv_data: "",
+            perPage: 10,
+            currentPage: 1,
           }
         },
         computed: {
           filename (){
             return this.$store.state.current_file;
+          },
+          rows (){
+            return this.items.length;
           }
         },
         methods: {
