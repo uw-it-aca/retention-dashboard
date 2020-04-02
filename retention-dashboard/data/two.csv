@@ -1,28 +1,205 @@
-has_issue,score,comments
-true,3,"This is my comment"
-false,21,"This is my new comment"
-true,12,"Another comment"
-true,21,"This is my test comment"
-false,3,"This is a comment"
-false,21,"This is my your comment"
-false,13,"This is my comment"
-true,5,"This is my comment"
-true,21,"This is my comment"
-true,3,"Lorem ipsum dolor"
-false,95,"This is my new comment"
-true,12,"eros bibendum elit, nec luctus"
-true,21,"This is my test comment"
-false,3,"This is a comment"
-false,75," eu tempor congue, eros"
-false,13,"habitasse platea dictumst"
-true,75,"This is my comment"
-true,21,"mauris eu nibh euismod gravida"
-true,3,"This is my comment"
-false,21,"This is my new comment"
-true,12,"Another comment"
-true,21,"This is my test comment"
-false,3,"This is a comment"
-false,21,"This is my your comment"
-false,13,"This is my comment"
-true,5,"This is my comment"
-true,21,"This is my comment"
+student_name,netid,email,pre-major,activity_score,assignments,grades
+James Fallows,foobar,foobar@uw.edu,FALSE,0,-5,5
+Anita Carroso,test,test@uw.edu,FALSE,3,-5,5
+Joel Wong,another netid,another netid@uw.edu,TRUE,-1,-5,5
+Jane Doe,jtacoma,jtacoma@uw.edu,TRUE,0,-5,5
+James Fallows,jinter,jinter@uw.edu,FALSE,-1,-5,5
+Anita Carroso,jbothell,jbothell@uw.edu,TRUE,0,-5,5
+Joel Wong,bill,bill@uw.edu,FALSE,1,-5,5
+Javerage Student,jnew,jnew@uw.edu,FALSE,2,-5,5
+James Average,foobar,foobar@uw.edu,FALSE,3,-5,5
+John Doe,test,test@uw.edu,TRUE,4,-5,5
+James Average,jinter,jinter@uw.edu,TRUE,5,-5,5
+John Doe,jbothell,jbothell@uw.edu,TRUE,5,-5,5
+Jane Doe,bill,bill@uw.edu,TRUE,-5,-5,5
+James Fallows,bills,bills@uw.edu,FALSE,-4,-5,5
+Anita Carroso,jnew,jnew@uw.edu,FALSE,-3,-5,5
+Joel Wong,javerage,javerage@uw.edu,FALSE,-2,-4,5
+Javerage Student,foo123,foo123@uw.edu,TRUE,-1,-4,5
+James Average,bar123,bar123@uw.edu,TRUE,0,-4,5
+John Doe,baz123,baz123@uw.edu,TRUE,1,-4,5
+Jane Doe,jtacoma,jtacoma@uw.edu,TRUE,2,-4,5
+James Fallows,jinter,jinter@uw.edu,FALSE,3,-4,5
+Anita Carroso,jbothell,jbothell@uw.edu,FALSE,4,-4,5
+Joel Wong,bill,bill@uw.edu,TRUE,5,-4,5
+Jane Doe,bills,bills@uw.edu,TRUE,-3,-4,5
+James Fallows,bills,bills@uw.edu,TRUE,-2,-4,5
+Anita Carroso,jnew,jnew@uw.edu,TRUE,-1,-4,5
+Joel Wong,foobar,foobar@uw.edu,FALSE,0,-4,5
+Javerage Student,test,test@uw.edu,FALSE,-1,-4,5
+James Average,another netid,another netid@uw.edu,TRUE,0,-4,5
+John Doe,jtacoma,jtacoma@uw.edu,TRUE,1,-4,5
+James Average,jinter,jinter@uw.edu,FALSE,2,-4,5
+John Doe,bill,bill@uw.edu,TRUE,3,-4,5
+Jane Doe,jnew,jnew@uw.edu,FALSE,4,-4,5
+James Fallows,foobar,foobar@uw.edu,FALSE,5,-4,5
+Anita Carroso,test,test@uw.edu,TRUE,-5,-4,5
+Joel Wong,bar123,bar123@uw.edu,FALSE,-4,-4,5
+James Average,baz123,baz123@uw.edu,FALSE,-3,-4,5
+John Doe,jtacoma,jtacoma@uw.edu,TRUE,-2,-4,5
+Jane Doe,jinter,jinter@uw.edu,TRUE,-1,-4,4
+James Fallows,jnew,jnew@uw.edu,TRUE,-3,-4,4
+Anita Carroso,javerage,javerage@uw.edu,TRUE,-2,-3,4
+Joel Wong,foo124,foo124@uw.edu,TRUE,-3,-3,4
+Javerage Student,bar124,bar124@uw.edu,FALSE,-2,-3,4
+James Average,baz124,baz124@uw.edu,FALSE,-1,-3,4
+John Doe,jtacoma,jtacoma@uw.edu,FALSE,0,-3,4
+Jane Doe,jinter,jinter@uw.edu,TRUE,3,-3,4
+James Fallows,jbothell,jbothell@uw.edu,TRUE,-1,-3,4
+Anita Carroso,bill,bill@uw.edu,TRUE,0,-3,4
+Joel Wong,bills,bills@uw.edu,TRUE,-1,-3,4
+Jane Doe,jnew,jnew@uw.edu,FALSE,0,-3,4
+James Fallows,foobar,foobar@uw.edu,FALSE,1,-3,4
+Anita Carroso,test,test@uw.edu,TRUE,2,-3,4
+Joel Wong,another netid,another netid@uw.edu,TRUE,3,-3,4
+Javerage Student,jtacoma,jtacoma@uw.edu,FALSE,4,-3,4
+James Average,jinter,jinter@uw.edu,FALSE,5,-3,4
+John Doe,jbothell,jbothell@uw.edu,TRUE,5,-3,4
+James Average,bill,bill@uw.edu,TRUE,-5,-3,4
+John Doe,jnew,jnew@uw.edu,TRUE,-4,-3,4
+Jane Doe,foobar,foobar@uw.edu,TRUE,-3,-3,4
+James Fallows,test,test@uw.edu,FALSE,-2,-3,4
+Anita Carroso,jinter,jinter@uw.edu,FALSE,-1,-3,4
+Joel Wong,jbothell,jbothell@uw.edu,TRUE,0,-3,4
+Javerage Student,bill,bill@uw.edu,TRUE,1,-3,4
+James Average,bills,bills@uw.edu,TRUE,2,-3,4
+John Doe,jnew,jnew@uw.edu,TRUE,3,-3,4
+Jane Doe,javerage,javerage@uw.edu,FALSE,4,-3,4
+James Fallows,foo124,foo124@uw.edu,FALSE,5,-3,4
+Anita Carroso,bar124,bar124@uw.edu,TRUE,-3,-3,4
+James Average,baz124,baz124@uw.edu,TRUE,-2,-3,4
+John Doe,jtacoma,jtacoma@uw.edu,FALSE,-1,-3,4
+Jane Doe,jinter,jinter@uw.edu,TRUE,0,-3,4
+James Fallows,jbothell,jbothell@uw.edu,FALSE,-1,-3,4
+Anita Carroso,bill,bill@uw.edu,FALSE,0,-3,4
+Joel Wong,bills,bills@uw.edu,TRUE,1,-3,4
+Javerage Student,bills,bills@uw.edu,FALSE,2,-3,3
+James Average,jnew,jnew@uw.edu,FALSE,3,-3,3
+John Doe,foobar,foobar@uw.edu,TRUE,4,-3,3
+Jane Doe,test,test@uw.edu,TRUE,5,-3,3
+James Fallows,another netid,another netid@uw.edu,FALSE,-5,-3,3
+Anita Carroso,jtacoma,jtacoma@uw.edu,FALSE,-4,-3,3
+Joel Wong,jinter,jinter@uw.edu,TRUE,-3,-3,3
+Jane Doe,bill,bill@uw.edu,TRUE,-2,-3,3
+James Fallows,jnew,jnew@uw.edu,FALSE,-1,-3,3
+Anita Carroso,foobar,foobar@uw.edu,TRUE,-3,-3,3
+Joel Wong,test,test@uw.edu,FALSE,-2,-3,3
+Javerage Student,bar124,bar124@uw.edu,FALSE,-3,-3,3
+James Average,baz124,baz124@uw.edu,FALSE,-2,-3,3
+John Doe,jtacoma,jtacoma@uw.edu,TRUE,-1,-3,3
+James Average,jinter,jinter@uw.edu,TRUE,0,-3,3
+John Doe,jnew,jnew@uw.edu,TRUE,3,-3,3
+Jane Doe,javerage,javerage@uw.edu,TRUE,-1,-3,3
+James Fallows,foo125,foo125@uw.edu,FALSE,0,-3,3
+Anita Carroso,bar125,bar125@uw.edu,FALSE,-1,-3,3
+Joel Wong,baz125,baz125@uw.edu,FALSE,0,-3,3
+Javerage Student,jtacoma,jtacoma@uw.edu,TRUE,1,-3,3
+James Average,jinter,jinter@uw.edu,TRUE,2,-3,3
+John Doe,jbothell,jbothell@uw.edu,TRUE,3,-3,3
+Jane Doe,bill,bill@uw.edu,TRUE,4,-3,3
+James Fallows,bills,bills@uw.edu,FALSE,5,-3,3
+Anita Carroso,jnew,jnew@uw.edu,FALSE,5,-3,3
+Joel Wong,foobar,foobar@uw.edu,TRUE,-5,-3,3
+Jane Doe,test,test@uw.edu,TRUE,-4,-3,3
+James Fallows,another netid,another netid@uw.edu,TRUE,-3,-3,3
+Anita Carroso,jtacoma,jtacoma@uw.edu,TRUE,-2,-2,3
+Joel Wong,jinter,jinter@uw.edu,FALSE,-1,-2,3
+Javerage Student,jbothell,jbothell@uw.edu,FALSE,0,-2,3
+James Average,bill,bill@uw.edu,TRUE,1,-2,3
+John Doe,jnew,jnew@uw.edu,TRUE,2,-2,3
+James Average,foobar,foobar@uw.edu,FALSE,3,-2,3
+John Doe,test,test@uw.edu,TRUE,4,-2,3
+Jane Doe,jinter,jinter@uw.edu,FALSE,5,-2,3
+James Fallows,jbothell,jbothell@uw.edu,FALSE,-3,-2,3
+Anita Carroso,bill,bill@uw.edu,TRUE,-2,-2,3
+Joel Wong,bills,bills@uw.edu,FALSE,-1,-2,3
+James Average,jnew,jnew@uw.edu,FALSE,0,-2,3
+John Doe,javerage,javerage@uw.edu,TRUE,-1,-2,3
+Jane Doe,foo125,foo125@uw.edu,TRUE,0,-2,3
+James Fallows,bar125,bar125@uw.edu,TRUE,1,-2,3
+Anita Carroso,baz125,baz125@uw.edu,TRUE,2,-2,3
+Joel Wong,jtacoma,jtacoma@uw.edu,TRUE,3,-2,3
+Javerage Student,jinter,jinter@uw.edu,FALSE,4,-2,3
+James Average,jbothell,jbothell@uw.edu,FALSE,5,-2,3
+John Doe,bill,bill@uw.edu,FALSE,-5,-2,3
+Jane Doe,bills,bills@uw.edu,TRUE,-4,-2,2
+James Fallows,bills,bills@uw.edu,TRUE,-3,-2,2
+Anita Carroso,jnew,jnew@uw.edu,TRUE,-2,-2,2
+Joel Wong,foobar,foobar@uw.edu,TRUE,-1,-2,2
+Jane Doe,test,test@uw.edu,FALSE,-3,-2,2
+James Fallows,another netid,another netid@uw.edu,FALSE,-2,-2,2
+Anita Carroso,jtacoma,jtacoma@uw.edu,TRUE,-3,-2,2
+Joel Wong,jinter,jinter@uw.edu,TRUE,-2,-2,2
+Javerage Student,bill,bill@uw.edu,FALSE,-1,-2,2
+James Average,jnew,jnew@uw.edu,FALSE,0,-2,2
+John Doe,foobar,foobar@uw.edu,TRUE,3,-2,2
+James Average,test,test@uw.edu,TRUE,-1,-2,2
+John Doe,bar125,bar125@uw.edu,TRUE,0,-2,2
+Jane Doe,baz125,baz125@uw.edu,TRUE,-1,-2,2
+James Fallows,jtacoma,jtacoma@uw.edu,FALSE,0,-2,2
+Anita Carroso,jinter,jinter@uw.edu,FALSE,1,-2,2
+Joel Wong,jnew,jnew@uw.edu,TRUE,2,-2,2
+Javerage Student,javerage,javerage@uw.edu,TRUE,3,-2,2
+James Average,foo126,foo126@uw.edu,TRUE,4,-2,2
+John Doe,bar126,bar126@uw.edu,TRUE,5,-2,2
+Jane Doe,baz126,baz126@uw.edu,FALSE,5,-2,2
+James Fallows,jtacoma,jtacoma@uw.edu,FALSE,-5,-2,2
+Anita Carroso,jinter,jinter@uw.edu,TRUE,-4,-2,2
+James Average,jbothell,jbothell@uw.edu,TRUE,-3,-2,2
+John Doe,bill,bill@uw.edu,FALSE,-2,-2,2
+Jane Doe,bills,bills@uw.edu,TRUE,-1,-2,2
+James Fallows,jnew,jnew@uw.edu,FALSE,0,-2,2
+Anita Carroso,foobar,foobar@uw.edu,FALSE,1,-2,2
+Joel Wong,test,test@uw.edu,TRUE,2,-2,2
+Javerage Student,another netid,another netid@uw.edu,FALSE,3,-2,2
+James Average,jtacoma,jtacoma@uw.edu,FALSE,4,-2,2
+John Doe,jinter,jinter@uw.edu,TRUE,5,-2,2
+Jane Doe,jbothell,jbothell@uw.edu,TRUE,-3,-2,2
+James Fallows,bill,bill@uw.edu,FALSE,-2,-2,2
+Anita Carroso,jnew,jnew@uw.edu,FALSE,-1,-2,2
+Joel Wong,foobar,foobar@uw.edu,TRUE,0,-2,2
+Jane Doe,test,test@uw.edu,TRUE,-1,-2,1
+James Fallows,jinter,jinter@uw.edu,FALSE,0,-2,1
+Anita Carroso,jbothell,jbothell@uw.edu,TRUE,1,-2,1
+Joel Wong,bill,bill@uw.edu,FALSE,2,-2,1
+Javerage Student,bills,bills@uw.edu,FALSE,3,-2,1
+James Average,jnew,jnew@uw.edu,FALSE,4,-2,1
+John Doe,javerage,javerage@uw.edu,TRUE,5,-2,1
+James Average,foo126,foo126@uw.edu,TRUE,-5,-1,1
+John Doe,bar126,bar126@uw.edu,TRUE,-4,-1,1
+Jane Doe,baz126,baz126@uw.edu,TRUE,-3,-1,1
+James Fallows,jtacoma,jtacoma@uw.edu,FALSE,-2,-1,1
+Anita Carroso,jinter,jinter@uw.edu,FALSE,-1,-1,1
+Joel Wong,jbothell,jbothell@uw.edu,FALSE,-3,-1,1
+Javerage Student,bill,bill@uw.edu,TRUE,-2,-1,1
+James Average,bills,bills@uw.edu,TRUE,-3,-1,1
+John Doe,bills,bills@uw.edu,TRUE,-2,-1,1
+Jane Doe,jnew,jnew@uw.edu,TRUE,-1,-1,1
+James Fallows,foobar,foobar@uw.edu,FALSE,0,-1,1
+Anita Carroso,test,test@uw.edu,FALSE,3,-1,1
+Joel Wong,another netid,another netid@uw.edu,TRUE,-1,-1,1
+Jane Doe,jtacoma,jtacoma@uw.edu,TRUE,0,-1,1
+James Fallows,jinter,jinter@uw.edu,TRUE,-1,-1,1
+Anita Carroso,bill,bill@uw.edu,TRUE,0,-1,1
+Joel Wong,jnew,jnew@uw.edu,FALSE,1,-1,1
+Javerage Student,foobar,foobar@uw.edu,FALSE,2,-1,1
+James Average,test,test@uw.edu,TRUE,3,-1,1
+John Doe,bar126,bar126@uw.edu,TRUE,4,-1,1
+James Average,baz126,baz126@uw.edu,FALSE,5,-1,1
+John Doe,jtacoma,jtacoma@uw.edu,TRUE,5,-1,1
+Jane Doe,jinter,jinter@uw.edu,FALSE,-5,-1,1
+James Fallows,jnew,jnew@uw.edu,FALSE,-4,-1,1
+Anita Carroso,javerage,javerage@uw.edu,TRUE,-3,-1,1
+Joel Wong,foo127,foo127@uw.edu,FALSE,-2,-1,1
+James Average,bar127,bar127@uw.edu,FALSE,-1,-1,1
+John Doe,baz127,baz127@uw.edu,TRUE,0,-1,1
+Jane Doe,jtacoma,jtacoma@uw.edu,TRUE,1,-1,1
+James Fallows,jinter,jinter@uw.edu,TRUE,2,-1,0
+Anita Carroso,jbothell,jbothell@uw.edu,TRUE,3,-1,0
+Joel Wong,bill,bill@uw.edu,TRUE,4,-1,0
+Javerage Student,bills,bills@uw.edu,FALSE,5,-1,0
+James Average,jnew,jnew@uw.edu,FALSE,-3,-1,0
+John Doe,foobar,foobar@uw.edu,FALSE,-2,-1,0
+Jane Doe,test,test@uw.edu,TRUE,-1,-1,0
+James Fallows,another netid,another netid@uw.edu,TRUE,0,-1,0
+Anita Carroso,jtacoma,jtacoma@uw.edu,TRUE,-1,-1,0
