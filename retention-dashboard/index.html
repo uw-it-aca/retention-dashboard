@@ -32,6 +32,9 @@
   <!-- Load PapaParse CSV parser -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.1.0/papaparse.min.js"></script>
 
+  <!-- Load Clipboard.js -->
+  <script src="https://unpkg.com/clipboard@2/dist/clipboard.min.js"></script>
+
   <script type="text/x-template" id="default-template">
     <b-container fluid>
       <b-row class="rd-app-banner">
@@ -80,6 +83,14 @@
 
   <script type="text/x-template" id="filedisplay-template">
     <b-container fluid>
+      <p>Students Selected: {{ selected_count }}</p>
+      <div>
+        <b-button v-b-modal.email-modal>Get E-Mail Addresses</b-button>
+        <b-modal id="email-modal" title="E-Mail Addresses" ok-only>
+          <textarea id="email_area" readonly>{{ email_list_text }}</textarea>
+          <button class="copybtn" data-clipboard-target="#email_area">copy</button>
+        </b-modal>
+        <button id="csv_download" @click="download_filtered">Download Filtered CSV</button></div>
       <span class="rd-file-select"><leftnav /></span>
       <b-pagination
               v-model="currentPage"
@@ -95,6 +106,21 @@
               :current-page="currentPage"
       >
 
+
+        <template v-slot:cell(actions)="row">
+          <b-form-group>
+            <b-form-checkbox
+                    :id="'email_select' + row.item.email"
+                    :key="row.item.email"
+                    v-model="selected[row.item.email]"
+                    :name="'email_select' + row.item.email"
+                    :value="true"
+                    :unchecked-value="false"
+            >
+              <span class="sr-only">Select application {{ row.item.admission_selection_id }}</span>
+            </b-form-checkbox>
+          </b-form-group>
+        </template>
       </b-table>
     </b-container>
   </script>
@@ -166,6 +192,10 @@
           return {
             fields: [
               {
+                key: 'Actions',
+                label: '✓'
+              },
+              {
                 key: 'student_name',
                 label: "Student Name",
                 sortable: true
@@ -203,6 +233,7 @@
             csv_data: "",
             perPage: 10,
             currentPage: 1,
+            selected: {}
           }
         },
         computed: {
@@ -211,9 +242,27 @@
           },
           rows (){
             return this.items.length;
+          },
+          selected_count (){
+            return this.get_selected().length;
+          },
+          email_list_text () {
+            var selected = this.get_selected();
+            return selected.join(", ");;
           }
         },
         methods: {
+          get_selected(){
+            var selected = [];
+            for (var key in this.selected) {
+              if (this.selected.hasOwnProperty(key)) {
+                if(this.selected[key] === true){
+                  selected.push(key);
+                }
+              }
+            }
+            return selected;
+          },
           load_file(filename){
             var vue = this;
             axios.get('/data/' + filename)
@@ -223,6 +272,40 @@
             .catch(function (error) {
               console.log(error)
             })
+          },
+          download_filtered() {
+            var to_download = [],
+                    hiddenElement = document.createElement('a'),
+                    selected = this.get_selected(),
+                    timestamp = Math.round(Date.now()/1000),
+                    csv_string = "";
+            for (var item in this.items){
+              if(selected.includes(this.items[item]['email'])){
+                to_download.push(this.items[item])
+              }
+            }
+            // format object to string
+
+            // Header
+            var fields = Object.keys(to_download[0]);
+            csv_string += fields.join(",");
+            csv_string += "\n";
+
+            // Data
+            to_download.forEach(function(item){
+
+              var row_string = "";
+              fields.forEach(function(field){
+                row_string += item[field] + ","
+              });
+              //remove trailing comma
+              csv_string += row_string.slice(0, -1) + "\n"
+            });
+
+            hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv_string);
+            hiddenElement.target = '_blank';
+            hiddenElement.download = 'rentention_export_'+timestamp+'.csv';
+            hiddenElement.click();
           }
         },
         mounted: function(){
@@ -233,6 +316,7 @@
                   }
           )
           this.$store.dispatch('set_file', "one.csv");
+          new ClipboardJS('.copybtn');
         },
         watch: {
           csv_data: function (csv){
