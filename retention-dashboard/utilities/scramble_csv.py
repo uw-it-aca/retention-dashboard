@@ -45,6 +45,3 @@ def gen_netid():
 
 def gen_stu_num():
     return ''.join(random.choice(string.digits) for x in range(7))
-
-
-scramble("/home/devights/Downloads/example-data.csv", "clean-data.csv")
