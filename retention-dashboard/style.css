@@ -11,6 +11,20 @@ body {
   background-color: white;
 }
 
+.row.rd-listactions-container {
+  padding: 1rem;
+  width: 100%;
+}
+
+.row.rd-listactions-container .col{
+  text-align: center;
+}
+
+/* override styles */
+a {
+  color: #0069d9;
+}
+
 /* Top banner styles */
 .rd-app-banner {
   align-items: center;
@@ -58,6 +72,13 @@ body {
   padding: 1.5rem 0;
 }
 
+/* main content styles */
+.rd-student-count {
+  background-color: #4b2e83;
+  border-radius: 4px;
+  color: white;
+  padding: 2px 4px;
+}
 
 /* footer styles */
 

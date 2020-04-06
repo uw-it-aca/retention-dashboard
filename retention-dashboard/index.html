@@ -58,34 +58,35 @@
   </script>
 
   <script type="text/x-template" id="leftnav-template">
-    <div>
-      <b-nav pills>
-        <b-nav-item-dropdown
-          id="file-dropdown"
-          :text="'File:' + ' ' + filename"
-          toggle-class="nav-link-custom"
-          right
-        >
-          <b-dropdown-item href="#" @click.prevent="selectPage('one.csv')">File: one.csv</b-dropdown-item>
-          <b-dropdown-item href="#" @click.prevent="selectPage('two.csv')">File: two.csv</b-dropdown-item>
-          <b-dropdown-item href="#" @click.prevent="selectPage('three.csv')">File: three.csv</b-dropdown-item>
-        </b-nav-item-dropdown>
-      </b-nav>
-    </div>
+    <b-nav pills>
+      <b-nav-item-dropdown
+        id="file-dropdown"
+        :text="'File:' + ' ' + filename"
+        toggle-class="nav-link-custom"
+        right
+      >
+        <b-dropdown-item href="#" @click.prevent="selectPage('one.csv')">File: one.csv</b-dropdown-item>
+        <b-dropdown-item href="#" @click.prevent="selectPage('two.csv')">File: two.csv</b-dropdown-item>
+        <b-dropdown-item href="#" @click.prevent="selectPage('three.csv')">File: three.csv</b-dropdown-item>
+      </b-nav-item-dropdown>
+    </b-nav>
   </script>
 
   <script type="text/x-template" id="filedisplay-template">
-    <b-container fluid>
-      <p>Students Selected: {{ selected_count }}</p>
-      <div>
-        <b-button v-b-modal.email-modal>Get E-Mail Addresses</b-button>
-        <b-modal id="email-modal" title="E-Mail Addresses" ok-only>
-          <textarea id="email_area" readonly>{{ email_list_text }}</textarea>
-          <button class="copybtn" data-clipboard-target="#email_area">copy</button>
-        </b-modal>
-        <button id="csv_download" @click="download_filtered">Download Filtered CSV</button></div>
-      <span class="rd-file-select"><leftnav /></span>
-      <div>
+    <b-container class="rd-main-container" fluid>
+      <b-row class="rd-listactions-container">
+        <b-col>
+          <p><span class="rd-student-count">{{ selected_count }}</span> students selected:
+            <b-link v-b-modal.email-modal>get e-mail addresses</b-link> or
+            <b-link id="csv_download" @click="download_filtered">download results</b-link>
+          </p>
+          <b-modal id="email-modal" title="E-Mail Addresses" ok-only>
+            <textarea id="email_area" readonly>{{ email_list_text }}</textarea>
+            <button class="copybtn" data-clipboard-target="#email_area">copy</button>
+          </b-modal>
+        </b-col>
+      </b-row>
+      <b-row>
         <b-form-group>
           Activity
           <b-form-checkbox-group id="activity_filters" v-model="activity_filter">
@@ -113,14 +114,16 @@
         <b-form-group>
           <b-form-checkbox v-model="premajor_filter">Is Premajor</b-form-checkbox>
         </b-form-group>
-
-      </div>
+      </b-row>
+      <span class="rd-file-select" align="left"><leftnav /></span>
       <b-pagination
+              align="right"
               v-model="currentPage"
               :total-rows="rows"
               :per-page="perPage"
               aria-controls="data-table"
-      ></b-pagination>
+      >
+      </b-pagination>
       <b-table
               responsive
               show-empty
@@ -130,22 +133,6 @@
               :per-page= "perPage"
               :current-page="currentPage"
       >
-
-
-        <template v-slot:cell(actions)="row">
-          <b-form-group>
-            <b-form-checkbox
-                    :id="'email_select' + row.item.email"
-                    :key="row.item.email"
-                    v-model="selected[row.item.email]"
-                    :name="'email_select' + row.item.email"
-                    :value="true"
-                    :unchecked-value="false"
-            >
-              <span class="sr-only">Select application {{ row.item.admission_selection_id }}</span>
-            </b-form-checkbox>
-          </b-form-group>
-        </template>
       </b-table>
     </b-container>
   </script>
@@ -215,10 +202,6 @@
         data: function() {
           return {
             fields: [
-              {
-                key: 'Actions',
-                label: '✓'
-              },
               {
                 key: 'name',
                 label: "Student Name",
