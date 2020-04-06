@@ -35,6 +35,9 @@
   <!-- Load Clipboard.js -->
   <script src="https://unpkg.com/clipboard@2/dist/clipboard.min.js"></script>
 
+  <!-- Load lodash -->
+  <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.15/lodash.min.js"></script>
+
   <script type="text/x-template" id="default-template">
     <b-container fluid>
       <b-row class="rd-app-banner">
@@ -386,9 +389,16 @@
             }
 
             //Premajor Filter
-            if(this.premajor_filter){
+            if(this.premajor_filter) {
               var premajor_items = this.filter_by_value("premajor", true);
               this.items = premajor_items;
+            }
+
+            //Keyword Filter
+            if(this.keyword_filter.length > 0){
+              var keyword_items = this.filter_by_text(this.keyword_filter);
+              this.items = keyword_items;
+
             }
           },
           filter_by_range(attr, min_value, max_value){
@@ -410,6 +420,20 @@
               }
             });
             return matches;
+          },
+          filter_by_text(text){
+            var items =  this.items,
+                    matches = [];
+            text = text.trim().toLowerCase();
+            items.forEach(function (item, index) {
+              Object.keys(item).forEach(function(key, idx){
+                if(item[key].toLowerCase().includes(text)){
+                  matches.push(item)
+                }
+              });
+            });
+
+            return matches;
           }
         },
         mounted: function(){
@@ -421,6 +445,9 @@
           )
           this.$store.dispatch('set_file', "one.csv");
           new ClipboardJS('.copybtn');
+        },
+        created: function () {
+          this.debouncedRunFilters = _.debounce(this.run_filters, 1000)
         },
         watch: {
           csv_data: function (csv){
@@ -439,6 +466,9 @@
           },
           premajor_filter: function () {
             this.run_filters();
+          },
+          keyword_filter: function () {
+            this.debouncedRunFilters();
           }
 
         }
