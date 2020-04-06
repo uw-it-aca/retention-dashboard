@@ -38,15 +38,8 @@
   <script type="text/x-template" id="default-template">
     <b-container fluid>
       <b-row class="rd-app-banner">
-        <b-col cols="3" sm="9" lg="10">
-          <h1 class="rd-app-title"><span class="hide-lg">Retention Analytics Dashboard</span></h1>
-        </b-col>
         <b-col>
-          <h2 id="rd_login_header" class="sr-only">Your information</h2>
-          <div aria-labelledby="rd_login_header" class="rd-login-info">
-            <div>Welcome, </span><span id="netid">{{ netid }}</span></div>
-            <a href="/saml/logout" tabindex="0" class="rd-logout-link">Sign out</a>
-          </div>
+          <h1 class="rd-app-title"><span>Retention Analytics Dashboard</span></h1>
         </b-col>
       </b-row>
       <b-row>
@@ -129,6 +122,8 @@
               aria-controls="data-table"
       ></b-pagination>
       <b-table
+              responsive
+              show-empty
               id="data-table"
               :items="items"
               :fields="fields"
