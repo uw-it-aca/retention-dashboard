@@ -37,6 +37,10 @@ fieldset.form-group {
   padding-bottom: 0.5rem;
 }
 
+th { 
+  white-space: nowrap;
+}
+
 /* Top banner styles */
 .rd-app-banner {
   align-items: center;
