@@ -33,6 +33,10 @@ fieldset.form-group {
   visibility: hidden;
 }
 
+.custom-control {
+  padding-bottom: 0.5rem;
+}
+
 /* Top banner styles */
 .rd-app-banner {
   align-items: center;
@@ -118,6 +122,16 @@ fieldset.form-group {
   font-weight: bold;
 }
 
+.rd-form-note {
+  clear: both;
+  font-size: 85%;
+  padding-top: 1.5rem;
+}
+
+.rd-form-key {
+  padding-right: 1rem;
+}
+
 /* main content styles */
 .rd-student-count {
   background-color: #4b2e83;
@@ -200,5 +214,9 @@ fieldset.form-group {
 
   .rd-filter-group-bottom {
     margin-top: 2rem;
+  }
+
+  .rd-form-note {
+    padding-top: 1rem;
   }
 }
