@@ -25,6 +25,14 @@ a {
   color: #0069d9;
 }
 
+fieldset.form-group {
+  margin-bottom: 0;
+}
+
+.rd-vis-hidden {
+  visibility: hidden;
+}
+
 /* Top banner styles */
 .rd-app-banner {
   align-items: center;
@@ -72,12 +80,58 @@ a {
   padding: 1.5rem 0;
 }
 
+/* filter styles */
+
+.rd-filters-container {
+  margin-bottom: 3rem;
+}
+
+.rd-filters-container fieldset {
+  border: 1px #ccc solid;
+  border-style: none solid none none;
+  float: left;
+  margin: 0 2rem 0 0;
+  padding: 0 2rem 0 0;
+}
+
+.rd-filters-container fieldset.rd-grades-filters {
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+
+.rd-filters-container fieldset.rd-major-filters {
+  border: 1px #ccc solid;
+  border-style: none none none solid;
+  float: left;
+  margin: 0 0 0 2rem;
+  padding: 0 0 0 2rem;
+}
+
+.rd-filters-container fieldset.rd-major-filters .rd-keyword-filter {
+  border: none;
+  margin-top: .5rem;
+  
+}
+
+.rd-filters-container fieldset legend {
+  font-weight: bold;
+}
+
 /* main content styles */
 .rd-student-count {
   background-color: #4b2e83;
   border-radius: 4px;
   color: white;
   padding: 2px 4px;
+}
+
+.rd-file-select {
+  float:left;
+}
+
+.rd-table-container {
+  margin-top: 2rem;
 }
 
 /* footer styles */
@@ -127,4 +181,24 @@ a {
     display: none;
   }
 
+}
+
+@media only screen and (max-width: 576px) {
+  /* small screen filter styles */
+  .rd-filters-container fieldset {
+    border-style: none;
+  }
+
+  .rd-filters-container fieldset.rd-grades-filters {
+    margin: 0 0 0 2rem;
+    padding: 0 0 0 2rem;
+  }
+
+  .rd-filters-container fieldset.rd-major-filters {
+    border-style: none;
+  }
+
+  .rd-filter-group-bottom {
+    margin-top: 2rem;
+  }
 }
