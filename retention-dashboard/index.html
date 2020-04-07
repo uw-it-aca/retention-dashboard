@@ -276,24 +276,20 @@
             return this.items.length;
           },
           selected_count (){
-            return this.get_selected().length;
+            return this.items.length;
           },
           email_list_text () {
-            var selected = this.get_selected();
+            var selected = this.get_filtered_emails();
             return selected.join(", ");;
           }
         },
         methods: {
-          get_selected(){
-            var selected = [];
-            for (var key in this.selected) {
-              if (this.selected.hasOwnProperty(key)) {
-                if(this.selected[key] === true){
-                  selected.push(key);
-                }
-              }
-            }
-            return selected;
+          get_filtered_emails(){
+            var emails = [];
+            this.items.forEach(function(item){
+              emails.push(item['uw_netid'] + "@uw.edu")
+            });
+            return emails;
           },
           load_file(filename){
             var vue = this;
@@ -306,17 +302,10 @@
             })
           },
           download_filtered() {
-            var to_download = [],
+            var to_download = this.items,
                     hiddenElement = document.createElement('a'),
-                    selected = this.get_selected(),
                     timestamp = Math.round(Date.now()/1000),
                     csv_string = "";
-            for (var item in this.items){
-              if(selected.includes(this.items[item]['email'])){
-                to_download.push(this.items[item])
-              }
-            }
-            // format object to string
 
             // Header
             var fields = Object.keys(to_download[0]);
@@ -427,7 +416,7 @@
             text = text.trim().toLowerCase();
             items.forEach(function (item, index) {
               Object.keys(item).forEach(function(key, idx){
-                if(item[key].toLowerCase().includes(text)){
+                if(item[key].toString().toLowerCase().includes(text)){
                   matches.push(item)
                 }
               });
@@ -458,7 +447,8 @@
               return item;
             });
             this.items = csv;
-            this.raw_items = csv.data.slice();
+            this.raw_items = csv.slice();
+            this.run_filters();
           },
           assignment_filter: function () {
             this.run_filters();
