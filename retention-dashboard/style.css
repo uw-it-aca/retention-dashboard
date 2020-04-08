@@ -91,7 +91,7 @@ th {
 /* filter styles */
 
 .rd-filters-container {
-  margin: 0 3rem 3rem;
+  padding: 0 15px 3rem;
 }
 
 .rd-filters-container fieldset {
@@ -201,7 +201,7 @@ th {
 
 }
 
-@media only screen and (max-width: 534px) {
+@media only screen and (max-width: 558px) {
   /* small screen filter styles */
 
   .rd-filters-container fieldset {
