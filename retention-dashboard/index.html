@@ -128,7 +128,7 @@
               label-class="rd-vis-hidden"
             >
               <b-form-checkbox v-model="premajor_filter">Is Premajor</b-form-checkbox>
-              <b-form-checkbox v-model="stem_filter">Is STEM</b-form-checkbox>
+              <!-- <b-form-checkbox v-model="stem_filter">Is STEM</b-form-checkbox> -->
               <b-form-group
               class="rd-keyword-filter"
               label="Keyword"
@@ -157,6 +157,7 @@
               :fields="fields"
               :per-page= "perPage"
               :current-page="currentPage"
+              sort-icon-left
       >
       </b-table>
     </div>
@@ -242,6 +243,7 @@
               {
                 key: 'uw_netid',
                 label: 'UWNetid',
+                sortable: true
               },
               {
                 key: 'premajor',
@@ -268,7 +270,7 @@
             items: [],
             raw_items: [],
             csv_data: "",
-            perPage: 10,
+            perPage: 200,
             currentPage: 1,
             selected: {},
             activity_filter: [],

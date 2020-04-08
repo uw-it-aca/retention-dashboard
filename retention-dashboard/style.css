@@ -11,6 +11,10 @@ body {
   background-color: white;
 }
 
+.table th {
+  padding: 1.5rem !important;
+}
+
 .row.rd-listactions-container {
   padding: 1rem;
   width: 100%;
@@ -129,7 +133,7 @@ th {
 .rd-form-note {
   clear: both;
   font-size: 85%;
-  padding-top: 1.5rem;
+  padding-top: 1rem;
 }
 
 .rd-form-key {
