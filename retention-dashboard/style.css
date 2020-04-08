@@ -91,7 +91,7 @@ th {
   float: right;
 }
 
-.rd-help-link {
+.rd-info-link {
   margin-left: 0.25rem;
 }
 
@@ -192,13 +192,18 @@ a.rd-help-link:focus svg,a.rd-help-link:hover svg {
   width: 335px;
   }
 
+.rd-support-link {
+  font-size: 1rem;
+}
+
 .rd-footer-links {
   font-size: 0.8725rem;
   padding: 0.5rem 0;
 }
 
 .rd-footer a {
-  color: #fff;
+  color: white;
+  text-decoration: underline;
 }
 
 .rd-footer a:hover,.rd-footer a:focus {
