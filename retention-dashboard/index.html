@@ -485,7 +485,7 @@
               item["premajor"] = (item["premajor"] === "1" ? true: false);
               item["international"] = (item["international"] === "1" ? true: false);
               item["omad"] = (item["omad"] === "1" ? true: false);
-              item["student_id"] = parseInt(item["student_id"]);
+              item["student_id"] = Number(item["student_id"]);
 
               item['activity'] = vue.get_rounded(item['activity']);
               item['assignments'] = vue.get_rounded(item['assignments']);
