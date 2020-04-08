@@ -162,6 +162,15 @@
               sort-icon-left
       >
       </b-table>
+      <b-pagination
+              align="right"
+              class="pagination-sm"
+              v-model="currentPage"
+              :total-rows="rows"
+              :per-page="perPage"
+              aria-controls="data-table"
+      >
+      </b-pagination>
     </div>
     </b-container>
   </script>
