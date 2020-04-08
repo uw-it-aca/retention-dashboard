@@ -12,6 +12,7 @@
   <!-- Load required Bootstrap and BootstrapVue CSS -->
   <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
   <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css" />
+  <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue-icons.min.js"></script>
 
   <!-- Load polyfills to support older browsers -->
   <script src="http://polyfill.io/v3/polyfill.min.js?features=es2015%2CIntersectionObserver" crossorigin="anonymous"></script>
@@ -161,6 +162,31 @@
               :current-page="currentPage"
               sort-icon-left
       >
+        <template v-slot:head(activity)="data">
+          {{ data.label }}<a href="#" class="rd-help-link" id="activity_help" role="button" title="What is the Activity score?"><span class="sr-only">What is the Activity Score?</span><b-icon icon="info-circle-fill" variant="primary"></b-icon></a>
+          <b-popover target="activity_help" triggers="focus">
+            <template v-slot:title>Activity Score</template>
+            This score is indicative of the level a student is interacting with Canvas relative to her classmates. Any number above or below zero indicates a student has greater or less than average activity, respectively. If a student is taking more than one course in Canvas, her score is an average across the courses she is taking.
+          </b-popover>
+        </template>
+
+        <template v-slot:head(assignments)="data">
+          {{ data.label }}<a href="#" class="rd-help-link" id="assignments_help" role="button" title="What is the Assignments score?"><span class="sr-only">What is the Assignments Score?</span><b-icon icon="info-circle-fill" variant="primary"></b-icon></a>
+          <b-popover target="assignments_help" triggers="focus">
+            <template v-slot:title>Assignments Score</template>
+            This score is indicative of how the student is doing relative to her classmates with regards to the status of assignments (e.g. # of missing assignments). Any number above or below zero indicates a student is doing better or worse than average. If the student is taking more than one course in Canvas, her score is an average across the courses she is taking.
+          </b-popover>
+        </template>
+
+        <template v-slot:head(grades)="data">
+          {{ data.label }}<a href="#" class="rd-help-link" id="grades_help" role="button" title="What is the Grades score?"><span class="sr-only">What is the Grades Score?</span><b-icon icon="info-circle-fill" variant="primary"></b-icon></a>
+          <b-popover target="grades_help" triggers="focus">
+            <template v-slot:title>Grades Score</template>
+            This score represents the student’s grade in Canvas relative to her classmates. Any number above or below zero indicates a student has a better or worse grade than the course average. If the student is taking more than one course in Canvas, her grades are averaged across the courses she is taking.
+          </b-popover>
+        </template>
+
+      
       </b-table>
       <b-pagination
               align="right"
@@ -248,15 +274,13 @@
                     {
                 key: 'student_id',
                 label: "Student Number",
-                class: 'text-center',
-                sortable: true
+                class: 'text-center'
               },
 
               {
                 key: 'uw_netid',
                 label: 'UWNetid',
-                class: 'text-center',
-                sortable: true
+                class: 'text-center'
               },
               {
                 key: 'premajor',
@@ -266,7 +290,7 @@
               },
               {
                 key: 'activity',
-                label: 'Activity Score',
+                label: 'Activity',
                 class: 'text-center',
                 sortable: true
               },

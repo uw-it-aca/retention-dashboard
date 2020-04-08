@@ -91,6 +91,14 @@ th {
   float: right;
 }
 
+.rd-help-link {
+  margin-left: 0.25rem;
+}
+
+a.rd-help-link:focus svg,a.rd-help-link:hover svg {
+  color: lightslategrey !important;
+}
+
 /* branding styles */
 .rd-page-header {
   font-size: 2rem;
