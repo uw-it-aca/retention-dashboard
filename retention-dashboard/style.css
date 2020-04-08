@@ -201,19 +201,24 @@ th {
 
 }
 
-@media only screen and (max-width: 576px) {
+@media only screen and (max-width: 550px) {
   /* small screen filter styles */
   .rd-filters-container fieldset {
     border-style: none;
+    margin: 0;
+    padding: 0;
+    width: 130px;
   }
 
   .rd-filters-container fieldset.rd-grades-filters {
-    margin: 0 0 0 2rem;
-    padding: 0 0 0 2rem;
+    margin: 0;
+    padding: 0;
   }
 
   .rd-filters-container fieldset.rd-major-filters {
     border-style: none;
+    margin: 0;
+    padding: 0;
   }
 
   .rd-filter-group-bottom {
