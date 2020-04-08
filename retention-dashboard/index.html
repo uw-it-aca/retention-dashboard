@@ -309,7 +309,7 @@
           },
           load_file(filename){
             var vue = this;
-            axios.get('/data/' + filename)
+            axios.get('data/' + filename)
               .then(function(response){
                 vue.csv_data = response.data;
               })
