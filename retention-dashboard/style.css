@@ -91,7 +91,7 @@ th {
 /* filter styles */
 
 .rd-filters-container {
-  margin-bottom: 3rem;
+  margin: 0 3rem 3rem;
 }
 
 .rd-filters-container fieldset {
@@ -190,7 +190,7 @@ th {
 
 
 
-@media only screen and (max-width: 720px) {
+@media only screen and (max-width: 768px) {
   html {
     font-size: 12px;
   }
@@ -201,8 +201,9 @@ th {
 
 }
 
-@media only screen and (max-width: 550px) {
+@media only screen and (max-width: 534px) {
   /* small screen filter styles */
+
   .rd-filters-container fieldset {
     border-style: none;
     margin: 0;
