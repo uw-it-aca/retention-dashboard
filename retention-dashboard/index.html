@@ -481,6 +481,10 @@
             });
 
             return matches;
+          },
+          get_rounded(num_string){
+            var number = Number(num_string);
+            return Number(number.toFixed(1));
           }
         },
         mounted: function(){
@@ -499,10 +503,17 @@
         watch: {
           csv_data: function (csv){
             var parsed_csv = Papa.parse(csv, {header: true}),
-              csv = parsed_csv.data;
-            csv = csv.map(item => {
-              Object.keys(item).forEach(k => item[k] = isNaN(item[k])? item[k] : Number(item[k]));
-              return item;
+              csv = parsed_csv.data,
+            vue = this;
+            csv.forEach(function(item, idx){
+              item["premajor"] = (item["premajor"] === "1" ? true: false);
+              item["international"] = (item["international"] === "1" ? true: false);
+              item["omad"] = (item["omad"] === "1" ? true: false);
+              item["student_id"] = Number(item["student_id"]);
+
+              item['activity'] = vue.get_rounded(item['activity']);
+              item['assignments'] = vue.get_rounded(item['assignments']);
+              item['grades'] = vue.get_rounded(item['grades']);
             });
             this.items = csv;
             this.raw_items = csv.slice();
