@@ -150,8 +150,10 @@
       >
       </b-pagination>
       <b-table
+              no-border-collapse
               responsive
               show-empty
+              sticky-header
               id="data-table"
               :items="items"
               :fields="fields"
@@ -237,12 +239,14 @@
                     {
                 key: 'student_id',
                 label: "Student Number",
+                class: 'text-center',
                 sortable: true
               },
 
               {
                 key: 'uw_netid',
                 label: 'UWNetid',
+                class: 'text-center',
                 sortable: true
               },
               {
@@ -254,16 +258,19 @@
               {
                 key: 'activity',
                 label: 'Activity Score',
+                class: 'text-center',
                 sortable: true
               },
               {
                 key: 'assignments',
                 label: 'Assignments',
+                class: 'text-center',
                 sortable: true
               },
               {
                 key: 'grades',
                 label: 'Grades',
+                class: 'text-center',
                 sortable: true
               }
             ],

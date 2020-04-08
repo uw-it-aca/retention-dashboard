@@ -9,6 +9,7 @@ body {
 
 .rd-content-container {
   background-color: white;
+  overflow: hidden;
 }
 
 .table th {
@@ -39,6 +40,10 @@ fieldset.form-group {
 
 .custom-control {
   padding-bottom: 0.5rem;
+}
+
+div.b-table-sticky-header {
+  min-height: 750px;
 }
 
 th { 
