@@ -65,11 +65,11 @@
     <b-nav pills>
       <b-nav-item-dropdown
         id="file-dropdown"
-        text="Pick a Dataset"
+        :text="filename"
         toggle-class="nav-link-custom"
         right
       >
-        <b-dropdown-item href="#" @click.prevent="selectPage('all-students.csv')">All students</b-dropdown-item>
+        <b-dropdown-item href="#" @click.prevent="selectPage('all-students.csv')">International students</b-dropdown-item>
         <b-dropdown-item href="#" @click.prevent="selectPage('premajor-students.csv')">Premajor Students</b-dropdown-item>
         <b-dropdown-item href="#" @click.prevent="selectPage('eop-students.csv')">EOP students</b-dropdown-item>
       </b-nav-item-dropdown>
