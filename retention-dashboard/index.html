@@ -41,12 +41,12 @@
 
   <script type="text/x-template" id="default-template">
     <b-container fluid>
-      <b-row class="rd-app-banner">
+      <b-row class="rd-app-banner" role="banner">
         <b-col>
           <h1 class="rd-app-title"><span>Retention Analytics Dashboard</span></h1>
         </b-col>
       </b-row>
-      <b-row>
+      <b-row role="main">
         <filedisplay />
       </b-row>
       <b-row>
@@ -80,7 +80,7 @@
     <b-container class="rd-main-container" fluid>
       <b-row class="rd-listactions-container">
         <b-col>
-          <p>Table contains <span class="rd-student-count">{{ selected_count }}</span> students:
+          <p role="alert">Table contains <span class="rd-student-count">{{ selected_count }}</span> students:
             <b-link v-b-modal.email-modal class="rd-action-link">get e-mail addresses</b-link> or
             <b-link id="csv_download" @click="download_filtered" class="rd-action-link">download results</b-link>
           </p>
