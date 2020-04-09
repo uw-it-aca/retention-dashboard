@@ -135,8 +135,9 @@ a.rd-help-link:focus svg,a.rd-help-link:hover svg {
 
 .rd-filters-container fieldset.rd-major-filters .rd-keyword-filter {
   border: none;
-  margin-top: .5rem;
-  
+  margin-right: 0;
+  margin-top: 0.5rem;
+  padding-right: 0;  
 }
 
 .rd-filters-container fieldset legend {
