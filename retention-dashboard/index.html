@@ -80,7 +80,7 @@
     <b-container class="rd-main-container" fluid>
       <b-row class="rd-listactions-container">
         <b-col>
-          <p><span class="rd-student-count">{{ selected_count }}</span> students selected:
+          <p>Table contains <span class="rd-student-count">{{ selected_count }}</span> students:
             <b-link v-b-modal.email-modal class="rd-action-link">get e-mail addresses</b-link> or
             <b-link id="csv_download" @click="download_filtered" class="rd-action-link">download results</b-link>
           </p>

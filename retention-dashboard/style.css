@@ -174,7 +174,8 @@ a.rd-help-link:focus svg,a.rd-help-link:hover svg {
   background-color: #4b2e83;
   border-radius: 4px;
   color: white;
-  padding: 2px 4px;
+  margin: 0 2px;
+  padding: 3px 6px;
 }
 
 .rd-file-select {
