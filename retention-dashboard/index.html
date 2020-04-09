@@ -189,7 +189,7 @@
         </template>
 
         <template v-slot:cell(grades)="row">
-          <span v-if="row.item.grades === -99" class="sr-only">No grades</span>
+          <span v-if="row.item.grades === -99">No grades</span>
           <span v-else>{{row.item.grades}}</span>
         </template>
 
