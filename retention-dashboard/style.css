@@ -16,6 +16,10 @@ body {
   padding: 1.5rem !important;
 }
 
+.table thead th.text-center {
+  background-position-x: 10px !important;
+}
+
 .row.rd-listactions-container {
   background-color: #dedede;
   border-bottom: solid 2px #cdcdcd;
@@ -217,6 +221,14 @@ a.rd-help-link:focus svg,a.rd-help-link:hover svg {
   color: #e8e3d3;
 }
 
+@media only screen and (min-width: 1290px) {
+
+  .table thead th.text-center.table-b-table-default {
+    background-position-x: 15% !important;
+  }
+
+}
+
 
 @media only screen and (max-width: 992px) {
   html {
@@ -225,6 +237,7 @@ a.rd-help-link:focus svg,a.rd-help-link:hover svg {
 
 }
 
+
 @media only screen and (max-width: 768px) {
   html {
     font-size: 12px;
@@ -232,6 +245,10 @@ a.rd-help-link:focus svg,a.rd-help-link:hover svg {
 
   .hide-lg {
     display: none;
+  }
+
+  .table thead th.text-center {
+    background-position-x: .5rem !important;
   }
 
 }
