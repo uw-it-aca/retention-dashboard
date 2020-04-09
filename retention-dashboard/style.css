@@ -17,8 +17,10 @@ body {
 }
 
 .row.rd-listactions-container {
-  padding: 1rem;
-  width: 100%;
+  background-color: #dedede;
+  border-bottom: solid 2px #cdcdcd;
+  margin-bottom: 2rem;
+  padding: 1rem 0;
 }
 
 .row.rd-listactions-container .col{
@@ -28,6 +30,14 @@ body {
 /* override styles */
 a {
   color: #0069d9;
+}
+
+a.rd-action-link {
+  font-weight: bold;
+}
+
+body p {
+  margin-bottom: 0;
 }
 
 fieldset.form-group {
