@@ -65,13 +65,13 @@
     <b-nav pills>
       <b-nav-item-dropdown
         id="file-dropdown"
-        :text="'File:' + ' ' + filename"
+        :text="filename"
         toggle-class="nav-link-custom"
         right
       >
-        <b-dropdown-item href="#" @click.prevent="selectPage('one.csv')">File: one.csv</b-dropdown-item>
-        <b-dropdown-item href="#" @click.prevent="selectPage('two.csv')">File: two.csv</b-dropdown-item>
-        <b-dropdown-item href="#" @click.prevent="selectPage('three.csv')">File: three.csv</b-dropdown-item>
+        <b-dropdown-item href="#" @click.prevent="selectPage('all-students.csv')">International students</b-dropdown-item>
+        <b-dropdown-item href="#" @click.prevent="selectPage('premajor-students.csv')">Premajor Students</b-dropdown-item>
+        <b-dropdown-item href="#" @click.prevent="selectPage('eop-students.csv')">EOP students</b-dropdown-item>
       </b-nav-item-dropdown>
     </b-nav>
   </script>
@@ -512,7 +512,7 @@
                     this.load_file(file)
                   }
           )
-          this.$store.dispatch('set_file', "one.csv");
+          this.$store.dispatch('set_file', "all-students.csv");
           new ClipboardJS('.copybtn');
         },
         created: function () {
