@@ -38,6 +38,7 @@ a {
 
 a.rd-action-link {
   font-weight: bold;
+  white-space: nowrap;
 }
 
 body p {
