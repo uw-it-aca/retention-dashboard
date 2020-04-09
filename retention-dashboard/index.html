@@ -384,7 +384,11 @@
 
               var row_string = "";
               fields.forEach(function(field){
-                row_string += item[field] + ","
+                if(field === "grades" && item[field] === -99){
+                  row_string += "NA,"
+                } else {
+                  row_string += item[field] + ","
+                }
               });
               //remove trailing comma
               csv_string += row_string.slice(0, -1) + "\n"
