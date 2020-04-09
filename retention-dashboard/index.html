@@ -188,6 +188,11 @@
           </b-popover>
         </template>
 
+        <template v-slot:cell(grades)="row">
+          <span v-if="row.item.grades === -99" class="sr-only">No grades</span>
+          <span v-else>{{row.item.grades}}</span>
+        </template>
+
         <template v-slot:cell(premajor)="row">
           <span v-if="row.item.premajor === true"><b-icon icon="check-box" scale="1.5"></b-icon><span class="sr-only">{{row.item.premajor}}</span></span>
           <span v-else class="sr-only">{{row.item.premajor}}</span>
