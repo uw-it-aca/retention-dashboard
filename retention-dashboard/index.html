@@ -5,13 +5,14 @@
   <meta content="utf-8" http-equiv="encoding">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>Retention Dashboard</title>
-  <link rel="icon" href="static/img/favicon.png">
+  <link rel="icon" href="static/img/favicon.ico">
 
   <link type="text/css" rel="stylesheet" href="style.css" />
 
   <!-- Load required Bootstrap and BootstrapVue CSS -->
   <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
   <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css" />
+  <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue-icons.min.js"></script>
 
   <!-- Load polyfills to support older browsers -->
   <script src="http://polyfill.io/v3/polyfill.min.js?features=es2015%2CIntersectionObserver" crossorigin="anonymous"></script>
@@ -35,123 +36,182 @@
   <!-- Load Clipboard.js -->
   <script src="https://unpkg.com/clipboard@2/dist/clipboard.min.js"></script>
 
+  <!-- Load lodash -->
+  <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.15/lodash.min.js"></script>
+
   <script type="text/x-template" id="default-template">
     <b-container fluid>
-      <b-row class="rd-app-banner">
-        <b-col cols="3" sm="9" lg="10">
-          <h1 class="rd-app-title"><span class="hide-lg">Retention Analytics Dashboard</span></h1>
-        </b-col>
+      <b-row class="rd-app-banner" role="banner">
         <b-col>
-          <h2 id="rd_login_header" class="sr-only">Your information</h2>
-          <div aria-labelledby="rd_login_header" class="rd-login-info">
-            <div>Welcome, </span><span id="netid">{{ netid }}</span></div>
-            <a href="/saml/logout" tabindex="0" class="rd-logout-link">Sign out</a>
-          </div>
+          <h1 class="rd-app-title"><span>Retention Analytics Dashboard</span></h1>
         </b-col>
       </b-row>
-      <b-row>
+      <b-row role="main">
         <filedisplay />
       </b-row>
       <b-row>
         <footer class="rd-footer" role="contentinfo">
           <a href="http://www.uw.edu" class="rd-footer-wordmark">University of Washington</a>
           <div class="rd-footer-links">
-            <a href="https://www.washington.edu/online/privacy/">Privacy</a> / <a href="https://www.washington.edu/online/terms/">Terms</a>
+            <a href="https://www.washington.edu/online/privacy/">Privacy</a> / <a href="https://www.washington.edu/online/terms/">Terms</a> / <a href="mailto:lyle3@uw.edu?subject=Support: Retention Analytics Dashboard">Support</a>
           </div>
-          <div>© 2019 University of Washington  |  Seattle, WA</div>
+          <div>© 2020 University of Washington  |  Seattle, WA</div>
         </footer>
       </b-row>
     </b-container>
   </script>
 
   <script type="text/x-template" id="leftnav-template">
-    <div>
-      <b-nav pills>
-        <b-nav-item-dropdown
-          id="file-dropdown"
-          :text="'File:' + ' ' + filename"
-          toggle-class="nav-link-custom"
-          right
-        >
-          <b-dropdown-item href="#" @click.prevent="selectPage('one.csv')">File: one.csv</b-dropdown-item>
-          <b-dropdown-item href="#" @click.prevent="selectPage('two.csv')">File: two.csv</b-dropdown-item>
-          <b-dropdown-item href="#" @click.prevent="selectPage('three.csv')">File: three.csv</b-dropdown-item>
-        </b-nav-item-dropdown>
-      </b-nav>
-    </div>
+    <b-nav pills>
+      <b-nav-item-dropdown
+        id="file-dropdown"
+        :text="filename"
+        toggle-class="nav-link-custom"
+        right
+      >
+        <b-dropdown-item href="#" @click.prevent="selectPage('all-students.csv')">International students</b-dropdown-item>
+        <b-dropdown-item href="#" @click.prevent="selectPage('premajor-students.csv')">Premajor Students</b-dropdown-item>
+        <b-dropdown-item href="#" @click.prevent="selectPage('eop-students.csv')">EOP students</b-dropdown-item>
+      </b-nav-item-dropdown>
+    </b-nav>
   </script>
 
   <script type="text/x-template" id="filedisplay-template">
-    <b-container fluid>
-      <p>Students Selected: {{ selected_count }}</p>
-      <div>
-        <b-button v-b-modal.email-modal>Get E-Mail Addresses</b-button>
-        <b-modal id="email-modal" title="E-Mail Addresses" ok-only>
-          <textarea id="email_area" readonly>{{ email_list_text }}</textarea>
-          <button class="copybtn" data-clipboard-target="#email_area">copy</button>
-        </b-modal>
-        <button id="csv_download" @click="download_filtered">Download Filtered CSV</button></div>
+    <b-container class="rd-main-container" fluid>
+      <b-row class="rd-listactions-container">
+        <b-col>
+          <p role="alert">Table contains <span class="rd-student-count">{{ selected_count }}</span> students:
+            <b-link v-b-modal.email-modal class="rd-action-link">get e-mail addresses</b-link> or
+            <b-link id="csv_download" @click="download_filtered" class="rd-action-link">download results</b-link>
+          </p>
+          <b-modal id="email-modal" title="E-Mail Addresses" ok-only>
+            <textarea id="email_area" readonly>{{ email_list_text }}</textarea>
+            <button class="copybtn" data-clipboard-target="#email_area">copy</button>
+          </b-modal>
+        </b-col>
+      </b-row>
+      <b-row class="rd-filters-container justify-content-center">
+          <span class="rd-filter-group">
+            <b-form-group
+              label="Activity"  
+            >
+              <b-form-checkbox-group id="activity_filters" v-model="activity_filter" stacked>
+                <b-form-checkbox value="high">High</b-form-checkbox>
+                <b-form-checkbox value="average">Average</b-form-checkbox>
+                <b-form-checkbox value="low">Low</b-form-checkbox>
+              </b-form-checkbox-group>
+            </b-form-group>
+            <b-form-group
+              label="Assignments"
+            >
+              <b-form-checkbox-group id="assignment_filters" v-model="assignment_filter" stacked>
+                <b-form-checkbox value="high">High</b-form-checkbox>
+                <b-form-checkbox value="average">Average</b-form-checkbox>
+                <b-form-checkbox value="low">Low</b-form-checkbox>
+              </b-form-checkbox-group>
+            </b-form-group>
+            <div class="rd-form-note"><span class="rd-form-key"><strong>Low</strong> -5 to -3</span><span class="rd-form-key"><strong class="rd-label">Average</strong> -2 to +2</span><span><strong>High</strong> +3 to +5</span></div>
+          </span>
+          <span class="rd-filter-group rd-filter-group-bottom">
+            <b-form-group
+              class= "rd-grades-filters"
+              label="Grades"
+            >
+              <b-form-checkbox-group id="grade_filters" v-model="grade_filter" stacked>
+                <b-form-checkbox value="high">High</b-form-checkbox>
+                <b-form-checkbox value="average">Average</b-form-checkbox>
+                <b-form-checkbox value="low">Low</b-form-checkbox>
+              </b-form-checkbox-group>
+            </b-form-group>
+            <b-form-group
+              class= "rd-major-filters"
+              label="Major Type"
+              label-class="rd-vis-hidden"
+            >
+              <b-form-checkbox v-model="premajor_filter">Is Pre-Major</b-form-checkbox>
+              <!-- <b-form-checkbox v-model="stem_filter">Is STEM</b-form-checkbox> -->
+              <b-form-group
+              class="rd-keyword-filter"
+              label="Keyword"
+            >
+                <b-form-input v-model="keyword_filter" size="sm" placeholder="Student name, #, NetID"></b-form-input>
+              </b-form-group>
+            </b-form-group>
+          </span>
+      </b-row>
+      <div class="rd-table-container">
       <span class="rd-file-select"><leftnav /></span>
-      <div>
-        <b-form-group>
-          Activity
-          <b-form-checkbox-group id="activity_filters" v-model="activity_filter">
-            <b-form-checkbox value="high">High</b-form-checkbox>
-            <b-form-checkbox value="average">Average</b-form-checkbox>
-            <b-form-checkbox value="low">Low</b-form-checkbox>
-          </b-form-checkbox-group>
-        </b-form-group>
-        <b-form-group>
-          Assignments
-          <b-form-checkbox-group id="assignment_filters" v-model="assignment_filter">
-            <b-form-checkbox value="high">High</b-form-checkbox>
-            <b-form-checkbox value="average">Average</b-form-checkbox>
-            <b-form-checkbox value="low">Low</b-form-checkbox>
-          </b-form-checkbox-group>
-        </b-form-group>
-        <b-form-group>
-          Grades
-          <b-form-checkbox-group id="grade_filters" v-model="grade_filter">
-            <b-form-checkbox value="high">High</b-form-checkbox>
-            <b-form-checkbox value="average">Average</b-form-checkbox>
-            <b-form-checkbox value="low">Low</b-form-checkbox>
-          </b-form-checkbox-group>
-        </b-form-group>
-        <b-form-group>
-          <b-form-checkbox v-model="premajor_filter">Is Premajor</b-form-checkbox>
-        </b-form-group>
-
-      </div>
       <b-pagination
+              align="right"
+              class="pagination-sm"
               v-model="currentPage"
               :total-rows="rows"
               :per-page="perPage"
               aria-controls="data-table"
-      ></b-pagination>
+              first-number
+              last-number
+      >
+      </b-pagination>
       <b-table
+              no-border-collapse
+              responsive
+              show-empty
+              sticky-header
               id="data-table"
               :items="items"
               :fields="fields"
               :per-page= "perPage"
               :current-page="currentPage"
+              sort-icon-left
       >
-
-
-        <template v-slot:cell(actions)="row">
-          <b-form-group>
-            <b-form-checkbox
-                    :id="'email_select' + row.item.email"
-                    :key="row.item.email"
-                    v-model="selected[row.item.email]"
-                    :name="'email_select' + row.item.email"
-                    :value="true"
-                    :unchecked-value="false"
-            >
-              <span class="sr-only">Select application {{ row.item.admission_selection_id }}</span>
-            </b-form-checkbox>
-          </b-form-group>
+        <template v-slot:head(activity)="data">
+          {{ data.label }}<a href="#" class="rd-info-link" id="activity_info" role="button" title="What is the Activity score?"><span class="sr-only">What is the Activity Score?</span><b-icon icon="info-circle-fill" variant="primary"></b-icon></a>
+          <b-popover target="activity_info" triggers="hover focus">
+            <template v-slot:title>Activity Score</template>
+            This score is indicative of the level a student is interacting with Canvas relative to her classmates. Any number above or below zero indicates a student has greater or less than average activity, respectively. If a student is taking more than one course in Canvas, her score is an average across the courses she is taking.
+          </b-popover>
         </template>
+
+        <template v-slot:head(assignments)="data">
+          {{ data.label }}<a href="#" class="rd-info-link" id="assignments_info" role="button" title="What is the Assignments score?"><span class="sr-only">What is the Assignments Score?</span><b-icon icon="info-circle-fill" variant="primary"></b-icon></a>
+          <b-popover target="assignments_info" triggers="hover focus">
+            <template v-slot:title>Assignments Score</template>
+            This score is indicative of how the student is doing relative to her classmates with regards to the status of assignments (e.g. # of missing assignments). Any number above or below zero indicates a student is doing better or worse than average. If the student is taking more than one course in Canvas, her score is an average across the courses she is taking.
+          </b-popover>
+        </template>
+
+        <template v-slot:head(grades)="data">
+          {{ data.label }}<a href="#" class="rd-info-link" id="grades_info" role="button" title="What is the Grades score?"><span class="sr-only">What is the Grades Score?</span><b-icon icon="info-circle-fill" variant="primary"></b-icon></a>
+          <b-popover target="grades_info" triggers="hover focus">
+            <template v-slot:title>Grades Score</template>
+            This score represents the student’s grade in Canvas relative to her classmates. Any number above or below zero indicates a student has a better or worse grade than the course average. If the student is taking more than one course in Canvas, her grades are averaged across the courses she is taking.
+          </b-popover>
+        </template>
+
+        <template v-slot:cell(grades)="row">
+          <span v-if="row.item.grades === -99">No grades</span>
+          <span v-else>{{row.item.grades}}</span>
+        </template>
+
+        <template v-slot:cell(premajor)="row">
+          <span v-if="row.item.premajor === true"><b-icon icon="check-box" scale="1.5"></b-icon><span class="sr-only">{{row.item.premajor}}</span></span>
+          <span v-else class="sr-only">{{row.item.premajor}}</span>
+        </template>
+
+      
       </b-table>
+      <b-pagination
+              align="right"
+              class="pagination-sm"
+              v-model="currentPage"
+              :total-rows="rows"
+              :per-page="perPage"
+              aria-controls="data-table"
+              first-number
+              last-number
+      >
+      </b-pagination>
+    </div>
     </b-container>
   </script>
 
@@ -221,10 +281,6 @@
           return {
             fields: [
               {
-                key: 'Actions',
-                label: '✓'
-              },
-              {
                 key: 'name',
                 label: "Student Name",
                 sortable: true
@@ -232,43 +288,43 @@
                     {
                 key: 'student_id',
                 label: "Student Number",
-                sortable: true
+                class: 'text-center'
               },
 
               {
                 key: 'uw_netid',
                 label: 'UWNetid',
-              },
-              {
-                key: 'premajor',
-                label: 'Pre-Major Status',
-                sortable: true
-              },
-                    {
-                key: 'premajor',
-                label: 'Pre-Major Status',
-                sortable: true
+                class: 'text-center'
               },
               {
                 key: 'activity',
-                label: 'Activity Score',
+                label: 'Activity',
+                class: 'text-center',
                 sortable: true
               },
               {
                 key: 'assignments',
                 label: 'Assignments',
+                class: 'text-center',
                 sortable: true
               },
               {
                 key: 'grades',
                 label: 'Grades',
+                class: 'text-center',
+                sortable: true
+              },
+              {
+                key: 'premajor',
+                label: 'Pre-Major',
+                class: 'text-center',
                 sortable: true
               }
             ],
             items: [],
             raw_items: [],
             csv_data: "",
-            perPage: 10,
+            perPage: 200,
             currentPage: 1,
             selected: {},
             activity_filter: [],
@@ -292,28 +348,24 @@
             return this.items.length;
           },
           selected_count (){
-            return this.get_selected().length;
+            return this.items.length;
           },
           email_list_text () {
-            var selected = this.get_selected();
+            var selected = this.get_filtered_emails();
             return selected.join(", ");;
           }
         },
         methods: {
-          get_selected(){
-            var selected = [];
-            for (var key in this.selected) {
-              if (this.selected.hasOwnProperty(key)) {
-                if(this.selected[key] === true){
-                  selected.push(key);
-                }
-              }
-            }
-            return selected;
+          get_filtered_emails(){
+            var emails = [];
+            this.items.forEach(function(item){
+              emails.push(item['uw_netid'] + "@uw.edu")
+            });
+            return emails;
           },
           load_file(filename){
             var vue = this;
-            axios.get('/data/' + filename)
+            axios.get('data/' + filename)
               .then(function(response){
                 vue.csv_data = response.data;
               })
@@ -322,17 +374,10 @@
             })
           },
           download_filtered() {
-            var to_download = [],
+            var to_download = this.items,
                     hiddenElement = document.createElement('a'),
-                    selected = this.get_selected(),
                     timestamp = Math.round(Date.now()/1000),
                     csv_string = "";
-            for (var item in this.items){
-              if(selected.includes(this.items[item]['email'])){
-                to_download.push(this.items[item])
-              }
-            }
-            // format object to string
 
             // Header
             var fields = Object.keys(to_download[0]);
@@ -344,7 +389,11 @@
 
               var row_string = "";
               fields.forEach(function(field){
-                row_string += item[field] + ","
+                if(field === "grades" && item[field] === -99){
+                  row_string += "NA,"
+                } else {
+                  row_string += item[field] + ","
+                }
               });
               //remove trailing comma
               csv_string += row_string.slice(0, -1) + "\n"
@@ -405,9 +454,16 @@
             }
 
             //Premajor Filter
-            if(this.premajor_filter){
+            if(this.premajor_filter) {
               var premajor_items = this.filter_by_value("premajor", true);
               this.items = premajor_items;
+            }
+
+            //Keyword Filter
+            if(this.keyword_filter.length > 0){
+              var keyword_items = this.filter_by_text(this.keyword_filter);
+              this.items = keyword_items;
+
             }
           },
           filter_by_range(attr, min_value, max_value){
@@ -429,6 +485,24 @@
               }
             });
             return matches;
+          },
+          filter_by_text(text){
+            var items =  this.items,
+                    matches = [];
+            text = text.trim().toLowerCase();
+            items.forEach(function (item, index) {
+              Object.keys(item).forEach(function(key, idx){
+                if(item[key].toString().toLowerCase().includes(text)){
+                  matches.push(item)
+                }
+              });
+            });
+
+            return matches;
+          },
+          get_rounded(num_string){
+            var number = Number(num_string);
+            return Number(number.toFixed(1));
           }
         },
         mounted: function(){
@@ -438,14 +512,30 @@
                     this.load_file(file)
                   }
           )
-          this.$store.dispatch('set_file', "one.csv");
+          this.$store.dispatch('set_file', "all-students.csv");
           new ClipboardJS('.copybtn');
+        },
+        created: function () {
+          this.debouncedRunFilters = _.debounce(this.run_filters, 1000)
         },
         watch: {
           csv_data: function (csv){
-            var parsed_csv = Papa.parse(csv, {header: true});
-            this.items = parsed_csv.data;
-            this.raw_items = parsed_csv.data.slice();
+            var parsed_csv = Papa.parse(csv, {header: true}),
+              csv = parsed_csv.data,
+            vue = this;
+            csv.forEach(function(item, idx){
+              item["premajor"] = (item["premajor"] === "1" ? true: false);
+              item["international"] = (item["international"] === "1" ? true: false);
+              item["omad"] = (item["omad"] === "1" ? true: false);
+              item["student_id"] = Number(item["student_id"]);
+
+              item['activity'] = vue.get_rounded(item['activity']);
+              item['assignments'] = vue.get_rounded(item['assignments']);
+              item['grades'] = vue.get_rounded(item['grades']);
+            });
+            this.items = csv;
+            this.raw_items = csv.slice();
+            this.run_filters();
           },
           assignment_filter: function () {
             this.run_filters();
@@ -458,6 +548,9 @@
           },
           premajor_filter: function () {
             this.run_filters();
+          },
+          keyword_filter: function () {
+            this.debouncedRunFilters();
           }
 
         }
