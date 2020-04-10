@@ -28,13 +28,11 @@ def get_row(row):
     netid = gen_netid()
     name = names.get_full_name()
     premajor = row['premajor']
-    inter = row['international']
-    omad = row['omad']
     acti = row['activity']
     assi = row['assignments']
     grade = row['grades']
 
-    return [stu_num, netid, name, premajor, inter, omad, acti, assi, grade]
+    return [netid, stu_num, name, premajor, acti, assi, grade]
 
 
 def gen_netid():

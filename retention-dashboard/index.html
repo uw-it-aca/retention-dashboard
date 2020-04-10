@@ -69,7 +69,7 @@
         toggle-class="nav-link-custom"
         right
       >
-        <b-dropdown-item href="#" @click.prevent="selectPage('all-students.csv')">International students</b-dropdown-item>
+        <b-dropdown-item href="#" @click.prevent="selectPage('international-students.csv')">International students</b-dropdown-item>
         <b-dropdown-item href="#" @click.prevent="selectPage('premajor-students.csv')">Premajor Students</b-dropdown-item>
         <b-dropdown-item href="#" @click.prevent="selectPage('eop-students.csv')">EOP students</b-dropdown-item>
       </b-nav-item-dropdown>
@@ -281,12 +281,12 @@
           return {
             fields: [
               {
-                key: 'name',
+                key: 'student_name_lowc',
                 label: "Student Name",
                 sortable: true
               },
                     {
-                key: 'student_id',
+                key: 'student_no',
                 label: "Student Number",
                 class: 'text-center'
               },
@@ -512,7 +512,7 @@
                     this.load_file(file)
                   }
           )
-          this.$store.dispatch('set_file', "all-students.csv");
+          this.$store.dispatch('set_file', "international-students.csv");
           new ClipboardJS('.copybtn');
         },
         created: function () {
@@ -525,9 +525,7 @@
             vue = this;
             csv.forEach(function(item, idx){
               item["premajor"] = (item["premajor"] === "1" ? true: false);
-              item["international"] = (item["international"] === "1" ? true: false);
-              item["omad"] = (item["omad"] === "1" ? true: false);
-              item["student_id"] = Number(item["student_id"]);
+              item["student_no"] = Number(item["student_no"]);
 
               item['activity'] = vue.get_rounded(item['activity']);
               item['assignments'] = vue.get_rounded(item['assignments']);
