@@ -76,6 +76,33 @@
     </b-nav>
   </script>
 
+  <script type="text/x-template" id="dateselect-template">
+    <b-form inline>
+      <b-form-group
+        id="date_select"
+        label="Choose a week of data"
+        label-class="sr-only"
+      >
+        <b-form-select
+          v-model="currentqtr"
+          id="quarter_dropdown"
+          class="rd-date-select"
+          :options="quarters"
+          size="sm"
+        >
+        </b-form-select>
+        <b-form-select
+          v-model="currentweek"
+          id="week_dropdown"
+          class="rd-date-select"
+          :options="weeks"
+          size="sm"
+        >
+        </b-form-select>
+      </b-form-group>
+    </b-form>
+  </script>
+
   <script type="text/x-template" id="filedisplay-template">
     <b-container class="rd-main-container" fluid>
       <b-row class="rd-listactions-container">
@@ -138,20 +165,26 @@
               </b-form-group>
             </b-form-group>
           </span>
+      </b-row>  
+      <b-row class="rd-table-container">
+        <b-col cols="5" md="9">
+          <span class="rd-file-select"><leftnav /></span>
+          <span class="rd-date-select"><dateselect /></span>
+        </b-col>
+        <b-col cols="7" md="3" class="rd-pagination-container">
+          <b-pagination
+                  align="right"
+                  class="pagination-sm"
+                  v-model="currentPage"
+                  :total-rows="rows"
+                  :per-page="perPage"
+                  aria-controls="data-table"
+                  first-number
+                  last-number
+          >
+          </b-pagination>
+        </b-col>
       </b-row>
-      <div class="rd-table-container">
-      <span class="rd-file-select"><leftnav /></span>
-      <b-pagination
-              align="right"
-              class="pagination-sm"
-              v-model="currentPage"
-              :total-rows="rows"
-              :per-page="perPage"
-              aria-controls="data-table"
-              first-number
-              last-number
-      >
-      </b-pagination>
       <b-table
               no-border-collapse
               responsive
@@ -272,6 +305,33 @@
           selectPage(page){
             this.$store.dispatch('set_file', page);
           }
+        }
+      });
+
+      Vue.component("dateselect", {
+        template: "#dateselect-template",
+        data(){
+          return {
+            currentqtr: 'spring2020',
+            currentweek: 'week1',
+            quarters: [
+              { value: 'spring2020', text: 'Spring 2020' },
+            ],
+            weeks: [
+              { value: 'week1', text: 'Week 1' },
+              { value: 'week2', text: 'Week 2' }
+            ]
+          };
+        },
+        computed: {
+          filename (){
+
+          }
+        },
+        mounted() {
+
+        },
+        methods: {
         }
       });
 
