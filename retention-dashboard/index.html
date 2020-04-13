@@ -15,7 +15,7 @@
   <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue-icons.min.js"></script>
 
   <!-- Load polyfills to support older browsers -->
-  <script src="http://polyfill.io/v3/polyfill.min.js?features=es2015%2CIntersectionObserver" crossorigin="anonymous"></script>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es2015%2CIntersectionObserver" crossorigin="anonymous"></script>
 
   <!-- Load Vue followed by BootstrapVue -->
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
@@ -260,16 +260,23 @@
     <script>
       const store = new Vuex.Store({
         state: {
-          current_file: ""
+          current_file: "",
+          current_week: "week1"
         },
         mutations: {
           set_file (state, value){
             state.current_file = value;
+          },
+          set_week (state, value){
+            state.current_week = value;
           }
         },
         actions: {
           set_file ({ commit, state }, value) {
             commit('set_file', value)
+          },
+          set_week ({ commit, state }, value) {
+            commit('set_week', value)
           }
         }
       });
@@ -334,7 +341,15 @@
         mounted() {
 
         },
+        watch: {
+          currentweek: function(){
+            this.selectWeek(this.currentweek)
+          }
+        },
         methods: {
+          selectWeek(week){
+            this.$store.dispatch('set_week', week);
+          }
         }
       });
 
@@ -415,8 +430,9 @@
           },
           email_list_text () {
             var selected = this.get_filtered_emails();
-            return selected.join(", ");;
-          }
+            return selected.join(", ");
+          },
+          ...Vuex.mapState(['current_week', 'current_file'])
         },
         methods: {
           get_filtered_emails(){
@@ -426,8 +442,9 @@
             });
             return emails;
           },
-          load_file(filename){
-            var vue = this;
+          load_file(){
+            var vue = this,
+                filename = this.current_week + "/" + this.current_file;
             axios.get('data/' + filename)
               .then(function(response){
                 vue.csv_data = response.data;
@@ -572,9 +589,15 @@
           this.$store.watch(
                   state => state.current_file,
                   (file) => {
-                    this.load_file(file)
+                    this.load_file()
                   }
-          )
+          );
+          this.$store.watch(
+                  state => state.current_week,
+                  (week) => {
+                    this.load_file()
+                  }
+          );
           this.$store.dispatch('set_file', "international-students.csv");
           new ClipboardJS('.copybtn');
         },
