@@ -67,6 +67,7 @@
         id="file-dropdown"
         :text="filename"
         toggle-class="nav-link-custom"
+        aria-controls="data_table"
         right
       >
         <b-dropdown-item href="#" @click.prevent="selectPage('international-students.csv')">International students</b-dropdown-item>
@@ -88,6 +89,7 @@
           id="quarter_dropdown"
           class="rd-date-select"
           :options="quarters"
+          aria-controls="data_table"
           size="sm"
         >
         </b-form-select>
@@ -96,6 +98,7 @@
           id="week_dropdown"
           class="rd-date-select"
           :options="weeks"
+          aria-controls="data_table"
           size="sm"
         >
         </b-form-select>
@@ -178,7 +181,7 @@
                   v-model="currentPage"
                   :total-rows="rows"
                   :per-page="perPage"
-                  aria-controls="data-table"
+                  aria-controls="data_table"
                   first-number
                   last-number
           >
@@ -190,7 +193,7 @@
               responsive
               show-empty
               sticky-header
-              id="data-table"
+              id="data_table"
               :items="items"
               :fields="fields"
               :per-page= "perPage"
@@ -239,7 +242,7 @@
               v-model="currentPage"
               :total-rows="rows"
               :per-page="perPage"
-              aria-controls="data-table"
+              aria-controls="data_table"
               first-number
               last-number
       >
