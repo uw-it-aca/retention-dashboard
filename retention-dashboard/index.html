@@ -68,7 +68,6 @@
         :text="filename"
         toggle-class="nav-link-custom"
         aria-controls="data_table"
-        right
       >
         <b-dropdown-item href="#" @click.prevent="selectPage('international-students.csv')">International students</b-dropdown-item>
         <b-dropdown-item href="#" @click.prevent="selectPage('premajor-students.csv')">Premajor Students</b-dropdown-item>
@@ -81,18 +80,10 @@
     <b-form inline>
       <b-form-group
         id="date_select"
-        label="Choose a week of data"
+        label="Select week"
         label-class="sr-only"
+        label-for="week_dropdown"
       >
-        <b-form-select
-          v-model="currentqtr"
-          id="quarter_dropdown"
-          class="rd-date-select"
-          :options="quarters"
-          aria-controls="data_table"
-          size="sm"
-        >
-        </b-form-select>
         <b-form-select
           v-model="currentweek"
           id="week_dropdown"
@@ -322,14 +313,10 @@
         template: "#dateselect-template",
         data(){
           return {
-            currentqtr: 'spring2020',
             currentweek: 'week1',
-            quarters: [
-              { value: 'spring2020', text: 'Spring 2020' },
-            ],
             weeks: [
-              { value: 'week1', text: 'Week 1' },
-              { value: 'week2', text: 'Week 2' }
+              { value: 'week1', text: 'Spring 2020: Week 2' },
+              { value: 'week2', text: 'Spring 2020: Week 3' }
             ]
           };
         },
