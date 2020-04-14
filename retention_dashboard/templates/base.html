@@ -1,0 +1,37 @@
+{% load static %}
+{% load render_bundle from webpack_loader %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta content="{{ csrf_token }}=" name="csrf-token" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" href="{% static '/retention_dashboard/img/favicon.png' %}">
+    <title>Application Assignment Tool</title>
+
+    <!-- fontawesome js -->
+    <script src="https://kit.fontawesome.com/b05fd46f45.js" crossorigin="anonymous"></script>
+
+    <!-- base js libs -->
+    <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+
+    <!-- load bundled vendor files using webpack loader -->
+{#  {% render_bundle 'base' %} #}
+    {% render_bundle 'vendor' %}
+
+</head>
+
+<body class="rad" data-django-debug="{{ django_debug|lower}}">
+    <script type="text/javascript">
+      window.user_netid = '{{ netid }}';
+    </script>
+    <div class="rad-content">
+        {% block content %}{% endblock %}
+    </div>
+
+
+</body>
+
+</html>

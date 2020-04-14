@@ -13,7 +13,7 @@ MIDDLEWARE += ['userservice.user.UserServiceMiddleware']
 WEBPACK_LOADER = {
     'DEFAULT': {
         'BUNDLE_DIR_NAME': 'retention_dashboard/bundles/',
-        'STATS_FILE': os.path.join(BASE_DIR, 'cohort_manager', 'static', 'webpack-stats.json'),
+        'STATS_FILE': os.path.join(BASE_DIR, 'retention_dashboard', 'static', 'webpack-stats.json'),
     }
 }
 

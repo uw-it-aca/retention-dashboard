@@ -22,7 +22,7 @@ class PageView(TemplateView):
 @method_decorator(group_required(settings.ALLOWED_USERS_GROUP),
                   name='dispatch')
 class LandingView(PageView):
-    template_name = "index.html"
+    template_name = "landing.html"
 
 
 

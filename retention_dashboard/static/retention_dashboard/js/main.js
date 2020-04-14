@@ -7,6 +7,7 @@ import VueMoment from 'vue-moment';
 import moment from 'moment-timezone';
 
 import App from "./App.vue";
+import DataView from "./components/DataView.vue";
 
 // import the bootstrap / bootstrap-vue base css
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -27,15 +28,7 @@ export const EventBus = new Vue();
 var router = new VueRouter({
   mode: "history",
   routes: [
-    { path: '/', redirect: '/cohort_list/' },
-    { path: '/cohort/', component: Cohort },
-    { path: '/cohort/:id', component: Cohort },
-    { path: '/major/', component: Major },
-    { path: '/major/:id', component: Major },
-    { path: '/cohort_list/', component: CohortList },
-    { path: '/major_list/', component: MajorList },
-    { path: '/log/', component: Log },
-    { path: '/log/:id', component: Log },
+    { path: '/', component: DataView },
   ]
 });
 
@@ -57,3 +50,4 @@ new Vue({
   router,
   render: h => h(App)
 }).$mount("#main");
+
