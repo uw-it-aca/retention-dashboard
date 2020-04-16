@@ -1,18 +1,25 @@
 <template>
   <b-container fluid>
     <p>App Wrapper</p>
-    <main ref="main" aria-labelledby="aat_page_header" class="col aat-main-container">
-      <router-view />
+    <main ref="main" aria-labelledby="" class="col">
+      <b-col cols="5" md="9">
+        <dataselect></dataselect>
+      </b-col>
+
+      <dataview></dataview>
     </main>
   </b-container>
 </template>
 
 <script>
-
+  import DataSelect from "./components/DataSelect.vue";
+  import DataView from "./components/DataView.vue";
   const axios = require("axios");
   export default {
     name: "LandingPage",
     components: {
+      dataselect: DataSelect,
+      dataview: DataView
     },
     data(){
       return {};

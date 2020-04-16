@@ -2,6 +2,7 @@ from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_required
 from uw_saml.utils import get_user
 import json
+import os
 from django.conf import settings
 from django.http import HttpResponse
 from django.views import View
@@ -55,4 +56,7 @@ class RESTDispatch(View):
                   name='dispatch')
 class DataView(RESTDispatch):
     def get(self, request, week, file, *args, **kwargs):
-        return self.json_response(content={"week": week, "file": file})
+        file_path = os.path.join(settings.BASE_DIR, "retention_dashboard/data", week, file)
+        with open(file_path, 'r') as content_file:
+            content = content_file.read()
+        return self.json_response(content={"data": content})
