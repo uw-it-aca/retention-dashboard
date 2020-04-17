@@ -7,6 +7,8 @@ import names
 """
 Deidentifies data in analytics csv
 """
+
+
 def scramble(in_path, out_path):
     headers = []
     clean_rows = []

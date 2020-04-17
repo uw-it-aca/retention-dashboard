@@ -26,9 +26,6 @@ class LandingView(PageView):
     template_name = "landing.html"
 
 
-
-
-
 class RESTDispatch(View):
     @staticmethod
     def json_response(content={}, status=200):
@@ -51,12 +48,13 @@ class RESTDispatch(View):
                             )
 
 
-
 @method_decorator(group_required(settings.ALLOWED_USERS_GROUP),
                   name='dispatch')
 class DataView(RESTDispatch):
     def get(self, request, week, file, *args, **kwargs):
-        file_path = os.path.join(settings.BASE_DIR, "retention_dashboard/data", week, file)
+        file_path = os.path.join(settings.BASE_DIR, "retention_dashboard/data",
+                                 week,
+                                 file)
         with open(file_path, 'r') as content_file:
             content = content_file.read()
         return self.json_response(content={"data": content})
