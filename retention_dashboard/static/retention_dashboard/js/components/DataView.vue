@@ -120,6 +120,16 @@
         <span v-else>{{row.item.grades}}</span>
       </template>
 
+      <template v-slot:cell(activity)="row">
+        <span v-if="row.item.activity === -99">No data</span>
+        <span v-else>{{row.item.activity}}</span>
+      </template>
+
+      <template v-slot:cell(assignments)="row">
+        <span v-if="row.item.assignments === -99">No data</span>
+        <span v-else>{{row.item.assignments}}</span>
+      </template>
+
       <template v-slot:cell(premajor)="row">
         <span v-if="row.item.premajor === true"><b-icon icon="check-box" scale="1.5"></b-icon><span class="sr-only">{{row.item.premajor}}</span></span>
         <span v-else class="sr-only">{{row.item.premajor}}</span>
@@ -266,7 +276,7 @@ import { mapState, mapActions } from 'vuex';
 
           var row_string = "";
           fields.forEach(function(field){
-            if(field === "grades" && item[field] === -99){
+            if(item[field] === -99){
               row_string += "NA,"
             } else {
               row_string += item[field] + ","
