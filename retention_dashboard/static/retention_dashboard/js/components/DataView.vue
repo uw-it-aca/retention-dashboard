@@ -7,8 +7,10 @@
           <b-link id="csv_download" @click="download_filtered" class="rd-action-link">download results</b-link>
         </p>
         <b-modal id="email-modal" title="E-Mail Addresses" ok-only>
-          <textarea id="email_area" readonly>{{ email_list_text }}</textarea>
-          <button v-clipboard:copy="email_list_text">copy</button>
+          <div class="container">
+            <textarea id="email_area" readonly>{{ email_list_text }}</textarea>
+              <button v-clipboard:copy="email_list_text">copy</button>
+          </div>
         </b-modal>
       </b-col>
     </b-row>

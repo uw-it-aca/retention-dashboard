@@ -22,6 +22,8 @@ import "bootstrap-vue/dist/bootstrap-vue.css";
 const gaCode = "UA-12345-6";
 const debugMode = $("body").data("django-debug");
 
+VueClipboard.config.autoSetContainer = true
+
 Vue.use(VueRouter);
 Vue.use(BootstrapVue);
 Vue.use(BootstrapVueIcons);
