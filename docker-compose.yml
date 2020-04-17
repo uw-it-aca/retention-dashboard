@@ -17,8 +17,8 @@ services:
     container_name: devtools
     image: node:8.16.0-jessie
     volumes:
-#      - ./package.json:/devtools/cohort-manager/package.json
-#      - ./webpack.config.js:/devtools/cohort-manager/webpack.config.js
-      - ./retention_dashboard:/devtools/cohort-manager/retention_dashboard
+      - ./package.json:/devtools/retention_dashboard/package.json
+      - ./webpack.config.js:/devtools/retention_dashboard/webpack.config.js
+      - ./retention_dashboard:/devtools/retention_dashboard/retention_dashboard
     working_dir: /devtools/retention_dashboard
     command: bash -c "yes yes | npm install; npx webpack --watch --mode=development"
