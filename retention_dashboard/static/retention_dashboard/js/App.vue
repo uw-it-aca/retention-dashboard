@@ -14,7 +14,6 @@
 <script>
   import DataSelect from "./components/DataSelect.vue";
   import DataView from "./components/DataView.vue";
-  const axios = require("axios");
   export default {
     name: "LandingPage",
     components: {

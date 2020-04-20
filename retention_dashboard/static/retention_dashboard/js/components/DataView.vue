@@ -13,7 +13,7 @@
         </p>
         <b-modal id="email-modal" title="E-Mail Addresses" ok-only>
           <div class="container">
-            <textarea id="email_area" readonly>{{ email_list_text }}</textarea>
+            <textarea id="email_area" v-model="email_list_text" readonly />
             <button v-clipboard:copy="email_list_text">
               copy
             </button>
@@ -156,7 +156,6 @@
       first-number
       last-number
     />
-    </div>
   </b-container>
 </template>
 <script>
@@ -164,7 +163,6 @@
   import Vuex from 'vuex';
   import {_} from 'vue-underscore';
   import axios from 'axios';
-  import { mapState, mapActions } from 'vuex';
   export default {
     name: "DataView",
     data: function() {
@@ -252,9 +250,9 @@
     watch: {
       csv_data: function (csv){
         var parsed_csv = this.$papa.parse(csv, {header: true}),
-            csv = parsed_csv.data,
+            csv_data = parsed_csv.data,
             vue = this;
-        csv.forEach(function(item, idx){
+        csv_data.forEach(function(item){
           item["premajor"] = (item["premajor"] === "1" ? true: false);
           item["student_no"] = Number(item["student_no"]);
 
@@ -262,8 +260,8 @@
           item['assignments'] = vue.get_rounded(item['assignments']);
           item['grades'] = vue.get_rounded(item['grades']);
         });
-        this.items = csv;
-        this.raw_items = csv.slice();
+        this.items = csv_data;
+        this.raw_items = csv_data.slice();
         this.run_filters();
       },
       assignment_filter: function () {
@@ -286,13 +284,13 @@
     mounted: function(){
       this.$store.watch(
         state => state.dataselect.current_file,
-        (file) => {
+        () => {
           this.load_file();
         }
       );
       this.$store.watch(
         state => state.dataselect.current_week,
-        (week) => {
+        () => {
           this.load_file();
         }
       );
@@ -417,7 +415,7 @@
       filter_by_range(attr, min_value, max_value){
         var items =  this.items,
             matches = [];
-        items.forEach(function (item, index) {
+        items.forEach(function (item) {
           if(min_value <= parseFloat(item[attr]) && parseFloat(item[attr]) <= max_value){
             matches.push(item);
           }
@@ -427,7 +425,7 @@
       filter_by_value(attr, value){
         var items =  this.items,
             matches = [];
-        items.forEach(function (item, index) {
+        items.forEach(function (item) {
           if(item[attr] == value){
             matches.push(item);
           }
@@ -438,8 +436,8 @@
         var items =  this.items,
             matches = [];
         text = text.trim().toLowerCase();
-        items.forEach(function (item, index) {
-          Object.keys(item).forEach(function(key, idx){
+        items.forEach(function (item) {
+          Object.keys(item).forEach(function(key){
             if(item[key].toString().toLowerCase().includes(text)){
               matches.push(item);
             }

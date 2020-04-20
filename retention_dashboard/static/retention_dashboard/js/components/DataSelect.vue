@@ -40,9 +40,7 @@
 
 <script>
 
-  const axios = require("axios");
   import Vuex from 'vuex';
-  import { mapState, mapActions } from 'vuex';
   export default {
     name: "DataSelect",
     components: {},

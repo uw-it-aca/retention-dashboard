@@ -1,9 +1,3 @@
-
-// initial state
-// shape: [{ id, quantity }]
-import Vue from "vue";
-import Vuex from "vuex";
-
 const state = {
   current_year: '',
   current_quarter: '',
@@ -16,10 +10,10 @@ const getters = {};
 
 // actions
 const actions = {
-  set_file ({ commit, state }, value) {
+  set_file ({ commit }, value) {
     commit('set_file', value);
   },
-  set_week ({ commit, state }, value) {
+  set_week ({ commit }, value) {
     commit('set_week', value);
   }
 };
