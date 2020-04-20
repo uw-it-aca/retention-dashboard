@@ -216,8 +216,18 @@
         </template>
 
         <template v-slot:cell(grades)="row">
-          <span v-if="row.item.grades === -99">No grades</span>
+          <span v-if="row.item.grades === -99">No data</span>
           <span v-else>{{row.item.grades}}</span>
+        </template>
+
+        <template v-slot:cell(activity)="row">
+          <span v-if="row.item.activity === -99">No data</span>
+          <span v-else>{{row.item.activity}}</span>
+        </template>
+
+        <template v-slot:cell(assignments)="row">
+          <span v-if="row.item.assignments === -99">No data</span>
+          <span v-else>{{row.item.assignments}}</span>
         </template>
 
         <template v-slot:cell(premajor)="row">
@@ -456,7 +466,7 @@
 
               var row_string = "";
               fields.forEach(function(field){
-                if(field === "grades" && item[field] === -99){
+                if(item[field] === -99){
                   row_string += "NA,"
                 } else {
                   row_string += item[field] + ","
