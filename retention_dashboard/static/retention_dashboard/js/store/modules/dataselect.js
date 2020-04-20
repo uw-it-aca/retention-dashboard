@@ -9,10 +9,10 @@ const state = {
   current_quarter: '',
   current_week: '',
   current_file: ''
-}
+};
 
 // getters
-const getters = {}
+const getters = {};
 
 // actions
 const actions = {
@@ -40,4 +40,4 @@ export default {
   getters,
   actions,
   mutations
-}
+};

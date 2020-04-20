@@ -3,10 +3,10 @@
     <p>App Wrapper</p>
     <main ref="main" aria-labelledby="" class="col">
       <b-col cols="5" md="9">
-        <dataselect></dataselect>
+        <dataselect />
       </b-col>
 
-      <dataview></dataview>
+      <dataview />
     </main>
   </b-container>
 </template>

@@ -10,7 +10,7 @@ import store from './store';
 import App from "./App.vue";
 import DataView from "./components/DataView.vue";
 import VueClipboard from 'vue-clipboard2';
-import VuePapaParse from 'vue-papa-parse'
+import VuePapaParse from 'vue-papa-parse';
 
 
 // import the bootstrap / bootstrap-vue base css
@@ -22,7 +22,7 @@ import "bootstrap-vue/dist/bootstrap-vue.css";
 const gaCode = "UA-12345-6";
 const debugMode = $("body").data("django-debug");
 
-VueClipboard.config.autoSetContainer = true
+VueClipboard.config.autoSetContainer = true;
 
 Vue.use(VueRouter);
 Vue.use(BootstrapVue);
