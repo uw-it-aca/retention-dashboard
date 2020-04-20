@@ -15,7 +15,7 @@
   <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue-icons.min.js"></script>
 
   <!-- Load polyfills to support older browsers -->
-  <script src="http://polyfill.io/v3/polyfill.min.js?features=es2015%2CIntersectionObserver" crossorigin="anonymous"></script>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es2015%2CIntersectionObserver" crossorigin="anonymous"></script>
 
   <!-- Load Vue followed by BootstrapVue -->
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
@@ -67,13 +67,34 @@
         id="file-dropdown"
         :text="filename"
         toggle-class="nav-link-custom"
-        right
+        aria-controls="data_table"
       >
         <b-dropdown-item href="#" @click.prevent="selectPage('international-students.csv')">International students</b-dropdown-item>
         <b-dropdown-item href="#" @click.prevent="selectPage('premajor-students.csv')">Premajor Students</b-dropdown-item>
         <b-dropdown-item href="#" @click.prevent="selectPage('eop-students.csv')">EOP students</b-dropdown-item>
       </b-nav-item-dropdown>
     </b-nav>
+  </script>
+
+  <script type="text/x-template" id="dateselect-template">
+    <b-form inline>
+      <b-form-group
+        id="date_select"
+        label="Select week"
+        label-class="sr-only"
+        label-for="week_dropdown"
+      >
+        <b-form-select
+          v-model="currentweek"
+          id="week_dropdown"
+          class="rd-date-select"
+          :options="weeks"
+          aria-controls="data_table"
+          size="sm"
+        >
+        </b-form-select>
+      </b-form-group>
+    </b-form>
   </script>
 
   <script type="text/x-template" id="filedisplay-template">
@@ -138,26 +159,32 @@
               </b-form-group>
             </b-form-group>
           </span>
+      </b-row>  
+      <b-row class="rd-table-container">
+        <b-col cols="5" md="9">
+          <span class="rd-file-select"><leftnav /></span>
+          <span class="rd-date-select"><dateselect /></span>
+        </b-col>
+        <b-col cols="7" md="3" class="rd-pagination-container">
+          <b-pagination
+                  align="right"
+                  class="pagination-sm"
+                  v-model="currentPage"
+                  :total-rows="rows"
+                  :per-page="perPage"
+                  aria-controls="data_table"
+                  first-number
+                  last-number
+          >
+          </b-pagination>
+        </b-col>
       </b-row>
-      <div class="rd-table-container">
-      <span class="rd-file-select"><leftnav /></span>
-      <b-pagination
-              align="right"
-              class="pagination-sm"
-              v-model="currentPage"
-              :total-rows="rows"
-              :per-page="perPage"
-              aria-controls="data-table"
-              first-number
-              last-number
-      >
-      </b-pagination>
       <b-table
               no-border-collapse
               responsive
               show-empty
               sticky-header
-              id="data-table"
+              id="data_table"
               :items="items"
               :fields="fields"
               :per-page= "perPage"
@@ -189,8 +216,18 @@
         </template>
 
         <template v-slot:cell(grades)="row">
-          <span v-if="row.item.grades === -99">No grades</span>
+          <span v-if="row.item.grades === -99">No data</span>
           <span v-else>{{row.item.grades}}</span>
+        </template>
+
+        <template v-slot:cell(activity)="row">
+          <span v-if="row.item.activity === -99">No data</span>
+          <span v-else>{{row.item.activity}}</span>
+        </template>
+
+        <template v-slot:cell(assignments)="row">
+          <span v-if="row.item.assignments === -99">No data</span>
+          <span v-else>{{row.item.assignments}}</span>
         </template>
 
         <template v-slot:cell(premajor)="row">
@@ -206,7 +243,7 @@
               v-model="currentPage"
               :total-rows="rows"
               :per-page="perPage"
-              aria-controls="data-table"
+              aria-controls="data_table"
               first-number
               last-number
       >
@@ -224,16 +261,23 @@
     <script>
       const store = new Vuex.Store({
         state: {
-          current_file: ""
+          current_file: "",
+          current_week: "week1"
         },
         mutations: {
           set_file (state, value){
             state.current_file = value;
+          },
+          set_week (state, value){
+            state.current_week = value;
           }
         },
         actions: {
           set_file ({ commit, state }, value) {
             commit('set_file', value)
+          },
+          set_week ({ commit, state }, value) {
+            commit('set_week', value)
           }
         }
       });
@@ -271,6 +315,37 @@
         methods: {
           selectPage(page){
             this.$store.dispatch('set_file', page);
+          }
+        }
+      });
+
+      Vue.component("dateselect", {
+        template: "#dateselect-template",
+        data(){
+          return {
+            currentweek: 'week1',
+            weeks: [
+              { value: 'week1', text: 'Spring 2020: Week 2' },
+              { value: 'week2', text: 'Spring 2020: Week 3' }
+            ]
+          };
+        },
+        computed: {
+          filename (){
+
+          }
+        },
+        mounted() {
+
+        },
+        watch: {
+          currentweek: function(){
+            this.selectWeek(this.currentweek)
+          }
+        },
+        methods: {
+          selectWeek(week){
+            this.$store.dispatch('set_week', week);
           }
         }
       });
@@ -352,8 +427,9 @@
           },
           email_list_text () {
             var selected = this.get_filtered_emails();
-            return selected.join(", ");;
-          }
+            return selected.join(", ");
+          },
+          ...Vuex.mapState(['current_week', 'current_file'])
         },
         methods: {
           get_filtered_emails(){
@@ -363,8 +439,9 @@
             });
             return emails;
           },
-          load_file(filename){
-            var vue = this;
+          load_file(){
+            var vue = this,
+                filename = this.current_week + "/" + this.current_file;
             axios.get('data/' + filename)
               .then(function(response){
                 vue.csv_data = response.data;
@@ -389,7 +466,7 @@
 
               var row_string = "";
               fields.forEach(function(field){
-                if(field === "grades" && item[field] === -99){
+                if(item[field] === -99){
                   row_string += "NA,"
                 } else {
                   row_string += item[field] + ","
@@ -509,9 +586,15 @@
           this.$store.watch(
                   state => state.current_file,
                   (file) => {
-                    this.load_file(file)
+                    this.load_file()
                   }
-          )
+          );
+          this.$store.watch(
+                  state => state.current_week,
+                  (week) => {
+                    this.load_file()
+                  }
+          );
           this.$store.dispatch('set_file', "international-students.csv");
           new ClipboardJS('.copybtn');
         },

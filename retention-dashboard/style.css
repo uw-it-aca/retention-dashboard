@@ -23,6 +23,7 @@ body {
 .row.rd-listactions-container {
   background-color: #dedede;
   border-bottom: solid 2px #cdcdcd;
+  line-height: 2;
   margin-bottom: 2rem;
   padding: 1rem 0;
 }
@@ -169,6 +170,17 @@ a.rd-help-link:focus svg,a.rd-help-link:hover svg {
   padding-right: 1rem;
 }
 
+/* Pagination */
+.rd-pagination-container {
+  align-self: flex-end;
+}
+
+/* date select  */
+.rd-date-select {
+  float: left;
+  margin-right: 0.5rem;
+}
+
 /* main content styles */
 .rd-student-count {
   background-color: #4b2e83;
@@ -253,6 +265,11 @@ a.rd-help-link:focus svg,a.rd-help-link:hover svg {
     background-position-x: .5rem !important;
   }
 
+  /* small screen date picker*/
+  .rd-date-select {
+    margin: 0 0 0.5rem 0.5rem;
+  }
+
 }
 
 @media only screen and (max-width: 558px) {
@@ -283,4 +300,5 @@ a.rd-help-link:focus svg,a.rd-help-link:hover svg {
   .rd-form-note {
     padding-top: 1rem;
   }
+
 }
