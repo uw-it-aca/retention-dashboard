@@ -28,8 +28,7 @@ function run_test {
 run_test "pycodestyle ${DJANGO_APP}/ --exclude='migrations,resources,static'"
 
 
-run_test "eslint --ext .js,.vue retention_dashboard/static/retention_dashboard/js/components/"
-run_test "eslint --ext .js,.vue retention_dashboard/static/retention_dashboard/js/pages/"
+run_test "eslint --ext .js,.vue retention_dashboard/static/retention_dashboard/js/"
 
 run_test "stylelint 'retention_dashboard/**/*.vue' 'retention_dashboard/**/*.scss' "
 run_test "coverage run --source=${DJANGO_APP} '--omit=*/migrations/*' manage.py test ${DJANGO_APP}"
