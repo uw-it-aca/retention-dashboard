@@ -459,5 +459,126 @@
 </script>
 
 <style lang="scss">
+  /* Structure */
 
+  .row.rd-listactions-container {
+    background-color: #dedede;
+    border-bottom: solid 2px #cdcdcd;
+    line-height: 2;
+    margin-bottom: 2rem;
+    padding: 1rem 0;
+  }
+
+  .row.rd-listactions-container .col{
+    text-align: center;
+  }
+
+
+  /* Top banner styles */
+
+  .rd-info-link {
+    margin-left: 0.25rem;
+  }
+
+  a.rd-help-link:focus svg,a.rd-help-link:hover svg {
+    color: lightslategrey !important;
+  }
+
+  /* filter styles */
+
+  .rd-filters-container {
+    padding: 0 15px 1rem;
+  }
+
+  .rd-filters-container fieldset {
+    border: 1px #ccc solid;
+    border-style: none solid none none;
+    float: left;
+    margin: 0 2rem 0 0;
+    padding: 0 2rem 0 0;
+  }
+
+  .rd-filters-container fieldset.rd-grades-filters {
+    border: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .rd-filters-container fieldset.rd-major-filters {
+    border: 1px #ccc solid;
+    border-style: none none none solid;
+    float: left;
+    margin: 0 0 0 2rem;
+    padding: 0 0 0 2rem;
+  }
+
+  .rd-filters-container fieldset.rd-major-filters .rd-keyword-filter {
+    border: none;
+    margin-right: 0;
+    margin-top: 0.5rem;
+    padding-right: 0;  
+  }
+
+  .rd-filters-container fieldset legend {
+    font-weight: bold;
+  }
+
+  .rd-form-note {
+    clear: both;
+    font-size: 85%;
+    padding-top: 1rem;
+  }
+
+  .rd-form-key {
+    padding-right: 1rem;
+  }
+
+  /* Pagination */
+  .rd-pagination-container {
+    align-self: flex-end;
+  }
+
+  /* main content styles */
+  .rd-student-count {
+    background-color: #4b2e83;
+    border-radius: 4px;
+    color: white;
+    margin: 0 2px;
+    padding: 3px 6px;
+  }
+
+  .rd-table-container {
+    margin-top: 2rem;
+  }
+
+  @media only screen and (max-width: 558px) {
+    /* small screen filter styles */
+
+    .rd-filters-container fieldset {
+      border-style: none;
+      margin: 0;
+      padding: 0;
+      width: 130px;
+    }
+
+    .rd-filters-container fieldset.rd-grades-filters {
+      margin: 0;
+      padding: 0;
+    }
+
+    .rd-filters-container fieldset.rd-major-filters {
+      border-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .rd-filter-group-bottom {
+      margin-top: 2rem;
+    }
+
+    .rd-form-note {
+      padding-top: 1rem;
+    }
+
+  }
 </style>

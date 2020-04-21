@@ -44,4 +44,115 @@
   // import base.scss which inherits the custom theme
   @import '../css/base.scss';
 
+  /* Structure */
+
+  .rd-content-container {
+    background-color: white;
+    overflow: hidden;
+  }
+
+  /* override styles */
+
+  a.rd-action-link {
+    font-weight: bold;
+    white-space: nowrap;
+  }
+
+  .rd-vis-hidden {
+    visibility: hidden;
+  }
+
+  /* Top banner styles */
+  .rd-app-banner {
+    align-items: center;
+    background-color: #4b2e83;
+    background-image: url('/static/retention_dashboard/img/uw-logo-white.png');
+    background-position: left 18px;
+    background-repeat: no-repeat;
+    background-size: 60px;
+    border-bottom: 3px solid #d1d1d1;
+    color: #fff;
+    font-size: 0.75rem;
+    min-height: 60px;
+  }
+
+  .rd-app-banner a {
+    color: #e8e3d3;
+  }
+
+  .rd-app-banner a:focus, .rd-app-banner a:hover {
+    color: white;
+    text-decoration: underline;
+  }
+
+  .rd-app-title {
+    font-size: 2rem;
+    margin-bottom: 0;
+    margin-left: 55px;
+    padding-top: 12px;
+  }
+
+  .rd-login-info {
+    flex: auto;
+    float: right;
+    font-weight: 600;
+    margin-left: 2rem;
+  }
+
+  .rd-logout-link {
+    float: right;
+  }
+
+  /* branding styles */
+  .rd-page-header {
+    font-size: 2rem;
+    padding: 1.5rem 0;
+  }
+
+  /* footer styles */
+
+  .rd-footer {
+    background-color: #4b2e83;
+    border-top: 3px solid #d1d1d1;
+    color: #fff;
+    font-size: 0.75rem;
+    min-height: 100px;
+    min-width: 100%;
+    padding: 1.5rem 0;
+    text-align: center;
+  }
+
+  .rd-footer-wordmark {
+    background: url('/static/retention_dashboard/img/uw-sprite.svg') no-repeat 0 -434px transparent;
+    display: inline-block;
+    margin-bottom: 1rem;
+    min-height: 16px;
+    overflow: hidden;
+    text-indent: -9999px;
+    width: 335px;
+    }
+
+  .rd-footer-links {
+    font-size: 0.8725rem;
+    padding: 0.5rem 0;
+  }
+
+  .rd-footer a {
+    color: white;
+    text-decoration: underline;
+  }
+
+  .rd-footer a:hover,.rd-footer a:focus {
+    color: #e8e3d3;
+  }
+
+
+  @media only screen and (max-width: 768px) {
+
+    .hide-lg {
+      display: none;
+    }
+
+  }
+
 </style>
