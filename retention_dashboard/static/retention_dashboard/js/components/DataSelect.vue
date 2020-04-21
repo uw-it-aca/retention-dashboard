@@ -1,5 +1,6 @@
 <template>
-  <div>
+<b-col cols="5" md="9">
+  <span class="rd-file-select">
     <b-nav pills>
       <b-nav-item-dropdown
         id="file-dropdown"
@@ -18,6 +19,8 @@
         </b-dropdown-item>
       </b-nav-item-dropdown>
     </b-nav>
+  </span>
+  <span>
     <b-form inline>
       <b-form-group
         id="date_select"
@@ -35,7 +38,8 @@
         />
       </b-form-group>
     </b-form>
-  </div>
+  </span>
+</b-col>
 </template>
 
 <script>

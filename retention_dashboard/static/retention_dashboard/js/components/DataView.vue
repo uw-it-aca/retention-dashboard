@@ -71,6 +71,7 @@
       </span>
     </b-row>
     <b-row class="rd-table-container">
+      <dataselect />
       <b-col cols="7" md="3" class="rd-pagination-container">
         <b-pagination
           v-model="currentPage"
@@ -159,12 +160,15 @@
   </b-container>
 </template>
 <script>
-
+  import DataSelect from "./DataSelect.vue";
   import Vuex from 'vuex';
   import {_} from 'vue-underscore';
   import axios from 'axios';
   export default {
     name: "DataView",
+    components: {
+      dataselect: DataSelect
+    },
     data: function() {
       return {
         fields: [
