@@ -2,7 +2,9 @@
   <b-container id="app" class="rd-content-container" fluid>
     <b-row class="rd-app-banner" role="banner">
       <b-col>
-        <h1 class="rd-app-title"><span>Retention Analytics Dashboard</span></h1>
+        <h1 class="rd-app-title">
+          <span>Retention Analytics Dashboard</span>
+        </h1>
       </b-col>
     </b-row>
     <b-row role="main">

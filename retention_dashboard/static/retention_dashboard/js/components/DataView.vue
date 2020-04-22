@@ -73,24 +73,6 @@
     <b-row class="rd-table-container">
       <b-col cols="5" md="9">
         <dataselect />
-        <span class="rd-date-select">
-          <b-form inline>
-            <b-form-group
-              id="date_select"
-              label="Select week"
-              label-class="sr-only"
-              label-for="week_dropdown"
-            >
-              <b-form-select
-                id="week_dropdown"
-                v-model="currentweek"
-                :options="weeks"
-                aria-controls="data_table"
-                size="sm"
-              />
-            </b-form-group>
-          </b-form>
-        </span>
       </b-col>
       <b-col cols="7" md="3" class="rd-pagination-container">
         <b-pagination
@@ -191,11 +173,6 @@
     },
     data: function() {
       return {
-        weeks: [
-              { value: 'week1', text: 'Spring 2020: Week 2' },
-              { value: 'week2', text: 'Spring 2020: Week 3' }
-            ],
-        currentweek: 'week2',
         fields: [
           {
             key: 'student_name_lowc',
@@ -324,7 +301,7 @@
         }
       );
       this.$store.dispatch('dataselect/set_file', "international-students.csv");
-      this.$store.dispatch('dataselect/set_week', "1");
+      this.$store.dispatch('dataselect/set_week', "2");
     },
     created: function () {
       this.debouncedRunFilters = _.debounce(this.run_filters, 1000);
@@ -537,7 +514,7 @@
           border: none;
           margin-right: 0;
           margin-top: 0.5rem;
-          padding-right: 0;  
+          padding-right: 0;
         }
       }
     }
@@ -556,19 +533,6 @@
   .rd-form-key {
     padding-right: 1rem;
   }
-
-  /* date select  */
-    .rd-date-select {
-    float: left;
-    margin-right: 0.5rem;
-    }
-
-    @media only screen and (max-width: 768px) {
-      /* small screen date picker*/
-      .rd-date-select {
-          margin: 0 0 0.5rem 0.5rem;
-      }
-    }
 
   /* Pagination */
   .rd-pagination-container {
