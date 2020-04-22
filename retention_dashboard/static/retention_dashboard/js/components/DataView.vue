@@ -71,7 +71,27 @@
       </span>
     </b-row>
     <b-row class="rd-table-container">
-      <dataselect />
+      <b-col cols="5" md="9">
+        <dataselect />
+        <span class="rd-date-select">
+          <b-form inline>
+            <b-form-group
+              id="date_select"
+              label="Select week"
+              label-class="sr-only"
+              label-for="week_dropdown"
+            >
+              <b-form-select
+                id="week_dropdown"
+                v-model="currentweek"
+                :options="weeks"
+                aria-controls="data_table"
+                size="sm"
+              />
+            </b-form-group>
+          </b-form>
+        </span>
+      </b-col>
       <b-col cols="7" md="3" class="rd-pagination-container">
         <b-pagination
           v-model="currentPage"
@@ -128,7 +148,7 @@
       </template>
 
       <template v-slot:cell(grades)="row">
-        <span v-if="row.item.grades === -99">No grades</span>
+        <span v-if="row.item.grades === -99">No data</span>
         <span v-else>{{ row.item.grades }}</span>
       </template>
 
@@ -171,6 +191,11 @@
     },
     data: function() {
       return {
+        weeks: [
+              { value: 'week1', text: 'Spring 2020: Week 2' },
+              { value: 'week2', text: 'Spring 2020: Week 3' }
+            ],
+        currentweek: 'week2',
         fields: [
           {
             key: 'student_name_lowc',
@@ -467,12 +492,11 @@
     line-height: 2;
     margin-bottom: 2rem;
     padding: 1rem 0;
-  }
 
-  .row.rd-listactions-container .col{
-    text-align: center;
+    .col{
+      text-align: center;
+    }
   }
-
 
   /* Top banner styles */
 
@@ -488,35 +512,35 @@
 
   .rd-filters-container {
     padding: 0 15px 1rem;
-  }
 
-  .rd-filters-container fieldset {
-    border: 1px #ccc solid;
-    border-style: none solid none none;
-    float: left;
-    margin: 0 2rem 0 0;
-    padding: 0 2rem 0 0;
-  }
+    fieldset {
+      border: 1px #ccc solid;
+      border-style: none solid none none;
+      float: left;
+      margin: 0 2rem 0 0;
+      padding: 0 2rem 0 0;
 
-  .rd-filters-container fieldset.rd-grades-filters {
-    border: none;
-    margin: 0;
-    padding: 0;
-  }
+      &.rd-grades-filters {
+        border: none;
+        margin: 0;
+        padding: 0;
+      }
 
-  .rd-filters-container fieldset.rd-major-filters {
-    border: 1px #ccc solid;
-    border-style: none none none solid;
-    float: left;
-    margin: 0 0 0 2rem;
-    padding: 0 0 0 2rem;
-  }
+      &.rd-major-filters {
+        border: 1px #ccc solid;
+        border-style: none none none solid;
+        float: left;
+        margin: 0 0 0 2rem;
+        padding: 0 0 0 2rem;
 
-  .rd-filters-container fieldset.rd-major-filters .rd-keyword-filter {
-    border: none;
-    margin-right: 0;
-    margin-top: 0.5rem;
-    padding-right: 0;  
+        .rd-keyword-filter {
+          border: none;
+          margin-right: 0;
+          margin-top: 0.5rem;
+          padding-right: 0;  
+        }
+      }
+    }
   }
 
   .rd-filters-container fieldset legend {
@@ -532,6 +556,19 @@
   .rd-form-key {
     padding-right: 1rem;
   }
+
+  /* date select  */
+    .rd-date-select {
+    float: left;
+    margin-right: 0.5rem;
+    }
+
+    @media only screen and (max-width: 768px) {
+      /* small screen date picker*/
+      .rd-date-select {
+          margin: 0 0 0.5rem 0.5rem;
+      }
+    }
 
   /* Pagination */
   .rd-pagination-container {
@@ -559,17 +596,17 @@
       margin: 0;
       padding: 0;
       width: 130px;
-    }
 
-    .rd-filters-container fieldset.rd-grades-filters {
-      margin: 0;
-      padding: 0;
-    }
+      &.rd-grades-filters {
+        margin: 0;
+        padding: 0;
+      }
 
-    .rd-filters-container fieldset.rd-major-filters {
-      border-style: none;
-      margin: 0;
-      padding: 0;
+      &.rd-major-filters {
+        border-style: none;
+        margin: 0;
+        padding: 0;
+      }
     }
 
     .rd-filter-group-bottom {

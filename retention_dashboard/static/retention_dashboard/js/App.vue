@@ -74,15 +74,15 @@
     color: #fff;
     font-size: 0.75rem;
     min-height: 60px;
-  }
 
-  .rd-app-banner a {
-    color: #e8e3d3;
-  }
+    a {
+      color: #e8e3d3;
 
-  .rd-app-banner a:focus, .rd-app-banner a:hover {
-    color: white;
-    text-decoration: underline;
+      &:focus, &:hover {
+        color: white;
+        text-decoration: underline;
+      }
+    }
   }
 
   .rd-app-title {
@@ -120,6 +120,15 @@
     min-width: 100%;
     padding: 1.5rem 0;
     text-align: center;
+
+    a {
+      color: white;
+      text-decoration: underline;
+
+      &:hover,&:focus {
+        color: #e8e3d3;
+      }
+    }
   }
 
   .rd-footer-wordmark {
@@ -135,15 +144,6 @@
   .rd-footer-links {
     font-size: 0.8725rem;
     padding: 0.5rem 0;
-  }
-
-  .rd-footer a {
-    color: white;
-    text-decoration: underline;
-  }
-
-  .rd-footer a:hover,.rd-footer a:focus {
-    color: #e8e3d3;
   }
 
 
