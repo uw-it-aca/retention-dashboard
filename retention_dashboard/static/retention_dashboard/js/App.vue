@@ -49,13 +49,13 @@
   /* Structure */
 
   .rd-content-container {
-    background-color: white;
+    background-color: #fff;
     overflow: hidden;
   }
 
   /* override styles */
 
-  a.rd-action-link {
+  .rd-action-link {
     font-weight: bold;
     white-space: nowrap;
   }
@@ -79,11 +79,12 @@
 
     a {
       color: #e8e3d3;
+    }
 
-      &:focus, &:hover {
-        color: white;
-        text-decoration: underline;
-      }
+    a:focus,
+    a:hover {
+      color: #fff;
+      text-decoration: underline;
     }
   }
 
@@ -124,12 +125,13 @@
     text-align: center;
 
     a {
-      color: white;
+      color: #fff;
       text-decoration: underline;
+    }
 
-      &:hover,&:focus {
-        color: #e8e3d3;
-      }
+    a:hover,
+    a:focus {
+      color: #e8e3d3;
     }
   }
 
@@ -141,7 +143,7 @@
     overflow: hidden;
     text-indent: -9999px;
     width: 335px;
-    }
+  }
 
   .rd-footer-links {
     font-size: 0.8725rem;
@@ -150,7 +152,6 @@
 
 
   @media only screen and (max-width: 768px) {
-
     .hide-lg {
       display: none;
     }

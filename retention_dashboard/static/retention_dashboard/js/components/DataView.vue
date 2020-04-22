@@ -470,7 +470,7 @@
     margin-bottom: 2rem;
     padding: 1rem 0;
 
-    .col{
+    .col {
       text-align: center;
     }
   }
@@ -479,10 +479,6 @@
 
   .rd-info-link {
     margin-left: 0.25rem;
-  }
-
-  a.rd-help-link:focus svg,a.rd-help-link:hover svg {
-    color: lightslategrey !important;
   }
 
   /* filter styles */
@@ -496,27 +492,27 @@
       float: left;
       margin: 0 2rem 0 0;
       padding: 0 2rem 0 0;
+    }
 
-      &.rd-grades-filters {
-        border: none;
-        margin: 0;
-        padding: 0;
-      }
+    .rd-grades-filters {
+      border-style: none;
+      margin: 0;
+      padding: 0;
+    }
 
-      &.rd-major-filters {
-        border: 1px #ccc solid;
-        border-style: none none none solid;
-        float: left;
-        margin: 0 0 0 2rem;
-        padding: 0 0 0 2rem;
+    .rd-major-filters {
+      border: 1px #ccc solid;
+      border-style: none none none solid;
+      float: left;
+      margin: 0 0 0 2rem;
+      padding: 0 0 0 2rem;
+    }
 
-        .rd-keyword-filter {
-          border: none;
-          margin-right: 0;
-          margin-top: 0.5rem;
-          padding-right: 0;
-        }
-      }
+    fieldset .rd-keyword-filter {
+      border-style: none;
+      margin-right: 0;
+      margin-top: 0.5rem;
+      padding-right: 0;
     }
   }
 
@@ -543,7 +539,7 @@
   .rd-student-count {
     background-color: #4b2e83;
     border-radius: 4px;
-    color: white;
+    color: #fff;
     margin: 0 2px;
     padding: 3px 6px;
   }
@@ -555,18 +551,20 @@
   @media only screen and (max-width: 558px) {
     /* small screen filter styles */
 
-    .rd-filters-container fieldset {
-      border-style: none;
-      margin: 0;
-      padding: 0;
-      width: 130px;
+    .rd-filters-container {   
+      fieldset {
+        border-style: none;
+        margin: 0;
+        padding: 0;
+        width: 130px;
+      }
 
-      &.rd-grades-filters {
+      .rd-grades-filters {
         margin: 0;
         padding: 0;
       }
 
-      &.rd-major-filters {
+      .rd-major-filters {
         border-style: none;
         margin: 0;
         padding: 0;

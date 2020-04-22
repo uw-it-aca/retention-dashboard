@@ -11,7 +11,7 @@ body {
   padding: 1.5rem !important;
 }
 
-.table thead th.text-center {
+.table thead .text-center {
   background-position-x: 10px !important;
 }
 
@@ -24,7 +24,7 @@ body p {
   margin-bottom: 0;
 }
 
-fieldset.form-group {
+.rd-filter-group .form-group {
   margin-bottom: 0;
 }
 
@@ -32,7 +32,7 @@ fieldset.form-group {
   padding-bottom: 0.5rem;
 }
 
-div.b-table-sticky-header {
+.b-table-sticky-header {
   min-height: 750px;
 }
 
@@ -41,8 +41,7 @@ th {
 }
 
 @media only screen and (min-width: 1290px) {
-
-  .table thead th.text-center.table-b-table-default {
+  .table thead .text-center.table-b-table-default {
     background-position-x: 15% !important;
   }
 
@@ -53,8 +52,8 @@ th {
     font-size: 14px;
   }
 
-  .table thead th.text-center {
-    background-position-x: .5rem !important;
+  .table thead .text-center {
+    background-position-x: 0.5rem !important;
   }
 
 }

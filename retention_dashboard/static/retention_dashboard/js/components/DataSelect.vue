@@ -83,19 +83,19 @@
   /* main content styles */
 
   .rd-file-select {
-  float:left;
+    float: left;
   }
 
-   /* date select  */
-    .rd-date-select {
+  /* date select  */
+  .rd-date-select {
     float: left;
     margin-right: 0.5rem;
-    }
+  }
 
-    @media only screen and (max-width: 768px) {
-      /* small screen date picker*/
-      .rd-date-select {
-          margin: 0 0 0.5rem 0.5rem;
-      }
+  @media only screen and (max-width: 768px) {
+    /* small screen date picker*/
+    .rd-date-select {
+      margin: 0 0 0.5rem 0.5rem;
     }
+  }
 </style>
