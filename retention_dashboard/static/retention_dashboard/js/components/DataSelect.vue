@@ -80,6 +80,7 @@
 </script>
 
 <style lang="scss">
+  @import '../../css/_variables.scss';
   /* main content styles */
 
   .rd-file-select {

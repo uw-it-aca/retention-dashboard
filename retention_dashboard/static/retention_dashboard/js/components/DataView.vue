@@ -461,11 +461,12 @@
 </script>
 
 <style lang="scss">
+  @import '../../css/_variables.scss';
   /* Structure */
 
   .row.rd-listactions-container {
-    background-color: #dedede;
-    border-bottom: solid 2px #cdcdcd;
+    background-color: $grey-bkgnd;
+    border-bottom: solid 2px $grey-border;
     line-height: 2;
     margin-bottom: 2rem;
     padding: 1rem 0;
@@ -487,7 +488,7 @@
     padding: 0 15px 1rem;
 
     fieldset {
-      border: 1px #ccc solid;
+      border: 1px $grey-border solid;
       border-style: none solid none none;
       float: left;
       margin: 0 2rem 0 0;
@@ -501,7 +502,7 @@
     }
 
     .rd-major-filters {
-      border: 1px #ccc solid;
+      border: 1px $grey-border solid;
       border-style: none none none solid;
       float: left;
       margin: 0 0 0 2rem;
@@ -537,9 +538,9 @@
 
   /* main content styles */
   .rd-student-count {
-    background-color: #4b2e83;
+    background-color: $uw-purple;
     border-radius: 4px;
-    color: #fff;
+    color: $white-text;
     margin: 0 2px;
     padding: 3px 6px;
   }

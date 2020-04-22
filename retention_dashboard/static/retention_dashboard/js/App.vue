@@ -49,7 +49,7 @@
   /* Structure */
 
   .rd-content-container {
-    background-color: #fff;
+    background-color: $app-bkgnd;
     overflow: hidden;
   }
 
@@ -67,23 +67,23 @@
   /* Top banner styles */
   .rd-app-banner {
     align-items: center;
-    background-color: #4b2e83;
+    background-color: $uw-purple;
     background-image: url('/static/retention_dashboard/img/uw-logo-white.png');
     background-position: left 18px;
     background-repeat: no-repeat;
     background-size: 60px;
-    border-bottom: 3px solid #d1d1d1;
-    color: #fff;
+    border-bottom: 3px solid $banner-border;
+    color: $white-text;
     font-size: 0.75rem;
     min-height: 60px;
 
     a {
-      color: #e8e3d3;
+      color: $uw-metallic;
     }
 
     a:focus,
     a:hover {
-      color: #fff;
+      color: $white-text;
       text-decoration: underline;
     }
   }
@@ -115,9 +115,9 @@
   /* footer styles */
 
   .rd-footer {
-    background-color: #4b2e83;
-    border-top: 3px solid #d1d1d1;
-    color: #fff;
+    background-color: $uw-purple;
+    border-top: 3px solid $banner-border;
+    color: $white-text;
     font-size: 0.75rem;
     min-height: 100px;
     min-width: 100%;
@@ -125,13 +125,13 @@
     text-align: center;
 
     a {
-      color: #fff;
+      color: $white-text;
       text-decoration: underline;
     }
 
     a:hover,
     a:focus {
-      color: #e8e3d3;
+      color: $uw-metallic;
     }
   }
 
