@@ -54,7 +54,7 @@
           { value: '2', text: 'Spring 2020: Week 2' },
           { value: '3', text: 'Spring 2020: Week 3' }
         ],
-        currentweek: '2',
+        currentweek: '3',
       };
     },
     computed: {
