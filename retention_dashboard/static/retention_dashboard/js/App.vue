@@ -1,0 +1,161 @@
+<template>
+  <b-container id="app" class="rd-content-container" fluid>
+    <b-row class="rd-app-banner" role="banner">
+      <b-col>
+        <h1 class="rd-app-title">
+          <span>Retention Analytics Dashboard</span>
+        </h1>
+      </b-col>
+    </b-row>
+    <b-row role="main">
+      <dataview />
+    </b-row>
+    <b-row>
+      <footer class="rd-footer" role="contentinfo">
+        <a href="http://www.uw.edu" class="rd-footer-wordmark">University of Washington</a>
+        <div class="rd-footer-links">
+          <a href="https://www.washington.edu/online/privacy/">Privacy</a> / <a href="https://www.washington.edu/online/terms/">Terms</a> / <a href="mailto:lyle3@uw.edu?subject=Support: Retention Analytics Dashboard">Support</a>
+        </div>
+        <div>© 2020 University of Washington  |  Seattle, WA</div>
+      </footer>
+    </b-row>
+  </b-container>
+</template>
+
+<script>
+  import DataView from "./components/DataView.vue";
+  export default {
+    name: "LandingPage",
+    components: {
+      dataview: DataView
+    },
+    data(){
+      return {};
+    },
+    computed: {},
+    watch: {
+      $route(){ },
+    },
+    mounted() {
+    },
+    methods: {}
+  };
+</script>
+
+<style lang="scss">
+  // import base.scss which inherits the custom theme
+  @import '../css/base.scss';
+
+  /* Structure */
+
+  .rd-content-container {
+    background-color: #fff;
+    overflow: hidden;
+  }
+
+  /* override styles */
+
+  .rd-action-link {
+    font-weight: bold;
+    white-space: nowrap;
+  }
+
+  .rd-vis-hidden {
+    visibility: hidden;
+  }
+
+  /* Top banner styles */
+  .rd-app-banner {
+    align-items: center;
+    background-color: #4b2e83;
+    background-image: url('/static/retention_dashboard/img/uw-logo-white.png');
+    background-position: left 18px;
+    background-repeat: no-repeat;
+    background-size: 60px;
+    border-bottom: 3px solid #d1d1d1;
+    color: #fff;
+    font-size: 0.75rem;
+    min-height: 60px;
+
+    a {
+      color: #e8e3d3;
+    }
+
+    a:focus,
+    a:hover {
+      color: #fff;
+      text-decoration: underline;
+    }
+  }
+
+  .rd-app-title {
+    font-size: 2rem;
+    margin-bottom: 0;
+    margin-left: 55px;
+    padding-top: 12px;
+  }
+
+  .rd-login-info {
+    flex: auto;
+    float: right;
+    font-weight: 600;
+    margin-left: 2rem;
+  }
+
+  .rd-logout-link {
+    float: right;
+  }
+
+  /* branding styles */
+  .rd-page-header {
+    font-size: 2rem;
+    padding: 1.5rem 0;
+  }
+
+  /* footer styles */
+
+  .rd-footer {
+    background-color: #4b2e83;
+    border-top: 3px solid #d1d1d1;
+    color: #fff;
+    font-size: 0.75rem;
+    min-height: 100px;
+    min-width: 100%;
+    padding: 1.5rem 0;
+    text-align: center;
+
+    a {
+      color: #fff;
+      text-decoration: underline;
+    }
+
+    a:hover,
+    a:focus {
+      color: #e8e3d3;
+    }
+  }
+
+  .rd-footer-wordmark {
+    background: url('/static/retention_dashboard/img/uw-sprite.svg') no-repeat 0 -434px transparent;
+    display: inline-block;
+    margin-bottom: 1rem;
+    min-height: 16px;
+    overflow: hidden;
+    text-indent: -9999px;
+    width: 335px;
+  }
+
+  .rd-footer-links {
+    font-size: 0.8725rem;
+    padding: 0.5rem 0;
+  }
+
+
+  @media only screen and (max-width: 768px) {
+    .hide-lg {
+      display: none;
+    }
+
+  }
+
+</style>
