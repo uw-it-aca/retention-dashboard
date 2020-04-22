@@ -1,10 +1,13 @@
+@import '_variables.scss';
+@import 'node_modules/bootstrap/scss/mixins';
+
 /* Structure */
 html {
   font-size: 16px;
 }
 
 body {
-  background-color: #4b2e83 !important;
+  background-color: $uw-purple !important;
 }
 
 .table th {
@@ -17,7 +20,7 @@ body {
 
 /* override styles */
 a {
-  color: #0069d9;
+  color: $link-blue;
 }
 
 body p {
