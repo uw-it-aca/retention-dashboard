@@ -21,55 +21,7 @@
         </b-modal>
       </b-col>
     </b-row>
-    <b-row class="rd-filters-container justify-content-center">
-      <span class="rd-filter-group">
-        <b-form-group
-          label="Activity"
-        >
-          <b-form-checkbox-group id="activity_filters" v-model="activity_filter" stacked>
-            <b-form-checkbox value="high">High</b-form-checkbox>
-            <b-form-checkbox value="average">Average</b-form-checkbox>
-            <b-form-checkbox value="low">Low</b-form-checkbox>
-          </b-form-checkbox-group>
-        </b-form-group>
-        <b-form-group
-          label="Assignments"
-        >
-          <b-form-checkbox-group id="assignment_filters" v-model="assignment_filter" stacked>
-            <b-form-checkbox value="high">High</b-form-checkbox>
-            <b-form-checkbox value="average">Average</b-form-checkbox>
-            <b-form-checkbox value="low">Low</b-form-checkbox>
-          </b-form-checkbox-group>
-        </b-form-group>
-        <div class="rd-form-note"><span class="rd-form-key"><strong>Low</strong> -5 to -3</span><span class="rd-form-key"><strong class="rd-label">Average</strong> -2 to +2</span><span><strong>High</strong> +3 to +5</span></div>
-      </span>
-      <span class="rd-filter-group rd-filter-group-bottom">
-        <b-form-group
-          class="rd-grades-filters"
-          label="Grades"
-        >
-          <b-form-checkbox-group id="grade_filters" v-model="grade_filter" stacked>
-            <b-form-checkbox value="high">High</b-form-checkbox>
-            <b-form-checkbox value="average">Average</b-form-checkbox>
-            <b-form-checkbox value="low">Low</b-form-checkbox>
-          </b-form-checkbox-group>
-        </b-form-group>
-        <b-form-group
-          class="rd-major-filters"
-          label="Major Type"
-          label-class="rd-vis-hidden"
-        >
-          <b-form-checkbox v-model="premajor_filter">Is Pre-Major</b-form-checkbox>
-          <!-- <b-form-checkbox v-model="stem_filter">Is STEM</b-form-checkbox> -->
-          <b-form-group
-            class="rd-keyword-filter"
-            label="Keyword"
-          >
-            <b-form-input v-model="keyword_filter" size="sm" placeholder="Student name, #, NetID" />
-          </b-form-group>
-        </b-form-group>
-      </span>
-    </b-row>
+    <filters />
     <b-row class="rd-table-container">
       <b-col cols="5" md="9">
         <dataselect />
@@ -163,13 +115,14 @@
 </template>
 <script>
   import DataSelect from "./DataSelect.vue";
+  import Filters from "./Filters.vue";
   import Vuex from 'vuex';
-  import {_} from 'vue-underscore';
   import axios from 'axios';
   export default {
     name: "DataView",
     components: {
-      dataselect: DataSelect
+      dataselect: DataSelect,
+      filters: Filters
     },
     data: function() {
       return {
@@ -221,11 +174,6 @@
         perPage: 200,
         currentPage: 1,
         selected: {},
-        activity_filter: [],
-        assignment_filter: [],
-        grade_filter: [],
-        premajor_filter: false,
-        keyword_filter: "",
         low_min: -5,
         low_max: -3,
         average_min: -2.999999999999999,
@@ -250,7 +198,12 @@
       },
       ...Vuex.mapState({
         current_week: state => state.dataselect.current_week,
-        current_file: state => state.dataselect.current_file
+        current_file: state => state.dataselect.current_file,
+        activity_filter: state => state.filters.filters.activity_filter,
+        assignment_filter: state => state.filters.filters.assignment_filter,
+        grade_filter: state => state.filters.filters.grade_filter,
+        premajor_filter: state => state.filters.filters.premajor_filter,
+        keyword_filter: state => state.filters.filters.keyword_filter,
       })
     },
     watch: {
@@ -283,7 +236,7 @@
         this.run_filters();
       },
       keyword_filter: function () {
-        this.debouncedRunFilters();
+        this.run_filters();
       }
 
     },
@@ -302,9 +255,6 @@
       );
       this.$store.dispatch('dataselect/set_file', "international-students.csv");
       this.$store.dispatch('dataselect/set_week', "2");
-    },
-    created: function () {
-      this.debouncedRunFilters = _.debounce(this.run_filters, 1000);
     },
     methods: {
       get_filtered_emails(){
@@ -482,54 +432,6 @@
     margin-left: 0.25rem;
   }
 
-  /* filter styles */
-
-  .rd-filters-container {
-    padding: 0 15px 1rem;
-
-    fieldset {
-      border: 1px $grey-border solid;
-      border-style: none solid none none;
-      float: left;
-      margin: 0 2rem 0 0;
-      padding: 0 2rem 0 0;
-    }
-
-    .rd-grades-filters {
-      border-style: none;
-      margin: 0;
-      padding: 0;
-    }
-
-    .rd-major-filters {
-      border: 1px $grey-border solid;
-      border-style: none none none solid;
-      float: left;
-      margin: 0 0 0 2rem;
-      padding: 0 0 0 2rem;
-    }
-
-    fieldset .rd-keyword-filter {
-      border-style: none;
-      margin-right: 0;
-      margin-top: 0.5rem;
-      padding-right: 0;
-    }
-  }
-
-  .rd-filters-container fieldset legend {
-    font-weight: bold;
-  }
-
-  .rd-form-note {
-    clear: both;
-    font-size: 85%;
-    padding-top: 1rem;
-  }
-
-  .rd-form-key {
-    padding-right: 1rem;
-  }
 
   /* Pagination */
   .rd-pagination-container {
@@ -547,38 +449,5 @@
 
   .rd-table-container {
     margin-top: 2rem;
-  }
-
-  @media only screen and (max-width: 558px) {
-    /* small screen filter styles */
-
-    .rd-filters-container {   
-      fieldset {
-        border-style: none;
-        margin: 0;
-        padding: 0;
-        width: 130px;
-      }
-
-      .rd-grades-filters {
-        margin: 0;
-        padding: 0;
-      }
-
-      .rd-major-filters {
-        border-style: none;
-        margin: 0;
-        padding: 0;
-      }
-    }
-
-    .rd-filter-group-bottom {
-      margin-top: 2rem;
-    }
-
-    .rd-form-note {
-      padding-top: 1rem;
-    }
-
   }
 </style>
