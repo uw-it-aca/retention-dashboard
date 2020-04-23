@@ -127,3 +127,8 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# custom
+retention_dashboard/static/retention_dashboard/bundles/
+webpack-stats.json
+node_modules/
