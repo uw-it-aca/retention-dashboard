@@ -32,6 +32,28 @@ body {
   text-align: center;
 }
 
+.rd-pred-score {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.rd-pred-label {
+  font-size: 1rem;
+}
+
+.rd-pred-label-top {
+  color: #CA231D;
+}
+
+.rd-pred-label-medium {
+  color: #B7961E;
+}
+
+.rd-pred-label-bottom {
+  color: #129562;
+}
+
 /* override styles */
 a {
   color: #0069d9;
