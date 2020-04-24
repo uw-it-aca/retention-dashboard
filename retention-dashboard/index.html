@@ -116,7 +116,7 @@
         </b-col>
         <b-col class="col-6 col-sm-2" order="3" order-sm="2">
           <b-form-group
-              label="Prediction"
+              label="Priority"
             >
             <b-form-checkbox-group id="pred_filters" v-model="pred_filter" stacked>
               <b-form-checkbox value="high">High</b-form-checkbox>
@@ -290,7 +290,7 @@
       const store = new Vuex.Store({
         state: {
           current_file: "",
-          current_week: "week1"
+          current_week: "week3"
         },
         mutations: {
           set_file (state, value){
@@ -351,7 +351,7 @@
         template: "#dateselect-template",
         data(){
           return {
-            currentweek: 'week1',
+            currentweek: 'week3',
             weeks: [
               { value: 'week1', text: 'Spring 2020: Week 2' },
               { value: 'week2', text: 'Spring 2020: Week 3' },
@@ -401,6 +401,12 @@
                 class: 'text-center'
               },
               {
+                key: 'pred',
+                label: 'Priority',
+                class: 'text-center',
+                sortable: true
+              },
+              {
                 key: 'activity',
                 label: 'Activity',
                 class: 'text-center',
@@ -421,12 +427,6 @@
               {
                 key: 'premajor',
                 label: 'Pre-Major',
-                class: 'text-center',
-                sortable: true
-              },
-              {
-                key: 'pred',
-                label: 'Prediction',
                 class: 'text-center',
                 sortable: true
               }
