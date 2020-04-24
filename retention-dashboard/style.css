@@ -130,23 +130,11 @@ a.rd-help-link:focus svg,a.rd-help-link:hover svg {
 .rd-filters-container fieldset {
   border: 1px #ccc solid;
   border-style: none solid none none;
-  float: left;
-  margin: 0 2rem 0 0;
-  padding: 0 2rem 0 0;
-}
-
-.rd-filters-container fieldset.rd-grades-filters {
-  border: none;
-  margin: 0;
   padding: 0;
 }
 
 .rd-filters-container fieldset.rd-major-filters {
-  border: 1px #ccc solid;
-  border-style: none none none solid;
-  float: left;
-  margin: 0 0 0 2rem;
-  padding: 0 0 0 2rem;
+  border-style: none;
 }
 
 .rd-filters-container fieldset.rd-major-filters .rd-keyword-filter {
@@ -163,11 +151,29 @@ a.rd-help-link:focus svg,a.rd-help-link:hover svg {
 .rd-form-note {
   clear: both;
   font-size: 85%;
+  padding-left: 15px;
   padding-top: 1rem;
 }
 
 .rd-form-key {
   padding-right: 1rem;
+}
+
+/* input style */
+input::placeholder {
+    font-size: .7rem;
+}
+input::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  font-size: .7rem;
+}
+input::-moz-placeholder { /* Firefox 19+ */
+  font-size: .7rem;
+}
+input:-ms-input-placeholder { /* IE 10+ */
+  font-size: .7rem;
+}
+input:-moz-placeholder { /* Firefox 18- */
+  font-size: .7rem;
 }
 
 /* Pagination */
@@ -252,7 +258,7 @@ a.rd-help-link:focus svg,a.rd-help-link:hover svg {
 }
 
 
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 800px) {
   html {
     font-size: 12px;
   }
@@ -269,11 +275,6 @@ a.rd-help-link:focus svg,a.rd-help-link:hover svg {
   .rd-date-select {
     margin: 0 0 0.5rem 0.5rem;
   }
-
-}
-
-@media only screen and (max-width: 558px) {
-  /* small screen filter styles */
 
   .rd-filters-container fieldset {
     border-style: none;
@@ -293,12 +294,8 @@ a.rd-help-link:focus svg,a.rd-help-link:hover svg {
     padding: 0;
   }
 
-  .rd-filter-group-bottom {
-    margin-top: 2rem;
-  }
-
   .rd-form-note {
-    padding-top: 1rem;
+    padding-bottom: 2rem;
   }
 
 }
