@@ -235,7 +235,11 @@
           <span v-else class="sr-only">{{row.item.premajor}}</span>
         </template>
 
-      
+        <template v-slot:cell(pred)="row">
+          <span v-if="row.item.pred === -99">No data</span>
+          <span v-else>{{row.item.pred}}</span>
+        </template>
+
       </b-table>
       <b-pagination
               align="right"
@@ -326,7 +330,8 @@
             currentweek: 'week1',
             weeks: [
               { value: 'week1', text: 'Spring 2020: Week 2' },
-              { value: 'week2', text: 'Spring 2020: Week 3' }
+              { value: 'week2', text: 'Spring 2020: Week 3' },
+              { value: 'week3', text: 'Spring 2020: Week 4' }
             ]
           };
         },
@@ -392,6 +397,12 @@
               {
                 key: 'premajor',
                 label: 'Pre-Major',
+                class: 'text-center',
+                sortable: true
+              },
+              {
+                key: 'pred',
+                label: 'Prediction',
                 class: 'text-center',
                 sortable: true
               }
@@ -613,6 +624,7 @@
               item['activity'] = vue.get_rounded(item['activity']);
               item['assignments'] = vue.get_rounded(item['assignments']);
               item['grades'] = vue.get_rounded(item['grades']);
+              item['pred'] = vue.get_rounded(item['pred']);
             });
             this.items = csv;
             this.raw_items = csv.slice();
