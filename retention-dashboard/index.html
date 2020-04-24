@@ -215,6 +215,13 @@
               :current-page="currentPage"
               sort-icon-left
       >
+        <template v-slot:head(pred)="data">
+          {{ data.label }}<a href="#" class="rd-info-link" id="pred_info" role="button" title="What is the Priority score?"><span class="sr-only">What is the Priority Score?</span><b-icon icon="info-circle-fill" variant="primary"></b-icon></a>
+          <b-popover target="pred_info" triggers="hover focus">
+            <template v-slot:title>Priority Score</template>
+            This score is derived from a model that predicts how well a student will do this quarter. Students with the greatest risk of having a poor quarter are considered top priority, while those who are predicted to have a good quarter are considered bottom priority.
+          </b-popover>
+        </template>
         <template v-slot:head(activity)="data">
           {{ data.label }}<a href="#" class="rd-info-link" id="activity_info" role="button" title="What is the Activity score?"><span class="sr-only">What is the Activity Score?</span><b-icon icon="info-circle-fill" variant="primary"></b-icon></a>
           <b-popover target="activity_info" triggers="hover focus">
