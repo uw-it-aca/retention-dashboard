@@ -145,6 +145,16 @@
               </b-form-checkbox-group>
             </b-form-group>
             <b-form-group
+              class= "rd-grades-filters"
+              label="Prediction"
+            >
+              <b-form-checkbox-group id="pred_filters" v-model="pred_filter" stacked>
+                <b-form-checkbox value="high">High</b-form-checkbox>
+                <b-form-checkbox value="average">Average</b-form-checkbox>
+                <b-form-checkbox value="low">Low</b-form-checkbox>
+              </b-form-checkbox-group>
+            </b-form-group>
+            <b-form-group
               class= "rd-major-filters"
               label="Major Type"
               label-class="rd-vis-hidden"
@@ -416,6 +426,7 @@
             activity_filter: [],
             assignment_filter: [],
             grade_filter: [],
+            pred_filter: [],
             premajor_filter: false,
             keyword_filter: "",
             low_min: -5,
@@ -540,6 +551,21 @@
               }
               this.items = grade_items;
             }
+            
+            //Pred Filters
+            if(this.pred_filter.includes("low") || this.pred_filter.includes("average") || this.pred_filter.includes("high")) {
+              var pred_items = [];
+              if (this.pred_filter.includes("low")) {
+                pred_items = pred_items.concat(this.filter_by_range('pred', this.low_min, this.low_max));
+              }
+              if (this.pred_filter.includes("average")) {
+                pred_items = pred_items.concat(this.filter_by_range('pred', this.average_min, this.average_max));
+              }
+              if (this.pred_filter.includes("high")) {
+                pred_items = pred_items.concat(this.filter_by_range('pred', this.high_min, this.high_max));
+              }
+              this.items = pred_items;
+            }
 
             //Premajor Filter
             if(this.premajor_filter) {
@@ -637,6 +663,9 @@
             this.run_filters();
           },
           activity_filter: function () {
+            this.run_filters();
+          },
+          pred_filter: function () {
             this.run_filters();
           },
           premajor_filter: function () {
