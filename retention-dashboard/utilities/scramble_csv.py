@@ -31,8 +31,9 @@ def get_row(row):
     acti = row['activity']
     assi = row['assignments']
     grade = row['grades']
+    pred = row['pred']
 
-    return [netid, stu_num, name, premajor, acti, assi, grade]
+    return [netid, stu_num, name, premajor, acti, assi, grade, pred]
 
 
 def gen_netid():
