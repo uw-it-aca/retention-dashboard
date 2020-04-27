@@ -112,38 +112,60 @@
         </b-col>
       </b-row>
       <b-row class="rd-filters-container justify-content-center">
-          <span class="rd-filter-group">
-            <b-form-group
-              label="Activity"  
+        <b-col order="1">
+        </b-col>
+        <b-col class="col-6 col-sm-2" order="3" order-sm="2">
+          <b-form-group
+              label="Priority"
             >
-              <b-form-checkbox-group id="activity_filters" v-model="activity_filter" stacked>
-                <b-form-checkbox value="high">High</b-form-checkbox>
-                <b-form-checkbox value="average">Average</b-form-checkbox>
-                <b-form-checkbox value="low">Low</b-form-checkbox>
-              </b-form-checkbox-group>
-            </b-form-group>
-            <b-form-group
-              label="Assignments"
-            >
-              <b-form-checkbox-group id="assignment_filters" v-model="assignment_filter" stacked>
-                <b-form-checkbox value="high">High</b-form-checkbox>
-                <b-form-checkbox value="average">Average</b-form-checkbox>
-                <b-form-checkbox value="low">Low</b-form-checkbox>
-              </b-form-checkbox-group>
-            </b-form-group>
-            <div class="rd-form-note"><span class="rd-form-key"><strong>Low</strong> -5 to -3</span><span class="rd-form-key"><strong class="rd-label">Average</strong> -2 to +2</span><span><strong>High</strong> +3 to +5</span></div>
-          </span>
-          <span class="rd-filter-group rd-filter-group-bottom">
-            <b-form-group
-              class= "rd-grades-filters"
-              label="Grades"
-            >
-              <b-form-checkbox-group id="grade_filters" v-model="grade_filter" stacked>
-                <b-form-checkbox value="high">High</b-form-checkbox>
-                <b-form-checkbox value="average">Average</b-form-checkbox>
-                <b-form-checkbox value="low">Low</b-form-checkbox>
-              </b-form-checkbox-group>
-            </b-form-group>
+            <b-form-checkbox-group id="pred_filters" v-model="pred_filter" stacked>
+              <b-form-checkbox value="low">Top</b-form-checkbox>
+              <b-form-checkbox value="average">Medium</b-form-checkbox>
+              <b-form-checkbox value="high">Bottom</b-form-checkbox>
+            </b-form-checkbox-group>
+          </b-form-group>
+        </b-col>
+          <b-col class="col-12 col-sm-6" order="2" order-sm="3">
+            <b-row>
+              <b-col class="col-4">
+              <b-form-group
+                label="Activity"  
+              >
+                <b-form-checkbox-group id="activity_filters" v-model="activity_filter" stacked>
+                  <b-form-checkbox value="high">High</b-form-checkbox>
+                  <b-form-checkbox value="average">Average</b-form-checkbox>
+                  <b-form-checkbox value="low">Low</b-form-checkbox>
+                </b-form-checkbox-group>
+              </b-form-group>
+              </b-col>
+              <b-col class="col-4">
+                <b-form-group
+                  label="Assignments"
+                >
+                  <b-form-checkbox-group id="assignment_filters" v-model="assignment_filter" stacked>
+                    <b-form-checkbox value="high">High</b-form-checkbox>
+                    <b-form-checkbox value="average">Average</b-form-checkbox>
+                    <b-form-checkbox value="low">Low</b-form-checkbox>
+                  </b-form-checkbox-group>
+                </b-form-group>
+              </b-col>
+              <b-col class="col-4">
+                <b-form-group
+                  label="Grades"
+                >
+                  <b-form-checkbox-group id="grade_filters" v-model="grade_filter" stacked>
+                    <b-form-checkbox value="high">High</b-form-checkbox>
+                    <b-form-checkbox value="average">Average</b-form-checkbox>
+                    <b-form-checkbox value="low">Low</b-form-checkbox>
+                  </b-form-checkbox-group>
+                </b-form-group>
+              </b-col>
+            </b-row>
+            <b-row>
+              <div class="rd-form-note"><span class="rd-form-key"><strong>Low</strong> -5 to -3</span><span class="rd-form-key"><strong class="rd-label">Average</strong> -2 to +2</span><span><strong>High</strong> +3 to +5</span></div>
+            </b-row>
+          </b-col>
+          <b-col class="col-6 col-sm-2" order="4">
             <b-form-group
               class= "rd-major-filters"
               label="Major Type"
@@ -158,7 +180,9 @@
                 <b-form-input v-model="keyword_filter" size="sm" placeholder="Student name, #, NetID"></b-form-input>
               </b-form-group>
             </b-form-group>
-          </span>
+          </b-col>
+          <b-col order="5">
+          </b-col>
       </b-row>  
       <b-row class="rd-table-container">
         <b-col cols="5" md="9">
@@ -191,11 +215,18 @@
               :current-page="currentPage"
               sort-icon-left
       >
+        <template v-slot:head(pred)="data">
+          {{ data.label }}<a href="#" class="rd-info-link" id="pred_info" role="button" title="What is the Priority score?"><span class="sr-only">What is the Priority Score?</span><b-icon icon="info-circle-fill" variant="primary"></b-icon></a>
+          <b-popover target="pred_info" triggers="hover focus">
+            <template v-slot:title>Priority Score</template>
+            This score is derived from a model that predicts how well a student will do this quarter. Students with the greatest risk of having a poor quarter are considered top priority, while those who are predicted to have a good quarter are considered bottom priority.
+          </b-popover>
+        </template>
         <template v-slot:head(activity)="data">
           {{ data.label }}<a href="#" class="rd-info-link" id="activity_info" role="button" title="What is the Activity score?"><span class="sr-only">What is the Activity Score?</span><b-icon icon="info-circle-fill" variant="primary"></b-icon></a>
           <b-popover target="activity_info" triggers="hover focus">
             <template v-slot:title>Activity Score</template>
-            This score is indicative of the level a student is interacting with Canvas relative to her classmates. Any number above or below zero indicates a student has greater or less than average activity, respectively. If a student is taking more than one course in Canvas, her score is an average across the courses she is taking.
+            This score is indicative of the level a student is interacting with Canvas relative to her classmates. Any number above or below zero indicates a student has greater or less than average activity, respectively. If a student is taking more than one course in Canvas, her score is an average across the courses she is taking.<br/><br/><strong>No Data</strong> indicates Canvas use is not a course requirement.
           </b-popover>
         </template>
 
@@ -203,7 +234,7 @@
           {{ data.label }}<a href="#" class="rd-info-link" id="assignments_info" role="button" title="What is the Assignments score?"><span class="sr-only">What is the Assignments Score?</span><b-icon icon="info-circle-fill" variant="primary"></b-icon></a>
           <b-popover target="assignments_info" triggers="hover focus">
             <template v-slot:title>Assignments Score</template>
-            This score is indicative of how the student is doing relative to her classmates with regards to the status of assignments (e.g. # of missing assignments). Any number above or below zero indicates a student is doing better or worse than average. If the student is taking more than one course in Canvas, her score is an average across the courses she is taking.
+            This score is indicative of how the student is doing relative to her classmates with regards to the status of assignments (e.g. # of missing assignments). Any number above or below zero indicates a student is doing better or worse than average. If the student is taking more than one course in Canvas, her score is an average across the courses she is taking.<br/><br/><strong>No Data</strong> indicates Canvas use is not a course requirement.
           </b-popover>
         </template>
 
@@ -211,7 +242,7 @@
           {{ data.label }}<a href="#" class="rd-info-link" id="grades_info" role="button" title="What is the Grades score?"><span class="sr-only">What is the Grades Score?</span><b-icon icon="info-circle-fill" variant="primary"></b-icon></a>
           <b-popover target="grades_info" triggers="hover focus">
             <template v-slot:title>Grades Score</template>
-            This score represents the student’s grade in Canvas relative to her classmates. Any number above or below zero indicates a student has a better or worse grade than the course average. If the student is taking more than one course in Canvas, her grades are averaged across the courses she is taking.
+            This score represents the student’s grade in Canvas relative to her classmates. Any number above or below zero indicates a student has a better or worse grade than the course average. If the student is taking more than one course in Canvas, her grades are averaged across the courses she is taking.<br/><br/><strong>No Data</strong> indicates Canvas use is not a course requirement.
           </b-popover>
         </template>
 
@@ -235,7 +266,16 @@
           <span v-else class="sr-only">{{row.item.premajor}}</span>
         </template>
 
-      
+        <template v-slot:cell(pred)="row">
+          <span v-if="row.item.pred === -99"> </span>
+          <span v-else class="rd-pred-score">
+            <span v-if="row.item.pred >= -5 && row.item.pred <= -3"><span class="rd-pred-label rd-pred-label-top">Top</span> {{row.item.pred}}</span>
+            <span v-else-if="row.item.pred >= -2.9 && row.item.pred <= 2.9"><span class="rd-pred-label rd-pred-label-medium">Medium</span> {{row.item.pred}}</span>
+            <span v-else-if="row.item.pred >= 3 && row.item.pred <= 5"><span class="rd-pred-label rd-pred-label-bottom">Bottom</span> {{row.item.pred}}</span>
+            <span v-else> </span>
+          </span>
+        </template>
+
       </b-table>
       <b-pagination
               align="right"
@@ -262,7 +302,7 @@
       const store = new Vuex.Store({
         state: {
           current_file: "",
-          current_week: "week1"
+          current_week: "week3"
         },
         mutations: {
           set_file (state, value){
@@ -323,10 +363,11 @@
         template: "#dateselect-template",
         data(){
           return {
-            currentweek: 'week1',
+            currentweek: 'week3',
             weeks: [
               { value: 'week1', text: 'Spring 2020: Week 2' },
-              { value: 'week2', text: 'Spring 2020: Week 3' }
+              { value: 'week2', text: 'Spring 2020: Week 3' },
+              { value: 'week3', text: 'Spring 2020: Week 4' }
             ]
           };
         },
@@ -372,6 +413,11 @@
                 class: 'text-center'
               },
               {
+                key: 'pred',
+                label: 'Priority',
+                sortable: true
+              },
+              {
                 key: 'activity',
                 label: 'Activity',
                 class: 'text-center',
@@ -405,6 +451,7 @@
             activity_filter: [],
             assignment_filter: [],
             grade_filter: [],
+            pred_filter: [],
             premajor_filter: false,
             keyword_filter: "",
             low_min: -5,
@@ -529,6 +576,21 @@
               }
               this.items = grade_items;
             }
+            
+            //Pred Filters
+            if(this.pred_filter.includes("low") || this.pred_filter.includes("average") || this.pred_filter.includes("high")) {
+              var pred_items = [];
+              if (this.pred_filter.includes("low")) {
+                pred_items = pred_items.concat(this.filter_by_range('pred', this.low_min, this.low_max));
+              }
+              if (this.pred_filter.includes("average")) {
+                pred_items = pred_items.concat(this.filter_by_range('pred', this.average_min, this.average_max));
+              }
+              if (this.pred_filter.includes("high")) {
+                pred_items = pred_items.concat(this.filter_by_range('pred', this.high_min, this.high_max));
+              }
+              this.items = pred_items;
+            }
 
             //Premajor Filter
             if(this.premajor_filter) {
@@ -613,6 +675,7 @@
               item['activity'] = vue.get_rounded(item['activity']);
               item['assignments'] = vue.get_rounded(item['assignments']);
               item['grades'] = vue.get_rounded(item['grades']);
+              item['pred'] = vue.get_rounded(item['pred']);
             });
             this.items = csv;
             this.raw_items = csv.slice();
@@ -625,6 +688,9 @@
             this.run_filters();
           },
           activity_filter: function () {
+            this.run_filters();
+          },
+          pred_filter: function () {
             this.run_filters();
           },
           premajor_filter: function () {
