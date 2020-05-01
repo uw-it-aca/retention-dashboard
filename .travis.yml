@@ -6,7 +6,7 @@ services:
 - docker
 env:
   global:
-  - RELEASE_NAME="rad"
+  - RELEASE_NAME="retention-dashboard"
   - DJANGO_APP="retention_dashboard"
   - COMMIT_HASH="$(git rev-parse --short=7 HEAD)"
   - IMAGE_TAG="${RELEASE_NAME}:${COMMIT_HASH}"
