@@ -4,7 +4,7 @@
     </b-col>
     <b-col class="col-6 col-sm-2" order="3" order-sm="2">
       <b-form-group
-          label="Prediction"
+          label="Priority"
         >
         <b-form-checkbox-group id="pred_filters" v-model="pred_filter" stacked>
           <b-form-checkbox value="low">Top</b-form-checkbox>
