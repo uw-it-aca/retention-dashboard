@@ -7,9 +7,9 @@
           label="Prediction"
         >
         <b-form-checkbox-group id="pred_filters" v-model="pred_filter" stacked>
-          <b-form-checkbox value="high">High</b-form-checkbox>
-          <b-form-checkbox value="average">Average</b-form-checkbox>
-          <b-form-checkbox value="low">Low</b-form-checkbox>
+          <b-form-checkbox value="low">Top</b-form-checkbox>
+          <b-form-checkbox value="average">Medium</b-form-checkbox>
+          <b-form-checkbox value="high">Bottom</b-form-checkbox>
         </b-form-checkbox-group>
       </b-form-group>
     </b-col>

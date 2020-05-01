@@ -51,13 +51,21 @@
       :current-page="currentPage"
       sort-icon-left
     >
+      <template v-slot:head(pred)="data">
+        {{ data.label }}<a href="#" class="rd-info-link" id="pred_info" role="button" title="What is the Priority score?"><span class="sr-only">What is the Priority Score?</span><b-icon icon="info-circle-fill" variant="primary"></b-icon></a>
+        <b-popover target="pred_info" triggers="hover focus">
+          <template v-slot:title>Priority Score</template>
+          This score is derived from a model that predicts how well a student will do this quarter. Students with the greatest risk of having a poor quarter are considered top priority, while those who are predicted to have a good quarter are considered bottom priority.
+        </b-popover>
+      </template>
+      
       <template v-slot:head(activity)="data">
         {{ data.label }}<a id="activity_info" href="#" class="rd-info-link" role="button" title="What is the Activity score?"><span class="sr-only">What is the Activity Score?</span><b-icon icon="info-circle-fill" variant="primary" /></a>
         <b-popover target="activity_info" triggers="hover focus">
           <template v-slot:title>
             Activity Score
           </template>
-          This score is indicative of the level a student is interacting with Canvas relative to her classmates. Any number above or below zero indicates a student has greater or less than average activity, respectively. If a student is taking more than one course in Canvas, her score is an average across the courses she is taking.
+          This score is indicative of the level a student is interacting with Canvas relative to her classmates. Any number above or below zero indicates a student has greater or less than average activity, respectively. If a student is taking more than one course in Canvas, her score is an average across the courses she is taking.<br/><br/><strong>No Data</strong> indicates Canvas use is not a course requirement.
         </b-popover>
       </template>
 
@@ -67,7 +75,7 @@
           <template v-slot:title>
             Assignments Score
           </template>
-          This score is indicative of how the student is doing relative to her classmates with regards to the status of assignments (e.g. # of missing assignments). Any number above or below zero indicates a student is doing better or worse than average. If the student is taking more than one course in Canvas, her score is an average across the courses she is taking.
+          This score is indicative of how the student is doing relative to her classmates with regards to the status of assignments (e.g. # of missing assignments). Any number above or below zero indicates a student is doing better or worse than average. If the student is taking more than one course in Canvas, her score is an average across the courses she is taking.<br/><br/><strong>No Data</strong> indicates Canvas use is not a course requirement.
         </b-popover>
       </template>
 
@@ -77,7 +85,7 @@
           <template v-slot:title>
             Grades Score
           </template>
-          This score represents the student’s grade in Canvas relative to her classmates. Any number above or below zero indicates a student has a better or worse grade than the course average. If the student is taking more than one course in Canvas, her grades are averaged across the courses she is taking.
+          This score represents the student’s grade in Canvas relative to her classmates. Any number above or below zero indicates a student has a better or worse grade than the course average. If the student is taking more than one course in Canvas, her grades are averaged across the courses she is taking.<br/><br/><strong>No Data</strong> indicates Canvas use is not a course requirement.
         </b-popover>
       </template>
 
@@ -100,6 +108,17 @@
         <span v-if="row.item.premajor === true"><b-icon icon="check-box" scale="1.5" /><span class="sr-only">{{ row.item.premajor }}</span></span>
         <span v-else class="sr-only">{{ row.item.premajor }}</span>
       </template>
+
+      <template v-slot:cell(pred)="row">
+        <span v-if="row.item.pred === -99"> </span>
+        <span v-else class="rd-pred-score">
+          <span v-if="row.item.pred >= -5 && row.item.pred <= -3"><span class="rd-pred-label rd-pred-label-top">Top</span> {{row.item.pred}}</span>
+          <span v-else-if="row.item.pred >= -2.9 && row.item.pred <= 2.9"><span class="rd-pred-label rd-pred-label-medium">Medium</span> {{row.item.pred}}</span>
+          <span v-else-if="row.item.pred >= 3 && row.item.pred <= 5"><span class="rd-pred-label rd-pred-label-bottom">Bottom</span> {{row.item.pred}}</span>
+          <span v-else> </span>
+        </span>
+      </template>
+
     </b-table>
     <b-pagination
       v-model="currentPage"
@@ -142,6 +161,11 @@
             key: 'uw_netid',
             label: 'UWNetid',
             class: 'text-center'
+          },
+          {
+            key: 'pred',
+            label: 'Priority',
+            sortable: true
           },
           {
             key: 'activity',
@@ -449,5 +473,28 @@
 
   .rd-table-container {
     margin-top: 2rem;
+  }
+
+  /* Prediction scores */
+  .rd-pred-score {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .rd-pred-label {
+    font-size: 1rem;
+  }
+
+  .rd-pred-label-top {
+    color: #ca231d;
+  }
+
+  .rd-pred-label-medium {
+    color: #b7961e;
+  }
+
+  .rd-pred-label-bottom {
+    color: #129562;
   }
 </style>
