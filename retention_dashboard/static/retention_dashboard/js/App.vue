@@ -150,12 +150,4 @@
     padding: 0.5rem 0;
   }
 
-
-  @media only screen and (max-width: 768px) {
-    .hide-lg {
-      display: none;
-    }
-
-  }
-
 </style>

@@ -1,53 +1,77 @@
 <template>
   <b-row class="rd-filters-container justify-content-center">
-    <span class="rd-filter-group">
+    <b-col order="1">
+    </b-col>
+    <b-col class="col-6 col-sm-2" order="3" order-sm="2">
       <b-form-group
-        label="Activity"
-      >
-        <b-form-checkbox-group id="activity_filters" v-model="activity_filter" stacked>
+          label="Prediction"
+        >
+        <b-form-checkbox-group id="pred_filters" v-model="pred_filter" stacked>
           <b-form-checkbox value="high">High</b-form-checkbox>
           <b-form-checkbox value="average">Average</b-form-checkbox>
           <b-form-checkbox value="low">Low</b-form-checkbox>
         </b-form-checkbox-group>
       </b-form-group>
-      <b-form-group
-        label="Assignments"
-      >
-        <b-form-checkbox-group id="assignment_filters" v-model="assignment_filter" stacked>
-          <b-form-checkbox value="high">High</b-form-checkbox>
-          <b-form-checkbox value="average">Average</b-form-checkbox>
-          <b-form-checkbox value="low">Low</b-form-checkbox>
-        </b-form-checkbox-group>
-      </b-form-group>
-      <div class="rd-form-note"><span class="rd-form-key"><strong>Low</strong> -5 to -3</span><span class="rd-form-key"><strong class="rd-label">Average</strong> -2 to +2</span><span><strong>High</strong> +3 to +5</span></div>
-    </span>
-    <span class="rd-filter-group rd-filter-group-bottom">
-      <b-form-group
-        class="rd-grades-filters"
-        label="Grades"
-      >
-        <b-form-checkbox-group id="grade_filters" v-model="grade_filter" stacked>
-          <b-form-checkbox value="high">High</b-form-checkbox>
-          <b-form-checkbox value="average">Average</b-form-checkbox>
-          <b-form-checkbox value="low">Low</b-form-checkbox>
-        </b-form-checkbox-group>
-      </b-form-group>
-      <b-form-group
-        class="rd-major-filters"
-        label="Major Type"
-        label-class="rd-vis-hidden"
-      >
-        <b-form-checkbox v-model="premajor_filter">Is Pre-Major</b-form-checkbox>
-        <!-- <b-form-checkbox v-model="stem_filter">Is STEM</b-form-checkbox> -->
+    </b-col>
+      <b-col class="col-12 col-sm-6" order="2" order-sm="3">
+        <b-row>
+          <b-col class="col-4">
+            <b-form-group
+              label="Activity"  
+            >
+              <b-form-checkbox-group id="activity_filters" v-model="activity_filter" stacked>
+                <b-form-checkbox value="high">High</b-form-checkbox>
+                <b-form-checkbox value="average">Average</b-form-checkbox>
+                <b-form-checkbox value="low">Low</b-form-checkbox>
+              </b-form-checkbox-group>
+            </b-form-group>
+          </b-col>
+          <b-col class="col-4">
+            <b-form-group
+              label="Assignments"
+            >
+              <b-form-checkbox-group id="assignment_filters" v-model="assignment_filter" stacked>
+                <b-form-checkbox value="high">High</b-form-checkbox>
+                <b-form-checkbox value="average">Average</b-form-checkbox>
+                <b-form-checkbox value="low">Low</b-form-checkbox>
+              </b-form-checkbox-group>
+            </b-form-group>
+          </b-col>
+          <b-col class="col-4">
+            <b-form-group
+              label="Grades"
+            >
+              <b-form-checkbox-group id="grade_filters" v-model="grade_filter" stacked>
+                <b-form-checkbox value="high">High</b-form-checkbox>
+                <b-form-checkbox value="average">Average</b-form-checkbox>
+                <b-form-checkbox value="low">Low</b-form-checkbox>
+              </b-form-checkbox-group>
+            </b-form-group>
+          </b-col>
+        </b-row>
+        <b-row>
+          <div class="rd-form-note"><span class="rd-form-key"><strong>Low</strong> -5 to -3</span><span class="rd-form-key"><strong class="rd-label">Average</strong> -2 to +2</span><span><strong>High</strong> +3 to +5</span></div>
+        </b-row>
+      </b-col>
+      <b-col class="col-6 col-sm-2" order="4">
         <b-form-group
+          class= "rd-major-filters"
+          label="Major Type"
+          label-class="rd-vis-hidden"
+        >
+          <b-form-checkbox v-model="premajor_filter">Is Pre-Major</b-form-checkbox>
+          <!-- <b-form-checkbox v-model="stem_filter">Is STEM</b-form-checkbox> -->
+          <b-form-group
           class="rd-keyword-filter"
           label="Keyword"
         >
-          <b-form-input v-model="keyword_filter" size="sm" placeholder="Student name, #, NetID" />
+            <b-form-input v-model="keyword_filter" size="sm" placeholder="Student name, #, NetID"></b-form-input>
+          </b-form-group>
         </b-form-group>
-      </b-form-group>
-    </span>
-  </b-row>
+      </b-col>
+      <b-col order="5">
+      </b-col>
+    </b-row>  
 </template>
 
 <script>
@@ -107,23 +131,11 @@
     fieldset {
       border: 1px $grey-border solid;
       border-style: none solid none none;
-      float: left;
-      margin: 0 2rem 0 0;
-      padding: 0 2rem 0 0;
-    }
-
-    .rd-grades-filters {
-      border-style: none;
-      margin: 0;
       padding: 0;
     }
 
     .rd-major-filters {
-      border: 1px $grey-border solid;
-      border-style: none none none solid;
-      float: left;
-      margin: 0 0 0 2rem;
-      padding: 0 0 0 2rem;
+      border-style: none;
     }
 
     fieldset .rd-keyword-filter {
@@ -141,6 +153,7 @@
   .rd-form-note {
     clear: both;
     font-size: 85%;
+    padding-left: 15px;
     padding-top: 1rem;
   }
 
@@ -148,7 +161,12 @@
     padding-right: 1rem;
   }
 
-  @media only screen and (max-width: 558px) {
+  /* input style */
+  input::placeholder {
+    font-size: 0.7rem;
+  }
+
+  @media only screen and (max-width: 800px) {
     /* small screen filter styles */
 
     .rd-filters-container {
@@ -171,12 +189,8 @@
       }
     }
 
-    .rd-filter-group-bottom {
-      margin-top: 2rem;
-    }
-
     .rd-form-note {
-      padding-top: 1rem;
+      padding-bottom: 2rem;
     }
 
   }
