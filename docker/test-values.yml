@@ -1,0 +1,55 @@
+ingress:
+  enabled: true
+  type: nginx
+  tls:
+    prereq:
+      secretName: test.retention.uw.edu
+      hosts:
+        - test.retention.uw.edu
+  hosts:
+    prereq:
+      host: test.retention.uw.edu
+      paths:
+        - "/"
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "500"
+database:
+  engine: postgres
+  secretName: retention-v1-gcp-sql-credentials
+  hostname: retention-v1
+  name: retention-test
+externalService:
+  enabled: true
+  name: retention-v1
+  type: ClusterIP
+  serviceAddress: 172.18.1.39
+  servicePort: 5432
+repo: retention-dashboard
+instance: test
+branch: develop
+certs:
+  mounted: true
+  certPath: /certs/tls.crt
+  keyPath: /certs/tls.key
+  secretName: retention-uwca
+image:
+  repository: registry.hub.docker.com/acait/retention-dashboard
+  tag: IMAGE_TAG
+environmentVariables:
+  - name: ENV
+    value: eval
+  - name: AUTH
+    value: SAML_MOCK
+  - name: CLUSTER_CNAME
+    value: test.retention.uw.edu
+#  - name: SP_CERT
+#    value: ''
+#  - name: IDP_CERT
+#    value: ''
+
+environmentVariablesSecrets:
+  djangoSecret:
+    name: DJANGO_SECRET
+    secretName: retention-test-django-secret
+    secretKey: django-secret

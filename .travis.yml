@@ -1,39 +1,34 @@
 sudo: required
-
 language: python
 python:
-  - '3.6'
-
+- '3.6'
 services:
-  - docker
-
+- docker
 env:
   global:
-    - RELEASE_NAME="rad"
-    - DJANGO_APP="retention_dashboard"
-    - COMMIT_HASH="$(git rev-parse --short=7 HEAD)"
-    - IMAGE_TAG="${RELEASE_NAME}:${COMMIT_HASH}"
-    - DEPLOY_SCRIPT_BASE=https://raw.githubusercontent.com/uw-it-aca/gcp-app-deploy/master
-
+  - RELEASE_NAME="rad"
+  - DJANGO_APP="retention_dashboard"
+  - COMMIT_HASH="$(git rev-parse --short=7 HEAD)"
+  - IMAGE_TAG="${RELEASE_NAME}:${COMMIT_HASH}"
+  - DEPLOY_SCRIPT_BASE=https://raw.githubusercontent.com/uw-it-aca/gcp-app-deploy/master
+  - secure: eZm6NH7EJA0fvadak9UF3nIN6WwebEiiSWmozT/c9y+QXgeLEnaNrxzREvqBtKdSKJEyRqIobUNkppDBmj4QXgYIxCK3ECAEoNhSAUyiVwBuCZGDZx6ql+kvSL8zyOXiAtFL96UWCXFnG+BTtyah1bxpi1UUTkCxSyydcgWMKcz35O0RliYLV0IoFACPxpAYHILD+7+TsGDks42gYHiclejaSP8IdC9Q/ig43fN2OdXOKVc/it1PdNv7LIcfuq3fQEuDxh1O9ycFsS6A/U62Dqv3y2VpDYOiI9n81xhbCY0hjhtnLhWlD3BVYzkjAyKLA3CYwQVW8jnC6RC3RKMAyxxtwMkLWSdHBnU0sRjCcbNLHkGXjXQ+zdhPmpnR9STLqYnQP3L4a966RWJ8Wx7LHkODr1Q+npllD4HLsDZOwFtnOSstE8xypVaRrQhhu5cnG+0GXL54EErNrWyuRxArGHvq6lp6z6Od/5W7w7nLweoO/6aw6xmDnGfT+z7Ef8P1imrhXITEpJ4KLjq5A6goIAZgZjWy1OgcWm4oCMSXWuKg096NVG/WEIlIoYX389eBPIWg641imePiPmiqIJGDsFFfRN620pPaaJzo3Rodh7ttWkkaRS6g283AcVxbKlMJqhZ5aJayHgNZEE0aHPokF45PC6klbHJgdTg8jFNuS0Y=
+  - secure: DfrCwLtIDjWla5Uz8oaRleJ/scE4S9xXLYAyfYbyFnBUvAsoRZPo2yp04dX+M2GglEA4R01cvDx5FezndBvu8MAOdZQ2NryFyIQcdhqEy2uxTAODuRgtFAdWvXcIIKU7M5slkSsQXXUSHUiNpFbxVGM+i3IZxSYSDDsRUQ/Ozecx5Uvn8jS8eHDcbxdm97gqBnayO99hm4iI4SzK+EcgJw1jPGVPUUAsG5D1BIr1xO2wV/bHKzf+VhTjCzx52haqJAPxG5sMt+kU1IZ2TD2w3iBPKH+qO3QabZC31hRmLf8gAg36LcAmcb9KyVFItQOKWJC+a+xaa41CtvVu3U2UfimfIkeb0mU4zVhNcQOdDBmDTiE7MDzQC7NtNI4bwQQHEf0uTD5im6cx/wb7Mq/5WTjqw1ZsJS3GJTf0i1kecItLb7/m8kAnH+rQHQiOIO6WpoVSmfxtk/lSK7dY+5Eh+i42vq2gUfLkFvW0Diuof7JApfrlrNvGcTTc8zqAJtMNtQpLaVE6uhQ3CJE/y6vaocQrtKj61Ee4NOGgn4rE8akL3r6HE0eqJIfGC2zKabt49wzKq4lCZjHkg/AtkiKV1/tPu533skaXWNIp09cAV8npgxbIXlHLNXIuTSD218OLquLDfbPqhhqTteODzHonNEoywyD2MPtb6NnSpO0oWg8=
+  - secure: rmDNQh3NxE9ZOIGM/RTgykLZF0SvCJhF6dLb+eCdO8FXzfnq2uBXQZqfelaUopShpdaO3Te/Np9iYV8fQqNpDIH+xqFqEZnNihi3GUKGS7WRnvn8fI3ox97x3BBAzTqRNrYmDGHlXws+gtXMYXC7c8+W5qwEYjwZvZ4UJ+U/JPevfD0v5JT8ORMH7CRYiCfTpKyHJ9qAygkzjwru3oebImeNynr56fiULNRK7rbxR3Jt9e2hBuZvhgqRqGiTzpFgFBzQw/BkU6+8w+gS+aIh+pwlx9OItkM7VStvhOpgNiTxbm4gnlz7ONOpVldss0I8mXvJOm/246AQryugNY/XByt0+EQOe7fhgxSyQRY8Y5SvuEuKM2BcLKBgkmeGzaZAwb9lKvERisCA+Ajt6tEJg1i1khF0PzWe5UPcrtRN2HS7EZMix4tRTFKdeM2U4lEQxZB1IV5g89VmJy7dCcI1OuQbefrBmXdQpVsC/d9XqBjuIxsHmCtu3+lvg3WWfye19xcJzw8q5dvwkeH7byKeHgLRuUL8DYqrEiBEyY7ol+M0IiYiAARMC/N+O2b3zO1gEdUOuXjinOP+xY9ZaZfjWIvKm+Kfwih8hxYPdDGyd8ZVxBJ+4jwxg7fycIFSglOePKGlQeBRMjJypmCV4xv8a7h0PuvGPanGz89r1fEx/8Q=
 install:
-  - docker build -t "$IMAGE_TAG" .
-
+- docker build -t "$IMAGE_TAG" .
 before_script:
-  - pip install coverage
-  - pip install coveralls
-
+- pip install coverage
+- pip install coveralls
 script:
-  - docker run -u root -it -v /tmp:/coverage -e DJANGO_APP="$DJANGO_APP" -e "ENV=localdev" -e "AUTH=SAML_MOCK" "$IMAGE_TAG" bash -c ". ./travis-ci/test.sh"
-
+- docker run -u root -it -v /tmp:/coverage -e DJANGO_APP="$DJANGO_APP" -e "ENV=localdev"
+  -e "AUTH=SAML_MOCK" "$IMAGE_TAG" bash -c ". ./travis-ci/test.sh"
 after_script:
-  - cp /tmp/.coverage.* .
-  - coverage combine
-  - coveralls
-  - if [ "$TRAVIS_PULL_REQUEST" == "false" ] && [[ "$TRAVIS_BRANCH" =~ ^(develop|master)$ ]]; then
-    curl -Ls ${DEPLOY_SCRIPT_BASE}/travis-ci/deploy.sh | bash;
-    fi
-
+- cp /tmp/.coverage.* .
+- coverage combine
+- coveralls
+- if [ "$TRAVIS_PULL_REQUEST" == "false" ] && [[ "$TRAVIS_BRANCH" =~ ^(develop|master)$
+  ]]; then curl -Ls ${DEPLOY_SCRIPT_BASE}/travis-ci/deploy.sh | bash; fi
 cache:
   directories:
-    - "$HOME/helm"
-    - "$HOME/kubeval"
+  - "$HOME/helm"
+  - "$HOME/kubeval"
