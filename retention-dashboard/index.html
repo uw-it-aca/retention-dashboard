@@ -302,7 +302,7 @@
       const store = new Vuex.Store({
         state: {
           current_file: "",
-          current_week: "week3"
+          current_week: "week4"
         },
         mutations: {
           set_file (state, value){
@@ -363,11 +363,12 @@
         template: "#dateselect-template",
         data(){
           return {
-            currentweek: 'week3',
+            currentweek: 'week4',
             weeks: [
               { value: 'week1', text: 'Spring 2020: Week 2' },
               { value: 'week2', text: 'Spring 2020: Week 3' },
-              { value: 'week3', text: 'Spring 2020: Week 4' }
+              { value: 'week3', text: 'Spring 2020: Week 4' },
+              { value: 'week4', text: 'Spring 2020: Week 5' }
             ]
           };
         },
