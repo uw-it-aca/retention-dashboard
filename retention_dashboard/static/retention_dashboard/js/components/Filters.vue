@@ -6,7 +6,7 @@
       <b-form-group
           label="Priority"
         >
-        <b-form-checkbox-group id="pred_filters" v-model="pred_filter" stacked>
+        <b-form-checkbox-group id="pred_filters" v-model="prediction_filter" stacked>
           <b-form-checkbox value="low">Top</b-form-checkbox>
           <b-form-checkbox value="average">Medium</b-form-checkbox>
           <b-form-checkbox value="high">Bottom</b-form-checkbox>
@@ -17,7 +17,7 @@
         <b-row>
           <b-col class="col-4">
             <b-form-group
-              label="Activity"  
+              label="Activity"
             >
               <b-form-checkbox-group id="activity_filters" v-model="activity_filter" stacked>
                 <b-form-checkbox value="high">High</b-form-checkbox>
@@ -71,7 +71,7 @@
       </b-col>
       <b-col order="5">
       </b-col>
-    </b-row>  
+    </b-row>
 </template>
 
 <script>
@@ -86,6 +86,7 @@
         activity_filter: [],
         assignment_filter: [],
         grade_filter: [],
+        prediction_filter: [],
         premajor_filter: false,
         keyword_filter: "",
       };
@@ -101,6 +102,9 @@
       },
       activity_filter: function () {
         this.$store.dispatch('filters/set_activity_filter', this.activity_filter);
+      },
+      prediction_filter: function () {
+        this.$store.dispatch('filters/set_prediction_filter', this.prediction_filter);
       },
       premajor_filter: function () {
         this.$store.dispatch('filters/set_premajor_filter', this.premajor_filter);

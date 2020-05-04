@@ -58,7 +58,7 @@
           This score is derived from a model that predicts how well a student will do this quarter. Students with the greatest risk of having a poor quarter are considered top priority, while those who are predicted to have a good quarter are considered bottom priority.
         </b-popover>
       </template>
-      
+
       <template v-slot:head(activity)="data">
         {{ data.label }}<a id="activity_info" href="#" class="rd-info-link" role="button" title="What is the Activity score?"><span class="sr-only">What is the Activity Score?</span><b-icon icon="info-circle-fill" variant="primary" /></a>
         <b-popover target="activity_info" triggers="hover focus">
@@ -226,6 +226,7 @@
         activity_filter: state => state.filters.filters.activity_filter,
         assignment_filter: state => state.filters.filters.assignment_filter,
         grade_filter: state => state.filters.filters.grade_filter,
+        prediction_filter: state => state.filters.filters.prediction_filter,
         premajor_filter: state => state.filters.filters.premajor_filter,
         keyword_filter: state => state.filters.filters.keyword_filter,
       })
@@ -254,6 +255,9 @@
         this.run_filters();
       },
       activity_filter: function () {
+        this.run_filters();
+      },
+      prediction_filter: function () {
         this.run_filters();
       },
       premajor_filter: function () {
@@ -377,6 +381,21 @@
             grade_items = grade_items.concat(this.filter_by_range('grades', this.high_min, this.high_max));
           }
           this.items = grade_items;
+        }
+
+        //Prediction Filters
+        if(this.prediction_filter.includes("low") || this.prediction_filter.includes("average") || this.prediction_filter.includes("high")) {
+          var prediction_items = [];
+          if (this.prediction_filter.includes("low")) {
+            prediction_items = prediction_items.concat(this.filter_by_range('pred', this.low_min, this.low_max));
+          }
+          if (this.prediction_filter.includes("average")) {
+            prediction_items = prediction_items.concat(this.filter_by_range('pred', this.average_min, this.average_max));
+          }
+          if (this.prediction_filter.includes("high")) {
+            prediction_items = prediction_items.concat(this.filter_by_range('pred', this.high_min, this.high_max));
+          }
+          this.items = prediction_items;
         }
 
         //Premajor Filter
