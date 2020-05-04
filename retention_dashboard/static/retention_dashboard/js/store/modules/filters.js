@@ -4,7 +4,8 @@ const state = {
     assignment_filter: [],
     grade_filter: [],
     premajor_filter: false,
-    keyword_filter: ""
+    keyword_filter: "",
+    prediction_filter: []
   }
 
 };
@@ -41,6 +42,12 @@ const actions = {
   set_keyword_filter ({ commit }, value) {
     commit('set_filters', {
       'type': 'keyword_filter',
+      'value':value
+    });
+  },
+  set_prediction_filter ({ commit }, value) {
+    commit('set_filters', {
+      'type': 'prediction_filter',
       'value':value
     });
   },
