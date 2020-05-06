@@ -16,7 +16,7 @@ ingress:
     nginx.ingress.kubernetes.io/proxy-read-timeout: "500"
 database:
   engine: postgres
-  secretName: retention-v1-gcp-sql-credentials
+  secretName: retention-v1-test-gcp-sql-credentials
   hostname: retention-v1
   name: retention-test
 externalService:
@@ -32,7 +32,7 @@ certs:
   mounted: true
   certPath: /certs/tls.crt
   keyPath: /certs/tls.key
-  secretName: retention-uwca
+  secretName: retention-test-uwca
 image:
   repository: registry.hub.docker.com/acait/retention-dashboard
   tag: IMAGE_TAG
