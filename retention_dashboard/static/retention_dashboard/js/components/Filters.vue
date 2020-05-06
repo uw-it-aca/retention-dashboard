@@ -2,7 +2,7 @@
   <b-row class="rd-filters-container justify-content-center">
     <b-col order="1">
     </b-col>
-    <b-col class="col-6 col-md-2" order="3" order-md="2">
+    <b-col class="col-6 col-md-2 rd-filter-border" order="3" order-md="2">
       <b-form-group
           label="Priority"
           aria-controls="data_table"
@@ -21,9 +21,9 @@
           />
       </b-form-group>
     </b-col>
-      <b-col class="col-12 col-md-6" order="2" order-md="3">
+      <b-col class="col-12 col-md-auto" order="2" order-md="3">
         <b-row>
-          <b-col class="col-4">
+          <b-col class="col rd-filter-border">
             <b-form-group
               label="Activity"
             >
@@ -34,7 +34,7 @@
               </b-form-checkbox-group>
             </b-form-group>
           </b-col>
-          <b-col class="col-4">
+          <b-col class="col rd-filter-border">
             <b-form-group
               label="Assignments"
             >
@@ -45,7 +45,7 @@
               </b-form-checkbox-group>
             </b-form-group>
           </b-col>
-          <b-col class="col-4">
+          <b-col class="col">
             <b-form-group
               label="Grades"
             >
@@ -61,7 +61,7 @@
           <div class="rd-form-note"><span class="rd-form-key"><strong>Low</strong> -5 to -3</span><span class="rd-form-key"><strong class="rd-label">Average</strong> -2 to +2</span><span><strong>High</strong> +3 to +5</span></div>
         </b-row>
       </b-col>
-      <b-col class="col-6 col-md-2" order="4">
+      <b-col class="col-6 col-md-2 rd-filter-border-end" order="4">
         <b-form-group
           class= "rd-major-filters"
           label="Major Type"
@@ -144,20 +144,20 @@
   /* filter styles */
 
   .rd-filters-container {
-    padding: 0 15px 1rem;
+    margin: auto;
+    padding: 0 0 1rem;
 
-    fieldset {
+    .rd-filter-border {
       border: 1px $grey-border solid;
       border-style: none solid none none;
-      padding: 0;
     }
 
-    .rd-major-filters {
-      border-style: none;
+    .rd-filter-border-end {
+      border: 1px $grey-border solid;
+      border-style: none none none solid;
     }
 
     fieldset .rd-keyword-filter {
-      border-style: none;
       margin-right: 0;
       margin-top: 0.5rem;
       padding-right: 0;
@@ -168,6 +168,11 @@
       margin-top: 0.5rem;
       width: 90%;
     }
+
+    .form-group {
+      min-width: 100px;
+    }
+
   }
 
   .rd-filters-container fieldset legend {
@@ -177,7 +182,7 @@
   .rd-form-note {
     clear: both;
     font-size: 85%;
-    padding-left: 15px;
+    margin: 0 auto;
     padding-top: 1rem;
   }
 
@@ -194,11 +199,14 @@
     /* small screen filter styles */
 
     .rd-filters-container {
-      fieldset {
+      .rd-filter-border,
+      .rd-filter-border-end {
         border-style: none;
+      }
+
+      fieldset {
         margin: 0;
         padding: 0;
-        width: 130px;
       }
 
       .rd-grades-filters {
@@ -211,10 +219,16 @@
         margin: 0;
         padding: 0;
       }
+
+      .form-group {
+        min-width: auto;
+      }
     }
 
     .rd-form-note {
+      margin: 0;
       padding-bottom: 2rem;
+      padding-left: 15px;
     }
 
   }
