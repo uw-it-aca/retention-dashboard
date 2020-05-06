@@ -58,4 +58,3 @@ from django.urls import reverse_lazy
 
 LOGIN_URL = reverse_lazy('saml_login')
 LOGOUT_URL = reverse_lazy('saml_logout')
-ALLOWED_USERS_GROUP = 'u_test_group'
