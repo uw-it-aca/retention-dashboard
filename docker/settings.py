@@ -39,9 +39,9 @@ TEMPLATES = [
     }
 ]
 if os.getenv('ENV') == 'prod':
-    ALLOWED_USERS_GROUP = '	u_acadev_retention-prod'
+    ALLOWED_USERS_GROUP = 'u_acadev_retention-prod'
 elif os.getenv('ENV') == 'eval':
-    ALLOWED_USERS_GROUP = '	u_acadev_retention-test'
+    ALLOWED_USERS_GROUP = 'u_acadev_retention-test'
 elif os.getenv("ENV") == "localdev":
     DEBUG = True
     ALLOWED_USERS_GROUP = 'u_test_group'
