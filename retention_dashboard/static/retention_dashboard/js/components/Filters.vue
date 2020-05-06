@@ -2,18 +2,26 @@
   <b-row class="rd-filters-container justify-content-center">
     <b-col order="1">
     </b-col>
-    <b-col class="col-6 col-sm-2" order="3" order-sm="2">
+    <b-col class="col-6 col-md-2" order="3" order-md="2">
       <b-form-group
           label="Priority"
+          aria-controls="data_table"
         >
         <b-form-checkbox-group id="pred_filters" v-model="prediction_filter" stacked>
           <b-form-checkbox value="low">Top</b-form-checkbox>
           <b-form-checkbox value="average">Medium</b-form-checkbox>
           <b-form-checkbox value="high">Bottom</b-form-checkbox>
         </b-form-checkbox-group>
+        <b-form-select
+            id="advisor_filter"
+            class="rd-advisor-filter"
+            v-model="advisorselected"
+            :options="advisors"
+            size="sm"
+          />
       </b-form-group>
     </b-col>
-      <b-col class="col-12 col-sm-6" order="2" order-sm="3">
+      <b-col class="col-12 col-md-6" order="2" order-md="3">
         <b-row>
           <b-col class="col-4">
             <b-form-group
@@ -53,7 +61,7 @@
           <div class="rd-form-note"><span class="rd-form-key"><strong>Low</strong> -5 to -3</span><span class="rd-form-key"><strong class="rd-label">Average</strong> -2 to +2</span><span><strong>High</strong> +3 to +5</span></div>
         </b-row>
       </b-col>
-      <b-col class="col-6 col-sm-2" order="4">
+      <b-col class="col-6 col-md-2" order="4">
         <b-form-group
           class= "rd-major-filters"
           label="Major Type"
@@ -89,6 +97,12 @@
         prediction_filter: [],
         premajor_filter: false,
         keyword_filter: "",
+        advisors: [
+          { value: '1', text: 'Advisors: All' },
+          { value: '2', text: 'John Doe' },
+          { value: '3', text: 'Jane Doe' }
+        ],
+        advisorselected: "1",
       };
     },
     computed: {
@@ -147,6 +161,12 @@
       margin-right: 0;
       margin-top: 0.5rem;
       padding-right: 0;
+    }
+
+    .rd-advisor-filter {
+      margin-bottom: 1rem;
+      margin-top: 0.5rem;
+      width: 90%;
     }
   }
 
