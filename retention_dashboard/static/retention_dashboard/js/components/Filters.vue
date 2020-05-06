@@ -164,7 +164,6 @@
     }
 
     .rd-advisor-filter {
-      margin-bottom: 1rem;
       margin-top: 0.5rem;
       width: 90%;
     }
