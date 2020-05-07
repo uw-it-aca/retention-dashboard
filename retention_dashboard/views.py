@@ -26,13 +26,17 @@ class PageView(TemplateView):
 class LandingView(PageView):
     template_name = "landing.html"
 
+
 class AdminView(PageView):
     template_name = "admin.html"
 
     def get_context_data(self, **kwargs):
         context = {}
-        context['weeks'] = Week.objects.all().order_by('year', 'quarter', 'number')
+        context['weeks'] = Week.objects.all().order_by('year',
+                                                       'quarter',
+                                                       'number')
         return context
+
 
 class RESTDispatch(View):
     @staticmethod
@@ -78,6 +82,7 @@ class WeekAdmin(RESTDispatch):
                                                    number=week)
         return self.json_response({"created": created})
 
+
 class DataAdmin(RESTDispatch):
     def post(self, request):
         week_id = request.POST.get('week')
@@ -96,7 +101,7 @@ class DataAdmin(RESTDispatch):
                                        message="Invalid document")
 
         week = Week.objects.get(id=week_id)
-        #TODO: Wire up user netid
+        # TODO: Wire up user netid
         upload = Upload.objects.create(file=document,
                                        type=type,
                                        week=week,

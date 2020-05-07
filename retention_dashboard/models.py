@@ -32,4 +32,3 @@ class Upload(models.Model):
     uploaded_by = models.CharField(max_length=12)
     created_on = models.DateTimeField(auto_now_add=True)
     week = models.ForeignKey("Week", on_delete=models.PROTECT)
-
