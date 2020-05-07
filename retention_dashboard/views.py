@@ -9,7 +9,6 @@ from django.views import View
 from django.utils.decorators import method_decorator
 from django.core.serializers.json import DjangoJSONEncoder
 from uw_saml.decorators import group_required
-from retention_dashboard.models import Week, DataPoint, Upload
 
 
 class PageView(TemplateView):
@@ -26,13 +25,6 @@ class PageView(TemplateView):
 class LandingView(PageView):
     template_name = "landing.html"
 
-class AdminView(PageView):
-    template_name = "admin.html"
-
-    def get_context_data(self, **kwargs):
-        context = {}
-        context['weeks'] = Week.objects.all().order_by('year', 'quarter', 'number')
-        return context
 
 class RESTDispatch(View):
     @staticmethod
@@ -66,39 +58,3 @@ class DataView(RESTDispatch):
         with open(file_path, 'r') as content_file:
             content = content_file.read()
         return self.json_response(content={"data": content})
-
-
-class WeekAdmin(RESTDispatch):
-    def post(self, request):
-        year = request.POST.get("year")
-        quarter = request.POST.get("quarter")
-        week = request.POST.get("week")
-        week, created = Week.objects.get_or_create(year=year,
-                                                   quarter=quarter,
-                                                   number=week)
-        return self.json_response({"created": created})
-
-class DataAdmin(RESTDispatch):
-    def post(self, request):
-        week_id = request.POST.get('week')
-        type = request.POST.get('type')
-
-        uploaded_file = request.FILES.get('file')
-        document = None
-        file = uploaded_file.read()
-        try:
-            document = file.decode('utf-16')
-        except UnicodeDecodeError as ex:
-            document = file.decode('utf-8')
-
-        if document is None:
-            return self.error_response(status=400,
-                                       message="Invalid document")
-
-        week = Week.objects.get(id=week_id)
-        #TODO: Wire up user netid
-        upload = Upload.objects.create(file=document,
-                                       type=type,
-                                       week=week,
-                                       uploaded_by="javerage")
-        return self.json_response({"created": True})
