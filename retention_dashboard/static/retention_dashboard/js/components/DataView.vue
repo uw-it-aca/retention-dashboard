@@ -299,7 +299,7 @@
         axios.get('/api/data/' + filename + "/")
           .then(function(response){
             vue.csv_data = response.data.data;
-          })
+          });
       },
       download_filtered() {
         var to_download = this.items,
