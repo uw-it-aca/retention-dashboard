@@ -16,7 +16,7 @@ apt-get install -y nodejs npm
 npm install -g npm@latest
 hash -r
 
-npm install -g eslint stylelint
+# npm install -g eslint stylelint
 npm install
 
 function run_test {
