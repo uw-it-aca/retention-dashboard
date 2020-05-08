@@ -1,9 +1,7 @@
-from django.urls import re_path, include
-from retention_dashboard.views import (LandingView,
-                                       DataView,
-                                       AdminView,
-                                       WeekAdmin,
-                                       DataAdmin)
+from django.urls import re_path
+from retention_dashboard.views.pages import LandingView, AdminView
+from retention_dashboard.views.api.admin import WeekAdmin, DataAdmin
+from retention_dashboard.views.api.data import DataView
 
 
 urlpatterns = [
