@@ -40,11 +40,14 @@ TEMPLATES = [
 ]
 if os.getenv('ENV') == 'prod':
     ALLOWED_USERS_GROUP = 'u_acadev_retention-prod'
+    ADMIN_USERS_GROUP = 'u_acadev_retention-prod-admin'
 elif os.getenv('ENV') == 'eval':
     ALLOWED_USERS_GROUP = 'u_acadev_retention-test'
+    ADMIN_USERS_GROUP = 'u_acadev_retention-test-admin'
 elif os.getenv("ENV") == "localdev":
     DEBUG = True
     ALLOWED_USERS_GROUP = 'u_test_group'
+    ADMIN_USERS_GROUP = ALLOWED_USERS_GROUP
     MOCK_SAML_ATTRIBUTES = {
         'uwnetid': ['javerage'],
         'affiliations': ['student', 'member', 'alum', 'staff', 'employee'],

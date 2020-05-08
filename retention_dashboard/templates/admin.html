@@ -23,6 +23,7 @@
             alert("Week already exists");
           } else {
             alert("Week created");
+            location.reload()
           }
         });
       });
@@ -30,13 +31,10 @@
       $("#data_form").submit(function (e) {
         e.preventDefault();
         var csrf = jQuery("[name=csrfmiddlewaretoken]").val(),
-            data = new FormData();
-        console.log($('input[name=type]:checked', '#data_form').val())
-        console.log($("#selected_week").val())
+                data = new FormData();
         data.append('type', $('input[name=type]:checked', '#data_form').val())
         data.append('week', $("#selected_week").val())
         data.append('file', $('#file').get(0).files[0])
-        console.log(data)
 
         $.ajax({
           url: "/api/admin/dataset/",
@@ -50,7 +48,31 @@
             'X-CSRFToken': csrf
           }
         }).done(function (response) {
-
+          alert('uploaded')
+          location.reload()
+        }).fail(function (response){
+          if (response.status === 400){
+            alert('week and type combo already exists')
+          }
+        });
+      });
+      $(".delete").click(function (e) {
+        e.preventDefault();
+        var upload_id = $(e.target).val(),
+                csrf = jQuery("[name=csrfmiddlewaretoken]").val();
+        $.ajax({
+          url: "/api/admin/dataset/" + upload_id + "/",
+          method: "DELETE",
+          contentType: false,
+          processData: false,
+          dataTyte: 'json',
+          headers: {
+            'X-CSRFToken': csrf
+          }
+        }).done(function (response) {
+          alert('deleted')
+          location.reload()
+        }).fail(function (response){
         });
       });
     });
@@ -73,6 +95,7 @@
   </div>
   <div>
     <h3>Add New Week</h3>
+    <p>Adding a new week will make it avalible for a dataset upload, new weeks will not appear in the UI until they have data attached</p>
     <form id="week_form">
       Week Number: <input id="week" minlength="1" maxlength="2">
       Quarter:
@@ -88,6 +111,7 @@
   </div>
   <div>
     <h2>Data Admin</h2>
+  <p>Only one file upload is allowed per type (eg OMAD) and week combination.  Add a new week above if it isn't in the dropdown.</p>
     <form id="data_form">
       <input id="file" type="file">
       <br />
@@ -104,6 +128,16 @@
       </select>
     <input type="submit" value="Add Dataset">
     </form>
+  <div>
+    <h3>Existing Uploads</h3>
+  <p>Deleting a upload will delete all data associated with it, so this has user facing consequences.  Should only be needed if a file is erroneously uploaded</p>
+    <table>
+      <tr><th>Date</th><th>User</th><th>Type</th><th>Week</th><th>Delete</th></tr>
+      {% for upload in uploads %}
+        <tr><td>{{upload.created_on}}</td><td>{{upload.uploaded_by}}</td><td>{{upload.get_type_display}}</td><td>{{ upload.week.year }} - {{ upload.week.get_quarter_display }} - Week {{ upload.week.number }}</td><td><button class="delete" value="{{ upload.id }}">x</button></td></tr>
+      {% endfor %}
+    </table>
+  </div>
   </div>
 </div>
 </body>

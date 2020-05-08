@@ -8,8 +8,11 @@ from django.http import HttpResponse
 from django.views import View
 from django.utils.decorators import method_decorator
 from django.core.serializers.json import DjangoJSONEncoder
+from django.db.utils import IntegrityError
 from uw_saml.decorators import group_required
 from retention_dashboard.models import Week, DataPoint, Upload
+from retention_dashboard.utilities.upload import process_upload
+from userservice.user import get_original_user
 
 
 class PageView(TemplateView):
@@ -35,6 +38,7 @@ class AdminView(PageView):
         context['weeks'] = Week.objects.all().order_by('year',
                                                        'quarter',
                                                        'number')
+        context['uploads'] = Upload.objects.all().order_by('week', 'type')
         return context
 
 
@@ -72,6 +76,8 @@ class DataView(RESTDispatch):
         return self.json_response(content={"data": content})
 
 
+@method_decorator(group_required(settings.ADMIN_USERS_GROUP),
+                  name='dispatch')
 class WeekAdmin(RESTDispatch):
     def post(self, request):
         year = request.POST.get("year")
@@ -83,6 +89,8 @@ class WeekAdmin(RESTDispatch):
         return self.json_response({"created": created})
 
 
+@method_decorator(group_required(settings.ADMIN_USERS_GROUP),
+                  name='dispatch')
 class DataAdmin(RESTDispatch):
     def post(self, request):
         week_id = request.POST.get('week')
@@ -92,18 +100,30 @@ class DataAdmin(RESTDispatch):
         document = None
         file = uploaded_file.read()
         try:
-            document = file.decode('utf-16')
-        except UnicodeDecodeError as ex:
             document = file.decode('utf-8')
+        except UnicodeDecodeError as ex:
+            document = file.decode('utf-16')
 
         if document is None:
             return self.error_response(status=400,
                                        message="Invalid document")
 
         week = Week.objects.get(id=week_id)
-        # TODO: Wire up user netid
-        upload = Upload.objects.create(file=document,
-                                       type=type,
-                                       week=week,
-                                       uploaded_by="javerage")
+        user = get_original_user(request)
+        try:
+            upload = Upload.objects.create(file=document,
+                                           type=type,
+                                           week=week,
+                                           uploaded_by=user)
+            process_upload(upload)
+        except IntegrityError:
+            return self.error_response(400)
         return self.json_response({"created": True})
+
+    def delete(self, request, upload_id):
+        try:
+            upload = Upload.objects.get(id=upload_id)
+            upload.delete()
+            return self.json_response({"deleted": True})
+        except Exception:
+            return self.error_response(400)
