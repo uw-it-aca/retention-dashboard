@@ -11,6 +11,12 @@ class Week(models.Model):
         default=1, choices=QUARTER_CHOICES)
     year = models.IntegerField()
 
+    def json_data(self):
+        return {"id": self.id,
+                "number": self.number,
+                "quarter": self.quarter,
+                "year": self.year}
+
 
 class DataPoint(models.Model):
     TYPE_CHOICES = ((1, "OMAD"), (2, "EOP"), (3, "International"))

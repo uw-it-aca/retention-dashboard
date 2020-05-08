@@ -44,6 +44,7 @@
 <script>
 
   import Vuex from 'vuex';
+  import axios from 'axios';
   export default {
     name: "DataSelect",
     components: {},
@@ -75,6 +76,15 @@
       selectWeek(week){
         this.$store.dispatch('dataselect/set_week', week);
       },
+      get_weeks(){
+        axios.get('/api/data/' + filename + "/")
+          .then(function(response){
+            vue.csv_data = response.data.data;
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      }
     }
   };
 </script>
