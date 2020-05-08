@@ -44,6 +44,7 @@
       $route(){ },
     },
     mounted() {
+      this.netid = window.user_netid;
     },
     methods: {}
   };
