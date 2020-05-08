@@ -300,9 +300,6 @@
           .then(function(response){
             vue.csv_data = response.data.data;
           })
-          .catch(function (error) {
-            console.log(error);
-          });
       },
       download_filtered() {
         var to_download = this.items,
