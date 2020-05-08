@@ -1,11 +1,15 @@
 from django.urls import re_path
 from retention_dashboard.views.pages import LandingView, AdminView
 from retention_dashboard.views.api.admin import WeekAdmin, DataAdmin
-from retention_dashboard.views.api.data import DataView, WeekView
+from retention_dashboard.views.api.data import (DataView,
+                                                WeekView,
+                                                DataAuthView)
 
 
 urlpatterns = [
     re_path(r'api/v1/weeks/', WeekView.as_view(), name="week_view"),
+    re_path(r'api/v1/data_auth/', DataAuthView.as_view(),
+            name="data_auth_view"),
     re_path(r'^api/data/(?P<week>.*)/(?P<file>.*)/',
             DataView.as_view(),
             name="data_view"),
