@@ -51,10 +51,7 @@
     props: {},
     data(){
       return {
-        weeks: [
-          { value: '2', text: 'Spring 2020: Week 2' },
-          { value: '3', text: 'Spring 2020: Week 3' }
-        ],
+        weeks: [],
         currentweek: '3',
       };
     },
@@ -69,6 +66,9 @@
         this.selectWeek(this.currentweek);
       }
     },
+    mounted: function(){
+      this.get_weeks();
+    },
     methods: {
       selectPage(page){
         this.$store.dispatch('dataselect/set_file', page);
@@ -77,9 +77,15 @@
         this.$store.dispatch('dataselect/set_week', week);
       },
       get_weeks(){
-        axios.get('/api/data/' + filename + "/")
+        var vue = this;
+        axios.get('/api/v1/weeks/')
           .then(function(response){
-            vue.csv_data = response.data.data;
+            var weeks = [];
+            response.data.forEach(function(week){
+              var week_string = week.quarter + " " + week.year + ": Week" + week.number;
+              weeks.push({value: week.id, text: week_string});
+            });
+            vue.weeks = weeks;
           })
           .catch(function (error) {
             console.log(error);

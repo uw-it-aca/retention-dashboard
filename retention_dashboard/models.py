@@ -14,7 +14,7 @@ class Week(models.Model):
     def json_data(self):
         return {"id": self.id,
                 "number": self.number,
-                "quarter": self.quarter,
+                "quarter": self.get_quarter_display(),
                 "year": self.year}
 
 
