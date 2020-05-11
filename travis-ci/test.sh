@@ -16,7 +16,7 @@ apt-get install -y nodejs npm
 npm install -g npm@latest
 hash -r
 
-npm install -g eslint stylelint
+npm install -g eslint@5.0.0 stylelint eslint-plugin-vue
 npm install
 
 function run_test {
