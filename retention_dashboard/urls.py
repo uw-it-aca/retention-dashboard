@@ -3,13 +3,16 @@ from retention_dashboard.views.pages import LandingView, AdminView
 from retention_dashboard.views.api.admin import WeekAdmin, DataAdmin
 from retention_dashboard.views.api.data import (DataView,
                                                 WeekView,
-                                                DataAuthView)
+                                                DataAuthView,
+                                                FilteredDataView)
 
 
 urlpatterns = [
     re_path(r'api/v1/weeks/', WeekView.as_view(), name="week_view"),
     re_path(r'api/v1/data_auth/', DataAuthView.as_view(),
             name="data_auth_view"),
+    re_path(r'api/v1/filtered_data/', FilteredDataView.as_view(),
+            name="filtered_view"),
     re_path(r'^api/data/(?P<week>.*)/(?P<file>.*)/',
             DataView.as_view(),
             name="data_view"),

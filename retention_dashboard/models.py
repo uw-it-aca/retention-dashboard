@@ -32,6 +32,24 @@ class DataPoint(models.Model):
     grade_score = models.FloatField()
     upload = models.ForeignKey("Upload", on_delete=models.CASCADE)
 
+    @staticmethod
+    def get_data_by_type_week(type, week):
+        type_int = [item for item in
+                    DataPoint.TYPE_CHOICES
+                    if type in item][0][0]
+        data = DataPoint.objects.filter(type=type_int, week=week)
+        return data
+
+    def json_data(self):
+        return {"student_name": self.student_name,
+                "student_number": self.student_number,
+                "netid": self.netid,
+                "priority_score": self.priority_score,
+                "activity_score": self.activity_score,
+                "assignment_score": self.assignment_score,
+                "grade_score": self.grade_score
+                }
+
 
 class Upload(models.Model):
     file = models.TextField()
