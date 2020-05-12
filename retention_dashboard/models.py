@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Q
 
 
 class Week(models.Model):
@@ -40,6 +41,44 @@ class DataPoint(models.Model):
         data = DataPoint.objects.filter(type=type_int, week=week)
         return data
 
+    @staticmethod
+    def filter_by_ranges(data_queryset, ranges, field):
+        LOW_MIN = -5
+        AVG_MIN = -2
+        HIGH_MIN = 3
+        HIGH_MAX = 5
+
+        field_lt = field + "__lt"
+        field_lte = field + "__lte"
+        field_gte = field + "__gte"
+        queries = []
+        if "low" in ranges:
+            queries.append(Q(**{field_lt: AVG_MIN,
+                                field_gte: LOW_MIN}))
+        if "avg" in ranges:
+            queries.append(Q(**{field_lt: HIGH_MIN,
+                                field_gte: AVG_MIN}))
+        if "high" in ranges:
+            queries.append(Q(**{field_lte: HIGH_MAX,
+                                field_gte: HIGH_MIN}))
+        query = queries.pop()
+        for item in queries:
+            query |= item
+        return data_queryset.filter(query)
+
+    @staticmethod
+    def filter_by_text(data_queryset, text):
+        data_queryset = \
+            data_queryset.filter(Q(student_name__icontains=text)
+                                 | Q(student_number__icontains=text)
+                                 | Q(netid__icontains=text))
+
+        return data_queryset
+
+    @staticmethod
+    def filter_by_premajor(data_queryset, is_premajor):
+        return data_queryset.filter(premajor=is_premajor)
+
     def json_data(self):
         return {"student_name": self.student_name,
                 "student_number": self.student_number,
@@ -47,7 +86,8 @@ class DataPoint(models.Model):
                 "priority_score": self.priority_score,
                 "activity_score": self.activity_score,
                 "assignment_score": self.assignment_score,
-                "grade_score": self.grade_score
+                "grade_score": self.grade_score,
+                "is_premajor": self.premajor
                 }
 
 
