@@ -86,7 +86,7 @@
               weeks.push({value: week.id, text: week_string});
             });
             vue.weeks = weeks;
-          })
+          });
       }
     }
   };
