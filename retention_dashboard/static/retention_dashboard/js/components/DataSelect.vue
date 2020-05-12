@@ -87,9 +87,6 @@
             });
             vue.weeks = weeks;
           })
-          .catch(function (error) {
-            console.log(error);
-          });
       }
     }
   };

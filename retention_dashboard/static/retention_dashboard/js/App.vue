@@ -7,7 +7,9 @@
         </h1>
       </b-col>
       <b-col class="rd-login-info col-2 col-md-4">
-        <h3 id="rd_login_header" class="sr-only">Your information</h3>
+        <h3 id="rd_login_header" class="sr-only">
+          Your information
+        </h3>
         <span aria-labelledby="rd_login_header" class="hide-lg">Welcome, </span><span id="netid">{{ netid }}</span>
         <a href="/saml/logout" tabindex="0" class="rd-logout-link">Sign out</a>
       </b-col>
