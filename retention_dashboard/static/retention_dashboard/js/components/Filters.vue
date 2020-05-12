@@ -8,9 +8,15 @@
           aria-controls="data_table"
         >
         <b-form-checkbox-group id="pred_filters" v-model="prediction_filter" stacked>
-          <b-form-checkbox value="low">Top</b-form-checkbox>
-          <b-form-checkbox value="average">Medium</b-form-checkbox>
-          <b-form-checkbox value="high">Bottom</b-form-checkbox>
+          <b-form-checkbox value="low">
+            Top
+          </b-form-checkbox>
+          <b-form-checkbox value="average">
+            Medium
+          </b-form-checkbox>
+          <b-form-checkbox value="high">
+            Bottom
+          </b-form-checkbox>
         </b-form-checkbox-group>
         <b-form-select
             id="advisor_filter"
@@ -70,16 +76,15 @@
           <b-form-checkbox v-model="premajor_filter">Is Pre-Major</b-form-checkbox>
           <!-- <b-form-checkbox v-model="stem_filter">Is STEM</b-form-checkbox> -->
           <b-form-group
-          class="rd-keyword-filter"
-          label="Keyword"
-        >
-            <b-form-input v-model="keyword_filter" size="sm" placeholder="Student name, #, NetID"></b-form-input>
-          </b-form-group>
+            class="rd-keyword-filter"
+            label="Keyword"
+          >
+          <b-form-input v-model="keyword_filter" size="sm" placeholder="Student name, #, NetID" />
         </b-form-group>
-      </b-col>
-      <b-col order="5">
-      </b-col>
-    </b-row>
+      </b-form-group>
+    </b-col>
+    <b-col order="5" />
+  </b-row>
 </template>
 
 <script>

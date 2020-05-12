@@ -1,10 +1,15 @@
 <template>
   <b-container id="app" class="rd-content-container" fluid>
     <b-row class="rd-app-banner" role="banner">
-      <b-col>
+      <b-col class="col-10 col-md-8">
         <h1 class="rd-app-title">
           <span>Retention Analytics Dashboard</span>
         </h1>
+      </b-col>
+      <b-col class="rd-login-info col-2 col-md-4">
+        <h3 id="rd_login_header" class="sr-only">Your information</h3>
+        <span aria-labelledby="rd_login_header" class="hide-lg">Welcome, </span><span id="netid">{{ netid }}</span>
+        <a href="/saml/logout" tabindex="0" class="rd-logout-link">Sign out</a>
       </b-col>
     </b-row>
     <b-row role="main">
@@ -30,13 +35,16 @@
       dataview: DataView
     },
     data(){
-      return {};
+      return {
+        netid: '',
+      };
     },
     computed: {},
     watch: {
       $route(){ },
     },
     mounted() {
+      this.netid = window.user_netid;
     },
     methods: {}
   };
@@ -91,19 +99,12 @@
   .rd-app-title {
     font-size: 2rem;
     margin-bottom: 0;
-    margin-left: 55px;
+    padding-left: 55px;
     padding-top: 12px;
   }
 
   .rd-login-info {
-    flex: auto;
-    float: right;
-    font-weight: 600;
-    margin-left: 2rem;
-  }
-
-  .rd-logout-link {
-    float: right;
+    text-align: right;
   }
 
   /* branding styles */
@@ -148,6 +149,10 @@
   .rd-footer-links {
     font-size: 0.8725rem;
     padding: 0.5rem 0;
+  }
+
+  .rd-logout-link {
+    display: block;
   }
 
 </style>
