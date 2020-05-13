@@ -138,6 +138,8 @@
   import Filters from "./Filters.vue";
   import Vuex from 'vuex';
   import axios from 'axios';
+  import qs from 'qs';
+
   export default {
     name: "DataView",
     components: {
@@ -221,27 +223,27 @@
         return selected.join(", ");
       },
       filter_params () {
-        const params = new URLSearchParams();
-        params.append("week", this.current_week);
-        params.append("type", this.current_file);
+        const params = {};
+        params['week'] = this.current_week;
+        params['type'] = this.current_file;
 
         if(this.grade_filter.length > 0){
-          params.append("grade_filters", this.grade_filter);
+          params['grade_filters'] = this.grade_filter;
         }
         if(this.assignment_filter.length > 0){
-          params.append("assignment_filters", this.assignment_filter);
+          params['assignment_filters'] = this.assignment_filter;
         }
         if(this.prediction_filter.length > 0){
-          params.append("priority_filters", this.prediction_filter);
+          params['priority_filters'] = this.prediction_filter;
         }
         if(this.activity_filter.length > 0){
-          params.append("activity_filters", this.activity_filter);
+          params['activity_filters'] = this.activity_filter;
         }
         if(this.premajor_filter.length > 0){
-          params.append("premajor_filter", this.premajor_filter);
+          params['premajor_filter'] = this.premajor_filter;
         }
         if(this.keyword_filter.length > 0){
-          params.append("text_filter", this.keyword_filter);
+          params['text_filter'] = this.keyword_filter;
         }
         return params;
       },
@@ -350,10 +352,17 @@
       },
       run_filters(){
         var vue = this;
+        if(this.current_file.length < 1 || this.current_week.length < 1){
+          // don't fire ajax unless week and type are set
+          return;
+        }
         axios({
           method: 'get',
           url: "/api/v1/filtered_data/",
-          params: this.filter_params
+          paramsSerializer: function (params) {
+            return qs.stringify(params, {arrayFormat: 'repeat'});
+          },
+          params: this.filter_params,
         })
           .then(function(response){
             vue.csv_data = response.data.rows;

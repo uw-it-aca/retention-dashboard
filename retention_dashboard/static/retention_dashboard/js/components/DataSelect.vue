@@ -1,24 +1,22 @@
 <template>
   <div>
     <span class="rd-file-select">
-      <b-nav pills>
-        <b-nav-item-dropdown
+      <b-form inline>
+        <b-form-group
           id="file-dropdown"
-          :text="current_file"
-          toggle-class="nav-link-custom"
-          aria-controls="data_table"
+          label="Select Data"
+          label-class="sr-only"
+          label-for="type_dropdown"
         >
-          <b-dropdown-item href="#" @click.prevent="selectPage('International')">
-            International students
-          </b-dropdown-item>
-          <b-dropdown-item href="#" @click.prevent="selectPage('Premajor')">
-            Premajor Students
-          </b-dropdown-item>
-          <b-dropdown-item href="#" @click.prevent="selectPage('EOP')">
-            EOP students
-          </b-dropdown-item>
-        </b-nav-item-dropdown>
-      </b-nav>
+          <b-form-select
+            id="type_dropdown"
+            v-model="type"
+            :options="auth_list"
+            aria-controls="data_table"
+            size="sm"
+          />
+        </b-form-group>
+      </b-form>
     </span>
     <span class="rd-date-select">
       <b-form inline>
@@ -52,7 +50,9 @@
     data(){
       return {
         weeks: [],
-        currentweek: '1',
+        auth_list: [],
+        type: '',
+        currentweek: ''
       };
     },
     computed: {
@@ -64,10 +64,20 @@
     watch: {
       currentweek: function(){
         this.selectWeek(this.currentweek);
+      },
+      type: function(){
+        this.selectPage(this.type);
+      },
+      weeks: function(){
+        this.currentweek = this.weeks[this.weeks.length-1].value;
+      },
+      auth_list: function(){
+        this.type = this.auth_list[0];
       }
     },
     mounted: function(){
       this.get_weeks();
+      this.get_types();
     },
     methods: {
       selectPage(page){
@@ -80,12 +90,14 @@
         var vue = this;
         axios.get('/api/v1/weeks/')
           .then(function(response){
-            var weeks = [];
-            response.data.forEach(function(week){
-              var week_string = week.quarter + " " + week.year + ": Week" + week.number;
-              weeks.push({value: week.id, text: week_string});
-            });
-            vue.weeks = weeks;
+            vue.weeks = response.data;
+          });
+      },
+      get_types(){
+        var vue = this;
+        axios.get('/api/v1/data_auth/')
+          .then(function(response){
+            vue.auth_list = response.data;
           });
       }
     }

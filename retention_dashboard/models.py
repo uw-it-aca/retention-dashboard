@@ -13,10 +13,11 @@ class Week(models.Model):
     year = models.IntegerField()
 
     def json_data(self):
-        return {"id": self.id,
-                "number": self.number,
-                "quarter": self.get_quarter_display(),
-                "year": self.year}
+        display_string = "{} {}: Week {}".format(self.get_quarter_display(),
+                                                 self.year,
+                                                 self.number)
+        return {"value": self.id,
+                "text": display_string}
 
 
 class DataPoint(models.Model):
