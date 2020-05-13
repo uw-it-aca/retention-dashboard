@@ -297,20 +297,6 @@
       },
 
     },
-    mounted: function(){
-      this.$store.watch(
-        state => state.dataselect.current_file,
-        () => {
-          this.run_filters();
-        }
-      );
-      this.$store.watch(
-        state => state.dataselect.current_week,
-        () => {
-          this.run_filters();
-        }
-      );
-    },
     methods: {
       get_filtered_emails(){
         var emails = [];
