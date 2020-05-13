@@ -2,7 +2,7 @@ from django.conf import settings
 from uw_saml.utils import is_member_of_group
 
 
-def is_omad_authorized(request):
+def is_premajor_authorized(request):
     return is_member_of_group(request, settings.OMAD_USERS_GROUP)
 
 
@@ -16,8 +16,8 @@ def is_international_authorized(request):
 
 def get_type_authorizations(request):
     types = []
-    if is_omad_authorized(request):
-        types.append("OMAD")
+    if is_premajor_authorized(request):
+        types.append("Premajor")
     if is_eop_authorized(request):
         types.append("EOP")
     if is_international_authorized(request):

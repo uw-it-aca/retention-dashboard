@@ -26,26 +26,26 @@ class DataTest(TestCase):
         self.week = Week.objects.get(id=1)
 
     def test_basic_data(self):
-        data = get_filtered_data("OMAD", self.week)
+        data = get_filtered_data("Premajor", self.week)
         self.assertEqual(len(data), 5)
 
         data = get_filtered_data("EOP", self.week)
         self.assertEqual(len(data), 1)
 
     def test_range_filter(self):
-        data = get_filtered_data("OMAD", self.week, grade_filters=["low"])
+        data = get_filtered_data("Premajor", self.week, grade_filters=["low"])
         self.assertEqual(len(data), 2)
 
-        data = get_filtered_data("OMAD", self.week, grade_filters=["low",
+        data = get_filtered_data("Premajor", self.week, grade_filters=["low",
                                                                    "avg"])
         self.assertEqual(len(data), 4)
 
-        data = get_filtered_data("OMAD", self.week, grade_filters=["low",
+        data = get_filtered_data("Premajor", self.week, grade_filters=["low",
                                                                    "avg",
                                                                    "high"])
         self.assertEqual(len(data), 5)
 
-        data = get_filtered_data("OMAD",
+        data = get_filtered_data("Premajor",
                                  self.week,
                                  grade_filters=["low"],
                                  activity_filters=["low"],
@@ -54,9 +54,9 @@ class DataTest(TestCase):
         self.assertEqual(len(data), 2)
 
     def test_premajor_filter(self):
-        data = get_filtered_data("OMAD", self.week, premajor_filter=True)
+        data = get_filtered_data("Premajor", self.week, premajor_filter=True)
         self.assertEqual(len(data), 3)
 
     def test_text_filter(self):
-        data = get_filtered_data("OMAD", self.week, text_filter="J")
+        data = get_filtered_data("Premajor", self.week, text_filter="J")
         self.assertEqual(len(data), 3)
