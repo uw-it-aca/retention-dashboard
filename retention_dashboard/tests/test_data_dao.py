@@ -37,12 +37,12 @@ class DataTest(TestCase):
         self.assertEqual(len(data), 2)
 
         data = get_filtered_data("Premajor", self.week, grade_filters=["low",
-                                                                   "avg"])
+                                                                       "avg"])
         self.assertEqual(len(data), 4)
 
         data = get_filtered_data("Premajor", self.week, grade_filters=["low",
-                                                                   "avg",
-                                                                   "high"])
+                                                                       "avg",
+                                                                       "high"])
         self.assertEqual(len(data), 5)
 
         data = get_filtered_data("Premajor",

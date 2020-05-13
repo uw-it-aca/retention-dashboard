@@ -52,7 +52,7 @@ class FilteredDataView(RESTDispatch):
         premajor_filter = request.GET.get("premajor_filter", None)
 
         if week is None or type is None:
-            return self.error_response(status=4//00)
+            return self.error_response(status=400)
         auth_list = get_type_authorizations(request)
         if type not in auth_list:
             err_msg = "Not authorized for type " + type

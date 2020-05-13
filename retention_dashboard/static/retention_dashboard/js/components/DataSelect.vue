@@ -8,13 +8,13 @@
           toggle-class="nav-link-custom"
           aria-controls="data_table"
         >
-          <b-dropdown-item href="#" @click.prevent="selectPage('international-students.csv')">
+          <b-dropdown-item href="#" @click.prevent="selectPage('International')">
             International students
           </b-dropdown-item>
-          <b-dropdown-item href="#" @click.prevent="selectPage('premajor-students.csv')">
+          <b-dropdown-item href="#" @click.prevent="selectPage('Premajor')">
             Premajor Students
           </b-dropdown-item>
-          <b-dropdown-item href="#" @click.prevent="selectPage('eop-students.csv')">
+          <b-dropdown-item href="#" @click.prevent="selectPage('EOP')">
             EOP students
           </b-dropdown-item>
         </b-nav-item-dropdown>
@@ -52,7 +52,7 @@
     data(){
       return {
         weeks: [],
-        currentweek: '3',
+        currentweek: '1',
       };
     },
     computed: {
