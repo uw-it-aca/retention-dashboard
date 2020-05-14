@@ -239,7 +239,7 @@
         if(this.activity_filter.length > 0){
           params['activity_filters'] = this.activity_filter;
         }
-        if(this.premajor_filter.length > 0){
+        if(this.premajor_filter === true){
           params['premajor_filter'] = this.premajor_filter;
         }
         if(this.keyword_filter.length > 0){
@@ -263,11 +263,11 @@
         var vue = this;
         csv.forEach(function(item){
           item["premajor"] = (item["premajor"] === "1" ? true: false);
-          item["student_no"] = Number(item["student_no"]);
+          item["student_number"] = Number(item["student_number"]);
 
-          item['activity'] = vue.get_rounded(item['activity']);
-          item['assignments'] = vue.get_rounded(item['assignments']);
-          item['grades'] = vue.get_rounded(item['grades']);
+          item['activity_score'] = vue.get_rounded(item['activity_score']);
+          item['assignment_score'] = vue.get_rounded(item['assignment_score']);
+          item['grade_score'] = vue.get_rounded(item['grade_score']);
         });
         this.items = csv;
       },
@@ -301,7 +301,7 @@
       get_filtered_emails(){
         var emails = [];
         this.items.forEach(function(item){
-          emails.push(item['uw_netid'] + "@uw.edu");
+          emails.push(item['netid'] + "@uw.edu");
         });
         return emails;
       },

@@ -22,6 +22,10 @@ class LandingView(PageView):
     template_name = "landing.html"
 
 
+@method_decorator(login_required(),
+                  name='dispatch')
+@method_decorator(group_required(settings.ADMIN_USERS_GROUP),
+                  name='dispatch')
 class AdminView(PageView):
     template_name = "admin.html"
 
