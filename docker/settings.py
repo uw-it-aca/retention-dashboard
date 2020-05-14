@@ -43,12 +43,16 @@ if os.getenv('ENV') == 'prod':
     ADMIN_USERS_GROUP = 'u_acadev_retention-prod-admin'
 elif os.getenv('ENV') == 'eval':
     ALLOWED_USERS_GROUP = 'u_acadev_retention-test'
-    ADMIN_USERS_GROUP = 'u_acadev_retention-test-admin'
+    # ADMIN_USERS_GROUP = 'u_acadev_retention-test-admin'
+    ADMIN_USERS_GROUP = ALLOWED_USERS_GROUP
+    PREMAJOR_USERS_GROUP = ALLOWED_USERS_GROUP
+    EOP_USERS_GROUP = ALLOWED_USERS_GROUP
+    INTERNATIONAL_USERS_GROUP = ALLOWED_USERS_GROUP
 elif os.getenv("ENV") == "localdev":
     DEBUG = True
     ALLOWED_USERS_GROUP = 'u_test_group'
     ADMIN_USERS_GROUP = ALLOWED_USERS_GROUP
-    OMAD_USERS_GROUP = ALLOWED_USERS_GROUP
+    PREMAJOR_USERS_GROUP = ALLOWED_USERS_GROUP
     EOP_USERS_GROUP = ALLOWED_USERS_GROUP
     INTERNATIONAL_USERS_GROUP = ALLOWED_USERS_GROUP
     MOCK_SAML_ATTRIBUTES = {
