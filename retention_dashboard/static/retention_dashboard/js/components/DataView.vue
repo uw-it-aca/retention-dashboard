@@ -148,7 +148,7 @@
     },
     data: function() {
       return {
-        fields: [
+        eop_fields: [
           {
             key: 'student_name',
             label: "Student Name",
@@ -195,6 +195,48 @@
             sortable: true
           }
         ],
+        standard_fields: [
+          {
+            key: 'student_name',
+            label: "Student Name",
+            sortable: true
+          },
+          {
+            key: 'student_number',
+            label: "Student Number",
+            class: 'text-center'
+          },
+
+          {
+            key: 'netid',
+            label: 'UWNetid',
+            class: 'text-center'
+          },
+          {
+            key: 'activity_score',
+            label: 'Activity',
+            class: 'text-center',
+            sortable: true
+          },
+          {
+            key: 'assignment_score',
+            label: 'Assignments',
+            class: 'text-center',
+            sortable: true
+          },
+          {
+            key: 'grade_score',
+            label: 'Grades',
+            class: 'text-center',
+            sortable: true
+          },
+          {
+            key: 'is_premajor',
+            label: 'Pre-Major',
+            class: 'text-center',
+            sortable: true
+          }
+        ],
         items: [],
         csv_data: "",
         perPage: 200,
@@ -209,6 +251,13 @@
       };
     },
     computed: {
+      fields (){
+        if (this.current_file === "EOP"){
+          return this.eop_fields;
+        } else {
+          return this.standard_fields;
+        }
+      },
       filename (){
         return this.$store.state.current_file;
       },
