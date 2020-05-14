@@ -62,6 +62,8 @@ class DataAdmin(RESTDispatch):
             return self.error_response(400)
 
 
+@method_decorator(group_required(settings.ADMIN_USERS_GROUP),
+                  name='dispatch')
 class MockDataAdmin(RESTDispatch):
     def put(self, request):
         if settings.DEBUG:
