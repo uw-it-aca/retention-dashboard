@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.utils.decorators import method_decorator
 from django.db.utils import IntegrityError
+from django.core.management import call_command
 from uw_saml.decorators import group_required
 from retention_dashboard.models import Week, Upload
 from retention_dashboard.utilities.upload import process_upload
@@ -59,3 +60,11 @@ class DataAdmin(RESTDispatch):
             return self.json_response({"deleted": True})
         except Exception:
             return self.error_response(400)
+
+
+class MockDataAdmin(RESTDispatch):
+    def put(self, request):
+        if settings.DEBUG:
+            call_command('loaddata', 'mock_data.json')
+            return self.json_response({"loaded": True})
+        return self.error_response(status=400)

@@ -31,4 +31,5 @@ class AdminView(PageView):
                                                        'quarter',
                                                        'number')
         context['uploads'] = Upload.objects.all().order_by('week', 'type')
+        context['debug'] = settings.DEBUG
         return context

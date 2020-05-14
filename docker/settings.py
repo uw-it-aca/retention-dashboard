@@ -48,14 +48,18 @@ elif os.getenv("ENV") == "localdev":
     DEBUG = True
     ALLOWED_USERS_GROUP = 'u_test_group'
     ADMIN_USERS_GROUP = ALLOWED_USERS_GROUP
+    OMAD_USERS_GROUP = ALLOWED_USERS_GROUP
+    EOP_USERS_GROUP = ALLOWED_USERS_GROUP
+    INTERNATIONAL_USERS_GROUP = ALLOWED_USERS_GROUP
     MOCK_SAML_ATTRIBUTES = {
         'uwnetid': ['javerage'],
         'affiliations': ['student', 'member', 'alum', 'staff', 'employee'],
         'eppn': ['javerage@washington.edu'],
         'scopedAffiliations': ['student@washington.edu',
                                'member@washington.edu'],
-        'isMemberOf': ['u_test_group'],
+        'isMemberOf': ['u_test_group', 'u_admin_group'],
     }
+
 
 from django.urls import reverse_lazy
 
