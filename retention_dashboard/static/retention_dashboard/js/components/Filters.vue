@@ -9,7 +9,7 @@
           <b-form-checkbox value="low">
             Top
           </b-form-checkbox>
-          <b-form-checkbox value="average">
+          <b-form-checkbox value="avg">
             Medium
           </b-form-checkbox>
           <b-form-checkbox value="high">
