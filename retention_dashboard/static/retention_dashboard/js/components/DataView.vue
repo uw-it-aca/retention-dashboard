@@ -91,19 +91,19 @@
         </b-popover>
       </template>
 
-      <template v-slot:cell(grades)="row">
-        <span v-if="row.item.grades === -99">No data</span>
-        <span v-else>{{ row.item.grades }}</span>
+      <template v-slot:cell(grade_score)="row">
+        <span v-if="row.item.grade_score === -99">No data</span>
+        <span v-else>{{ row.item.grade_score }}</span>
       </template>
 
-      <template v-slot:cell(activity)="row">
-        <span v-if="row.item.activity === -99">No data</span>
-        <span v-else>{{ row.item.activity }}</span>
+      <template v-slot:cell(activity_score)="row">
+        <span v-if="row.item.activity_score === -99">No data</span>
+        <span v-else>{{ row.item.activity_score }}</span>
       </template>
 
-      <template v-slot:cell(assignments)="row">
-        <span v-if="row.item.assignments === -99">No data</span>
-        <span v-else>{{ row.item.assignments }}</span>
+      <template v-slot:cell(assignment_score)="row">
+        <span v-if="row.item.assignment_score === -99">No data</span>
+        <span v-else>{{ row.item.assignment_score }}</span>
       </template>
 
       <template v-slot:cell(is_premajor)="row">
@@ -111,12 +111,12 @@
         <span v-else class="sr-only">{{ row.item.is_premajor }}</span>
       </template>
 
-      <template v-slot:cell(pred)="row">
-        <span v-if="row.item.pred === -99" />
+      <template v-slot:cell(priority_score)="row">
+        <span v-if="row.item.priority_score === -99" />
         <span v-else class="rd-pred-score">
-          <span v-if="row.item.pred >= -5 && row.item.pred <= -3"><span class="rd-pred-label rd-pred-label-top">Top</span> {{ row.item.pred }}</span>
-          <span v-else-if="row.item.pred >= -2.9 && row.item.pred <= 2.9"><span class="rd-pred-label rd-pred-label-medium">Medium</span> {{ row.item.pred }}</span>
-          <span v-else-if="row.item.pred >= 3 && row.item.pred <= 5"><span class="rd-pred-label rd-pred-label-bottom">Bottom</span> {{ row.item.pred }}</span>
+          <span v-if="row.item.priority_score >= -5 && row.item.priority_score <= -3"><span class="rd-pred-label rd-pred-label-top">Top</span> {{ row.item.priority_score }}</span>
+          <span v-else-if="row.item.priority_score >= -2.9 && row.item.priority_score <= 2.9"><span class="rd-pred-label rd-pred-label-medium">Medium</span> {{ row.item.priority_score }}</span>
+          <span v-else-if="row.item.priority_score >= 3 && row.item.priority_score <= 5"><span class="rd-pred-label rd-pred-label-bottom">Bottom</span> {{ row.item.priority_score }}</span>
           <span v-else />
         </span>
       </template>
