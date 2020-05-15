@@ -106,9 +106,9 @@
         <span v-else>{{ row.item.assignments }}</span>
       </template>
 
-      <template v-slot:cell(premajor)="row">
-        <span v-if="row.item.premajor === true"><b-icon icon="check-box" scale="1.5" /><span class="sr-only">{{ row.item.premajor }}</span></span>
-        <span v-else class="sr-only">{{ row.item.premajor }}</span>
+      <template v-slot:cell(is_premajor)="row">
+        <span v-if="row.item.is_premajor === true"><b-icon icon="check-box" scale="1.5" /><span class="sr-only">{{ row.item.is_premajor }}</span></span>
+        <span v-else class="sr-only">{{ row.item.is_premajor }}</span>
       </template>
 
       <template v-slot:cell(pred)="row">
@@ -311,7 +311,6 @@
       csv_data: function (csv){
         var vue = this;
         csv.forEach(function(item){
-          item["premajor"] = (item["premajor"] === "1" ? true: false);
           item["student_number"] = Number(item["student_number"]);
 
           item['activity_score'] = vue.get_rounded(item['activity_score']);
