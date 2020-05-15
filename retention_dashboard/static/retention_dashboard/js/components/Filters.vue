@@ -3,6 +3,7 @@
     <b-col order="1" />
     <b-col class="col-6 col-sm-2" order="3" order-sm="2">
       <b-form-group
+        v-if="show_pred"
         label="Priority"
       >
         <b-form-checkbox-group id="pred_filters" v-model="prediction_filter" stacked>
@@ -103,6 +104,7 @@
 <script>
 
   import {_} from "vue-underscore";
+  import Vuex from "vuex";
   export default {
     name: "Filters",
     components: {},
@@ -118,6 +120,12 @@
       };
     },
     computed: {
+      ...Vuex.mapState({
+        current_file: state => state.dataselect.current_file,
+      }),
+      show_pred (){
+        return this.current_file === "EOP";
+      }
     },
     watch: {
       assignment_filter: function () {
