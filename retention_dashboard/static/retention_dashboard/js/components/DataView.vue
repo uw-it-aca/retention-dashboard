@@ -115,7 +115,7 @@
         <span v-if="row.item.priority_score === -99" />
         <span v-else class="rd-pred-score">
           <span v-if="row.item.priority_score >= -5 && row.item.priority_score <= -3"><span class="rd-pred-label rd-pred-label-top">Top</span> {{ row.item.priority_score }}</span>
-          <span v-else-if="row.item.priority_score >= -2.9 && row.item.priority_score <= 2.9"><span class="rd-pred-label rd-pred-label-medium">Medium</span> {{ row.item.priority_score }}</span>
+          <span v-else-if="row.item.priority_score > -3 && row.item.priority_score < 3"><span class="rd-pred-label rd-pred-label-medium">Medium</span> {{ row.item.priority_score }}</span>
           <span v-else-if="row.item.priority_score >= 3 && row.item.priority_score <= 5"><span class="rd-pred-label rd-pred-label-bottom">Bottom</span> {{ row.item.priority_score }}</span>
           <span v-else />
         </span>
