@@ -14,10 +14,9 @@ source bin/activate
 pip install pycodestyle coverage
 apt-get install -y nodejs npm
 npm install -g npm@latest
-node --version
 hash -r
 
-npm install -g eslint@5.0.0 stylelint eslint-plugin-vue
+npm install -g eslint@5.0.0 stylelint@13.3.3 eslint-plugin-vue
 npm install
 
 function run_test {
