@@ -50,6 +50,8 @@ class FilteredDataView(RESTDispatch):
         priority_filters = request.GET.getlist("priority_filters", None)
         activity_filters = request.GET.getlist("activity_filters", None)
         premajor_filter = request.GET.get("premajor_filter", None)
+        if premajor_filter == "true":
+            premajor_filter = True
 
         if week is None or type is None:
             return self.error_response(status=400)

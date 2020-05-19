@@ -41,6 +41,9 @@ TEMPLATES = [
 if os.getenv('ENV') == 'prod':
     ALLOWED_USERS_GROUP = 'u_acadev_retention-prod'
     ADMIN_USERS_GROUP = 'u_acadev_retention-prod-admin'
+    PREMAJOR_USERS_GROUP = "u_acadev_retention-prod-premajor"
+    EOP_USERS_GROUP = "u_acadev_retention-prod-eop"
+    INTERNATIONAL_USERS_GROUP = "u_acadev_retention-prod-international"
 elif os.getenv('ENV') == 'eval':
     ALLOWED_USERS_GROUP = 'u_acadev_retention-test'
     # ADMIN_USERS_GROUP = 'u_acadev_retention-test-admin'

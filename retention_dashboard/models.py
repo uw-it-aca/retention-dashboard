@@ -45,20 +45,21 @@ class DataPoint(models.Model):
     @staticmethod
     def filter_by_ranges(data_queryset, ranges, field):
         LOW_MIN = -5
-        AVG_MIN = -2
+        AVG_MIN = -3
         HIGH_MIN = 3
         HIGH_MAX = 5
 
         field_lt = field + "__lt"
+        field_gt = field + "__gt"
         field_lte = field + "__lte"
         field_gte = field + "__gte"
         queries = []
         if "low" in ranges:
-            queries.append(Q(**{field_lt: AVG_MIN,
+            queries.append(Q(**{field_lte: AVG_MIN,
                                 field_gte: LOW_MIN}))
         if "avg" in ranges:
             queries.append(Q(**{field_lt: HIGH_MIN,
-                                field_gte: AVG_MIN}))
+                                field_gt: AVG_MIN}))
         if "high" in ranges:
             queries.append(Q(**{field_lte: HIGH_MAX,
                                 field_gte: HIGH_MIN}))

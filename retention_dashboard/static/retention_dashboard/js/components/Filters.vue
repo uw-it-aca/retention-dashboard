@@ -4,6 +4,7 @@
     </b-col>
     <b-col class="col-6 col-md-2 rd-filter-border" order="3" order-md="2">
       <b-form-group
+          v-if="show_pred"
           label="Priority"
           aria-controls="data_table"
         >
@@ -11,7 +12,7 @@
           <b-form-checkbox value="low">
             Top
           </b-form-checkbox>
-          <b-form-checkbox value="average">
+          <b-form-checkbox value="avg">
             Medium
           </b-form-checkbox>
           <b-form-checkbox value="high">
@@ -90,6 +91,7 @@
 <script>
 
   import {_} from "vue-underscore";
+  import Vuex from "vuex";
   export default {
     name: "Filters",
     components: {},
@@ -111,6 +113,12 @@
       };
     },
     computed: {
+      ...Vuex.mapState({
+        current_file: state => state.dataselect.current_file,
+      }),
+      show_pred (){
+        return this.current_file === "EOP";
+      }
     },
     watch: {
       assignment_filter: function () {

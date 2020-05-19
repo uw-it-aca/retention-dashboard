@@ -91,32 +91,32 @@
         </b-popover>
       </template>
 
-      <template v-slot:cell(grades)="row">
-        <span v-if="row.item.grades === -99">No data</span>
-        <span v-else>{{ row.item.grades }}</span>
+      <template v-slot:cell(grade_score)="row">
+        <span v-if="row.item.grade_score === -99">No data</span>
+        <span v-else>{{ row.item.grade_score }}</span>
       </template>
 
-      <template v-slot:cell(activity)="row">
-        <span v-if="row.item.activity === -99">No data</span>
-        <span v-else>{{ row.item.activity }}</span>
+      <template v-slot:cell(activity_score)="row">
+        <span v-if="row.item.activity_score === -99">No data</span>
+        <span v-else>{{ row.item.activity_score }}</span>
       </template>
 
-      <template v-slot:cell(assignments)="row">
-        <span v-if="row.item.assignments === -99">No data</span>
-        <span v-else>{{ row.item.assignments }}</span>
+      <template v-slot:cell(assignment_score)="row">
+        <span v-if="row.item.assignment_score === -99">No data</span>
+        <span v-else>{{ row.item.assignment_score }}</span>
       </template>
 
-      <template v-slot:cell(premajor)="row">
-        <span v-if="row.item.premajor === true"><b-icon icon="check-box" scale="1.5" /><span class="sr-only">{{ row.item.premajor }}</span></span>
-        <span v-else class="sr-only">{{ row.item.premajor }}</span>
+      <template v-slot:cell(is_premajor)="row">
+        <span v-if="row.item.is_premajor === true"><b-icon icon="check-box" scale="1.5" /><span class="sr-only">{{ row.item.is_premajor }}</span></span>
+        <span v-else class="sr-only">{{ row.item.is_premajor }}</span>
       </template>
 
-      <template v-slot:cell(pred)="row">
-        <span v-if="row.item.pred === -99" />
+      <template v-slot:cell(priority_score)="row">
+        <span v-if="row.item.priority_score === -99" />
         <span v-else class="rd-pred-score">
-          <span v-if="row.item.pred >= -5 && row.item.pred <= -3"><span class="rd-pred-label rd-pred-label-top">Top</span> {{ row.item.pred }}</span>
-          <span v-else-if="row.item.pred >= -2.9 && row.item.pred <= 2.9"><span class="rd-pred-label rd-pred-label-medium">Medium</span> {{ row.item.pred }}</span>
-          <span v-else-if="row.item.pred >= 3 && row.item.pred <= 5"><span class="rd-pred-label rd-pred-label-bottom">Bottom</span> {{ row.item.pred }}</span>
+          <span v-if="row.item.priority_score >= -5 && row.item.priority_score <= -3"><span class="rd-pred-label rd-pred-label-top">Top</span> {{ row.item.priority_score }}</span>
+          <span v-else-if="row.item.priority_score > -3 && row.item.priority_score < 3"><span class="rd-pred-label rd-pred-label-medium">Medium</span> {{ row.item.priority_score }}</span>
+          <span v-else-if="row.item.priority_score >= 3 && row.item.priority_score <= 5"><span class="rd-pred-label rd-pred-label-bottom">Bottom</span> {{ row.item.priority_score }}</span>
           <span v-else />
         </span>
       </template>
@@ -148,7 +148,7 @@
     },
     data: function() {
       return {
-        fields: [
+        eop_fields: [
           {
             key: 'student_name',
             label: "Student Name",
@@ -195,6 +195,48 @@
             sortable: true
           }
         ],
+        standard_fields: [
+          {
+            key: 'student_name',
+            label: "Student Name",
+            sortable: true
+          },
+          {
+            key: 'student_number',
+            label: "Student Number",
+            class: 'text-center'
+          },
+
+          {
+            key: 'netid',
+            label: 'UWNetid',
+            class: 'text-center'
+          },
+          {
+            key: 'activity_score',
+            label: 'Activity',
+            class: 'text-center',
+            sortable: true
+          },
+          {
+            key: 'assignment_score',
+            label: 'Assignments',
+            class: 'text-center',
+            sortable: true
+          },
+          {
+            key: 'grade_score',
+            label: 'Grades',
+            class: 'text-center',
+            sortable: true
+          },
+          {
+            key: 'is_premajor',
+            label: 'Pre-Major',
+            class: 'text-center',
+            sortable: true
+          }
+        ],
         items: [],
         csv_data: "",
         perPage: 200,
@@ -209,6 +251,13 @@
       };
     },
     computed: {
+      fields (){
+        if (this.current_file === "EOP"){
+          return this.eop_fields;
+        } else {
+          return this.standard_fields;
+        }
+      },
       filename (){
         return this.$store.state.current_file;
       },
@@ -239,7 +288,7 @@
         if(this.activity_filter.length > 0){
           params['activity_filters'] = this.activity_filter;
         }
-        if(this.premajor_filter.length > 0){
+        if(this.premajor_filter === true){
           params['premajor_filter'] = this.premajor_filter;
         }
         if(this.keyword_filter.length > 0){
@@ -262,12 +311,11 @@
       csv_data: function (csv){
         var vue = this;
         csv.forEach(function(item){
-          item["premajor"] = (item["premajor"] === "1" ? true: false);
-          item["student_no"] = Number(item["student_no"]);
+          item["student_number"] = Number(item["student_number"]);
 
-          item['activity'] = vue.get_rounded(item['activity']);
-          item['assignments'] = vue.get_rounded(item['assignments']);
-          item['grades'] = vue.get_rounded(item['grades']);
+          item['activity_score'] = vue.get_rounded(item['activity_score']);
+          item['assignment_score'] = vue.get_rounded(item['assignment_score']);
+          item['grade_score'] = vue.get_rounded(item['grade_score']);
         });
         this.items = csv;
       },
@@ -301,7 +349,7 @@
       get_filtered_emails(){
         var emails = [];
         this.items.forEach(function(item){
-          emails.push(item['uw_netid'] + "@uw.edu");
+          emails.push(item['netid'] + "@uw.edu");
         });
         return emails;
       },
