@@ -33,6 +33,7 @@ class DataPoint(models.Model):
     assignment_score = models.FloatField()
     grade_score = models.FloatField()
     upload = models.ForeignKey("Upload", on_delete=models.CASCADE)
+    advisor = models.ForeignKey("Advisor", on_delete=models.PROTECT, null=True)
 
     @staticmethod
     def get_data_by_type_week(type, week):
@@ -102,3 +103,22 @@ class Upload(models.Model):
 
     class Meta:
         unique_together = ('type', 'week',)
+
+
+class Advisor(models.Model):
+    advisor_name = models.TextField()
+    advisor_netid = models.CharField(max_length=12)
+    advisor_type = models.PositiveSmallIntegerField(
+        choices=DataPoint.TYPE_CHOICES)
+
+    @staticmethod
+    def get_all_advisors():
+        eop = Advisor.objects.filter(advisor_type=2).\
+            values('advisor_name', 'advisor_netid')
+        prem = Advisor.objects.filter(advisor_type=1).\
+            values('advisor_name', 'advisor_netid')
+        inter = Advisor.objects.filter(advisor_type=3).\
+            values('advisor_name', 'advisor_netid')
+        return {"EOP": list(eop),
+                "Premajor": list(prem),
+                "International": list(inter)}
