@@ -111,6 +111,9 @@ class Advisor(models.Model):
     advisor_type = models.PositiveSmallIntegerField(
         choices=DataPoint.TYPE_CHOICES)
 
+    class Meta:
+        unique_together = ('advisor_netid', 'advisor_type')
+
     @staticmethod
     def get_all_advisors():
         eop = Advisor.objects.filter(advisor_type=2).\
