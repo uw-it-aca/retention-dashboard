@@ -1,9 +1,8 @@
 <template>
   <b-row class="rd-filters-container justify-content-center">
     <b-col order="1" />
-    <b-col class="col-6 col-md-2 rd-filter-border" order="3" order-md="2">
+    <b-col class="col-6 col-md-2 rd-filter-border" order="3" order-md="2" v-if="show_pred">
       <b-form-group
-        v-if="show_pred"
         label="Priority"
         aria-controls="data_table"
       >
