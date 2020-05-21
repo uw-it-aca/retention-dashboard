@@ -6,11 +6,14 @@ from retention_dashboard.views.api.admin import (WeekAdmin,
 from retention_dashboard.views.api.data import (DataView,
                                                 WeekView,
                                                 DataAuthView,
-                                                FilteredDataView)
+                                                FilteredDataView,
+                                                AdvisorListView)
 
 
 urlpatterns = [
     re_path(r'api/v1/weeks/', WeekView.as_view(), name="week_view"),
+    re_path(r'api/v1/advisors/', AdvisorListView.as_view(),
+            name="advisor_view"),
     re_path(r'api/v1/data_auth/', DataAuthView.as_view(),
             name="data_auth_view"),
     re_path(r'api/v1/filtered_data/', FilteredDataView.as_view(),

@@ -5,7 +5,7 @@ from uw_saml.decorators import group_required
 from retention_dashboard.views.api import RESTDispatch
 from retention_dashboard.dao.data import get_weeks_with_data, get_filtered_data
 from retention_dashboard.dao.auth import get_type_authorizations
-from retention_dashboard.models import DataPoint
+from retention_dashboard.models import Advisor
 
 
 @method_decorator(group_required(settings.ALLOWED_USERS_GROUP),
@@ -72,3 +72,11 @@ class FilteredDataView(RESTDispatch):
             response_data.append(point.json_data())
         return self.json_response(content={"count": len(data_points),
                                            "rows": response_data})
+
+
+@method_decorator(group_required(settings.ALLOWED_USERS_GROUP),
+                  name='dispatch')
+class AdvisorListView(RESTDispatch):
+    def get(self, request):
+        advisors = Advisor.get_all_advisors()
+        return self.json_response(content=advisors)
