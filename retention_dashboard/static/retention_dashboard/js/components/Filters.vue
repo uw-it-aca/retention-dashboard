@@ -18,14 +18,16 @@
             Bottom
           </b-form-checkbox>
         </b-form-checkbox-group>
+        <b-form-select
+          id="advisor_filter"
+          v-model="advisorselected"
+          class="rd-advisor-filter"
+          :options="eop_advisors"
+          value-field="advisor_netid"
+          text-field="advisor_name"
+          size="sm"
+        />
       </b-form-group>
-      <b-form-select
-        id="advisor_filter"
-        v-model="advisorselected"
-        class="rd-advisor-filter"
-        :options="advisors"
-        size="sm"
-      />
     </b-col>
     <b-col class="col-12 col-md-auto" order="2" order-md="3">
       <b-row>
@@ -125,21 +127,19 @@
         prediction_filter: [],
         premajor_filter: false,
         keyword_filter: "",
-        advisors: [
-          { value: '1', text: 'Advisors: All' },
-          { value: '2', text: 'John Doe' },
-          { value: '3', text: 'Jane Doe' }
-        ],
         advisorselected: "1",
+        eop_advisors: []
       };
     },
     computed: {
       ...Vuex.mapState({
         current_file: state => state.dataselect.current_file,
+        advisor_list: state => state.advisors.advisors,
       }),
       show_pred (){
         return this.current_file === "EOP";
       }
+
     },
     watch: {
       assignment_filter: function () {
@@ -159,6 +159,9 @@
       },
       keyword_filter: function () {
         this.debouncedKeywordFilters();
+      },
+      advisor_list: function() {
+        this.eop_advisors = this.advisor_list["EOP"]
       }
     },
     created: function () {

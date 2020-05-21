@@ -51,6 +51,7 @@
       return {
         weeks: [],
         auth_list: [],
+        advisors: [],
         type: '',
         currentweek: ''
       };
@@ -67,12 +68,18 @@
       },
       type: function(){
         this.selectPage(this.type);
+        if(this.type === "EOP"){
+          this.get_advisors();
+        }
       },
       weeks: function(){
         this.currentweek = this.weeks[this.weeks.length-1].value;
       },
-      auth_list: function(){
+      auth_list: function() {
         this.type = this.auth_list[0];
+      },
+      advisors: function(){
+        this.setAdvisors(this.advisors);
       }
     },
     mounted: function(){
@@ -86,6 +93,9 @@
       selectWeek(week){
         this.$store.dispatch('dataselect/set_week', week);
       },
+      setAdvisors(advisors){
+        this.$store.dispatch('advisors/set_advisors', advisors)
+      },
       get_weeks(){
         var vue = this;
         axios.get('/api/v1/weeks/')
@@ -98,6 +108,13 @@
         axios.get('/api/v1/data_auth/')
           .then(function(response){
             vue.auth_list = response.data;
+          });
+      },
+      get_advisors(){
+        var vue = this;
+        axios.get('/api/v1/advisors/')
+          .then(function(response){
+            vue.advisors = response.data;
           });
       }
     }
