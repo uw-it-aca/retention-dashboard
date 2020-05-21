@@ -20,7 +20,7 @@
         </b-form-checkbox-group>
         <b-form-select
           id="advisor_filter"
-          v-model="advisorselected"
+          v-model="eop_advisor_selected"
           class="rd-advisor-filter"
           :options="eop_advisors"
           value-field="advisor_netid"
@@ -127,7 +127,7 @@
         prediction_filter: [],
         premajor_filter: false,
         keyword_filter: "",
-        advisorselected: "1",
+        eop_advisor_selected: "1",
         eop_advisors: []
       };
     },
@@ -160,8 +160,11 @@
       keyword_filter: function () {
         this.debouncedKeywordFilters();
       },
+      eop_advisor_selected: function () {
+        this.$store.dispatch('filters/set_advisor_filter', this.eop_advisor_selected);
+      },
       advisor_list: function() {
-        this.eop_advisors = this.advisor_list["EOP"]
+        this.eop_advisors = this.advisor_list["EOP"];
       }
     },
     created: function () {

@@ -49,6 +49,7 @@ class FilteredDataView(RESTDispatch):
         assignment_filters = request.GET.getlist("assignment_filters", None)
         priority_filters = request.GET.getlist("priority_filters", None)
         activity_filters = request.GET.getlist("activity_filters", None)
+        advisor_filter = request.GET.get("advisor_filter", None)
         premajor_filter = request.GET.get("premajor_filter", None)
         if premajor_filter == "true":
             premajor_filter = True
@@ -65,7 +66,8 @@ class FilteredDataView(RESTDispatch):
                                         assignment_filters=assignment_filters,
                                         priority_filters=priority_filters,
                                         activity_filters=activity_filters,
-                                        premajor_filter=premajor_filter)
+                                        premajor_filter=premajor_filter,
+                                        advisor_filter=advisor_filter)
 
         response_data = []
         for point in data_points:

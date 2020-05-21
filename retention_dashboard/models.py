@@ -82,16 +82,31 @@ class DataPoint(models.Model):
     def filter_by_premajor(data_queryset, is_premajor):
         return data_queryset.filter(premajor=is_premajor)
 
+    @staticmethod
+    def filter_by_advisor(data_queryset, advisor_netid):
+        """
+        Hard code this to EOP advisors for now, if we get other types add that
+        filtering here
+        """
+        advisor = Advisor.objects.get(advisor_netid=advisor_netid,
+                                      advisor_type=2)
+        return data_queryset.filter(advisor=advisor)
+
     def json_data(self):
-        return {"student_name": self.student_name,
+        resp = {"student_name": self.student_name,
                 "student_number": self.student_number,
                 "netid": self.netid,
                 "priority_score": self.priority_score,
                 "activity_score": self.activity_score,
                 "assignment_score": self.assignment_score,
                 "grade_score": self.grade_score,
-                "is_premajor": self.premajor
+                "is_premajor": self.premajor,
                 }
+        if self.advisor is not None:
+            resp["advisor_name"] = self.advisor.advisor_name
+            resp["advisor_netid"] = self.advisor.advisor_netid
+
+        return resp
 
 
 class Upload(models.Model):

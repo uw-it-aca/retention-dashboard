@@ -94,7 +94,7 @@
         this.$store.dispatch('dataselect/set_week', week);
       },
       setAdvisors(advisors){
-        this.$store.dispatch('advisors/set_advisors', advisors)
+        this.$store.dispatch('advisors/set_advisors', advisors);
       },
       get_weeks(){
         var vue = this;

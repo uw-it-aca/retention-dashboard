@@ -294,6 +294,9 @@
         if(this.keyword_filter.length > 0){
           params['text_filter'] = this.keyword_filter;
         }
+        if(this.advisor_filter.length > 0){
+          params['advisor_filter'] = this.advisor_filter;
+        }
         return params;
       },
       ...Vuex.mapState({
@@ -305,6 +308,7 @@
         prediction_filter: state => state.filters.filters.prediction_filter,
         premajor_filter: state => state.filters.filters.premajor_filter,
         keyword_filter: state => state.filters.filters.keyword_filter,
+        advisor_filter: state => state.filters.filters.advisor_filter,
       })
     },
     watch: {
@@ -335,6 +339,9 @@
         this.run_filters();
       },
       keyword_filter: function () {
+        this.run_filters();
+      },
+      advisor_filter: function () {
         this.run_filters();
       },
       current_week: function () {
