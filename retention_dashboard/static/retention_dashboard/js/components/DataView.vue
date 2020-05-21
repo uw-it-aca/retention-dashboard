@@ -140,6 +140,7 @@
   import axios from 'axios';
   import qs from 'qs';
 
+
   export default {
     name: "DataView",
     components: {
@@ -247,7 +248,8 @@
         average_min: -2.999999999999999,
         average_max: 2.999999999999999,
         high_min: 3,
-        high_max: 5
+        high_max: 5,
+        request_id: 0
       };
     },
     computed: {
@@ -392,11 +394,14 @@
         hiddenElement.click();
       },
       run_filters(){
-        var vue = this;
+        var vue = this,
+            query_token = Date.now();
+        this.request_id = query_token;
         if(this.current_file.length < 1 || this.current_week.length < 1){
           // don't fire ajax unless week and type are set
           return;
         }
+
         axios({
           method: 'get',
           url: "/api/v1/filtered_data/",
@@ -406,7 +411,9 @@
           params: this.filter_params,
         })
           .then(function(response){
-            vue.csv_data = response.data.rows;
+            if(query_token === vue.request_id){
+              vue.csv_data = response.data.rows;
+            }
           });
       },
       get_rounded(num_string){
