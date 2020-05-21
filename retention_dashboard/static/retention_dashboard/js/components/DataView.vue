@@ -194,6 +194,12 @@
             label: 'Pre-Major',
             class: 'text-center',
             sortable: true
+          },
+          {
+            key: 'advisor_name',
+            label: 'Advisor',
+            class: 'text-center',
+            sortable: true
           }
         ],
         standard_fields: [
