@@ -64,5 +64,5 @@ def get_row(row):
 
     advisor_name, advisor_netid = random.choice(advisors)
 
-
-    return [netid, stu_num, name, premajor, acti, assi, grade, pred, advisor_name, advisor_netid]
+    return [netid, stu_num, name, premajor, acti, assi, grade, pred,
+            advisor_name, advisor_netid]
