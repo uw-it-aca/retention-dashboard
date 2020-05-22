@@ -40,7 +40,8 @@ class DataPoint(models.Model):
         type_int = [item for item in
                     DataPoint.TYPE_CHOICES
                     if type in item][0][0]
-        data = DataPoint.objects.filter(type=type_int, week=week)
+        data = DataPoint.objects.filter(type=type_int,
+                                        week=week).prefetch_related('advisor')
         return data
 
     @staticmethod
