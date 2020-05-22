@@ -38,7 +38,7 @@
               <b-form-checkbox value="high">
                 High
               </b-form-checkbox>
-              <b-form-checkbox value="average">
+              <b-form-checkbox value="avg">
                 Average
               </b-form-checkbox>
               <b-form-checkbox value="low">
@@ -55,7 +55,7 @@
               <b-form-checkbox value="high">
                 High
               </b-form-checkbox>
-              <b-form-checkbox value="average">
+              <b-form-checkbox value="avg">
                 Average
               </b-form-checkbox>
               <b-form-checkbox value="low">
@@ -72,7 +72,7 @@
               <b-form-checkbox value="high">
                 High
               </b-form-checkbox>
-              <b-form-checkbox value="average">
+              <b-form-checkbox value="avg">
                 Average
               </b-form-checkbox>
               <b-form-checkbox value="low">
