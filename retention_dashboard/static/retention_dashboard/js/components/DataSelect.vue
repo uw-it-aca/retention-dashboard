@@ -127,18 +127,22 @@
 
   .rd-file-select {
     float: left;
+    margin-right: 0.5rem;
   }
 
   /* date select  */
   .rd-date-select {
     float: left;
-    margin-right: 0.5rem;
   }
 
   @media only screen and (max-width: 768px) {
     /* small screen date picker*/
+    .rd-file-select {
+      margin-bottom: 0.5rem;
+    }
+
     .rd-date-select {
-      margin: 0 0 0.5rem 0.5rem;
+      margin: 0 0 1rem;
     }
   }
 </style>
