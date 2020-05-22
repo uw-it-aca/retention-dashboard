@@ -2,7 +2,7 @@ import json
 from django.test import TestCase, Client
 from retention_dashboard.dao.data import get_filtered_data, get_weeks_with_data
 from retention_dashboard.tests import create_initial_data
-from retention_dashboard.models import Week, DataPoint, Upload
+from retention_dashboard.models import Week, Advisor, Upload
 
 
 class WeekTest(TestCase):
@@ -60,3 +60,14 @@ class DataTest(TestCase):
     def test_text_filter(self):
         data = get_filtered_data("Premajor", self.week, text_filter="J")
         self.assertEqual(len(data), 3)
+
+
+class AdvisorTest(TestCase):
+    def setUp(self):
+        create_initial_data()
+
+    def test_get_advisors(self):
+        advisors = Advisor.get_all_advisors()
+        self.assertEqual(len(advisors['Premajor']), 2)
+        self.assertEqual(len(advisors['EOP']), 2)
+        self.assertEqual(len(advisors['International']), 1)

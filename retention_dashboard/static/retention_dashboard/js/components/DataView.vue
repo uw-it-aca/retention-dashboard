@@ -140,6 +140,7 @@
   import axios from 'axios';
   import qs from 'qs';
 
+
   export default {
     name: "DataView",
     components: {
@@ -191,6 +192,12 @@
           {
             key: 'is_premajor',
             label: 'Pre-Major',
+            class: 'text-center',
+            sortable: true
+          },
+          {
+            key: 'advisor_name',
+            label: 'Advisor',
             class: 'text-center',
             sortable: true
           }
@@ -247,7 +254,8 @@
         average_min: -2.999999999999999,
         average_max: 2.999999999999999,
         high_min: 3,
-        high_max: 5
+        high_max: 5,
+        request_id: 0
       };
     },
     computed: {
@@ -294,6 +302,9 @@
         if(this.keyword_filter.length > 0){
           params['text_filter'] = this.keyword_filter;
         }
+        if(this.advisor_filter.length > 0){
+          params['advisor_filter'] = this.advisor_filter;
+        }
         return params;
       },
       ...Vuex.mapState({
@@ -305,6 +316,7 @@
         prediction_filter: state => state.filters.filters.prediction_filter,
         premajor_filter: state => state.filters.filters.premajor_filter,
         keyword_filter: state => state.filters.filters.keyword_filter,
+        advisor_filter: state => state.filters.filters.advisor_filter,
       })
     },
     watch: {
@@ -335,6 +347,9 @@
         this.run_filters();
       },
       keyword_filter: function () {
+        this.run_filters();
+      },
+      advisor_filter: function () {
         this.run_filters();
       },
       current_week: function () {
@@ -385,11 +400,14 @@
         hiddenElement.click();
       },
       run_filters(){
-        var vue = this;
+        var vue = this,
+            query_token = Date.now();
+        this.request_id = query_token;
         if(this.current_file.length < 1 || this.current_week.length < 1){
           // don't fire ajax unless week and type are set
           return;
         }
+
         axios({
           method: 'get',
           url: "/api/v1/filtered_data/",
@@ -399,7 +417,9 @@
           params: this.filter_params,
         })
           .then(function(response){
-            vue.csv_data = response.data.rows;
+            if(query_token === vue.request_id){
+              vue.csv_data = response.data.rows;
+            }
           });
       },
       get_rounded(num_string){
