@@ -144,5 +144,10 @@
     .rd-date-select {
       margin: 0 0 1rem;
     }
+
+    .rd-file-select .form-group,
+    .rd-date-select .form-group {
+      margin-bottom: 0;
+    }
   }
 </style>
