@@ -25,7 +25,11 @@
           value-field="advisor_netid"
           text-field="advisor_name"
           size="sm"
-        />
+        >
+          <template v-slot:first>
+            <b-form-select-option :value="null" selected>All advisors</b-form-select-option>
+          </template>
+        </b-form-select>
       </b-form-group>
     </b-col>
     <b-col class="col-12 col-md-auto" order="2" order-md="3">
@@ -126,7 +130,7 @@
         prediction_filter: [],
         premajor_filter: false,
         keyword_filter: "",
-        eop_advisor_selected: "1",
+        eop_advisor_selected: null,
         eop_advisors: []
       };
     },
