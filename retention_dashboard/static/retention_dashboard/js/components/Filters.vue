@@ -1,7 +1,7 @@
 <template>
   <b-row class="rd-filters-container justify-content-center">
     <b-col order="1" />
-    <b-col class="col-6 col-md-2 rd-filter-border" order="3" order-md="2" v-if="show_pred">
+    <b-col v-if="show_pred" class="col-6 col-md-2 rd-filter-border" order="3" order-md="2">
       <b-form-group
         label="Priority"
         aria-controls="data_table"
@@ -26,9 +26,11 @@
           text-field="advisor_name"
           size="sm"
         >
-        <template v-slot:first>
-          <b-form-select-option :value="1" selected>All advisors</b-form-select-option>
-        </template>
+          <template v-slot:first>
+            <b-form-select-option :value="1" selected>
+              All advisors
+            </b-form-select-option>
+          </template>
         </b-form-select>
       </b-form-group>
     </b-col>
@@ -130,13 +132,14 @@
         prediction_filter: [],
         premajor_filter: false,
         keyword_filter: "",
-        eop_advisor_selected: "1",
+        eop_advisor_selected: 1,
         eop_advisors: []
       };
     },
     computed: {
       ...Vuex.mapState({
         current_file: state => state.dataselect.current_file,
+        current_week: state => state.dataselect.current_week,
         advisor_list: state => state.advisors.advisors,
       }),
       show_pred (){
@@ -168,6 +171,12 @@
       },
       advisor_list: function() {
         this.eop_advisors = this.advisor_list["EOP"];
+      },
+      current_file: function() {
+        this.reset_filters();
+      },
+      current_week: function() {
+        this.reset_filters();
       }
     },
     created: function () {
@@ -176,6 +185,9 @@
     methods: {
       run_keyword_filter() {
         this.$store.dispatch('filters/set_keyword_filter', this.keyword_filter);
+      },
+      reset_filters() {
+        this.eop_advisor_selected = 1;
       }
     }
   };
