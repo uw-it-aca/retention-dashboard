@@ -45,6 +45,7 @@
       responsive
       show-empty
       sticky-header
+      :busy="isBusy"
       :items="items"
       :fields="fields"
       :per-page="perPage"
@@ -120,6 +121,14 @@
           <span v-else />
         </span>
       </template>
+
+      <template v-slot:table-busy>
+        <div class="text-center text-info">
+          <b-spinner class="align-middle" />
+          <strong>Loading...</strong>
+        </div>
+      </template>
+
     </b-table>
     <b-pagination
       v-model="currentPage"
@@ -245,6 +254,7 @@
           }
         ],
         items: [],
+        isBusy: false,
         csv_data: "",
         perPage: 200,
         currentPage: 1,
@@ -407,6 +417,7 @@
           // don't fire ajax unless week and type are set
           return;
         }
+        this.isBusy = true;
 
         axios({
           method: 'get',
@@ -418,6 +429,7 @@
         })
           .then(function(response){
             if(query_token === vue.request_id){
+              vue.isBusy = false;
               vue.csv_data = response.data.rows;
             }
           });
@@ -470,6 +482,19 @@
   .rd-table-container {
     margin-top: 2rem;
   }
+
+  /* Loading message */
+  .b-table[aria-busy='true'] .b-table-busy-slot .text-info {
+    padding: 3rem 0;
+  }
+
+  .spinner-border,
+  .b-table-busy-slot .text-info,
+  .aat-processing-text {
+    color: $uw-purple !important;
+  }
+
+
 
   /* Prediction scores */
   .rd-pred-score {
