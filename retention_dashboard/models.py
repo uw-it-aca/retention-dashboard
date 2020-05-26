@@ -33,13 +33,15 @@ class DataPoint(models.Model):
     assignment_score = models.FloatField()
     grade_score = models.FloatField()
     upload = models.ForeignKey("Upload", on_delete=models.CASCADE)
+    advisor = models.ForeignKey("Advisor", on_delete=models.PROTECT, null=True)
 
     @staticmethod
     def get_data_by_type_week(type, week):
         type_int = [item for item in
                     DataPoint.TYPE_CHOICES
                     if type in item][0][0]
-        data = DataPoint.objects.filter(type=type_int, week=week)
+        data = DataPoint.objects.filter(type=type_int,
+                                        week=week).prefetch_related('advisor')
         return data
 
     @staticmethod
@@ -81,16 +83,31 @@ class DataPoint(models.Model):
     def filter_by_premajor(data_queryset, is_premajor):
         return data_queryset.filter(premajor=is_premajor)
 
+    @staticmethod
+    def filter_by_advisor(data_queryset, advisor_netid):
+        """
+        Hard code this to EOP advisors for now, if we get other types add that
+        filtering here
+        """
+        advisor = Advisor.objects.get(advisor_netid=advisor_netid,
+                                      advisor_type=2)
+        return data_queryset.filter(advisor=advisor)
+
     def json_data(self):
-        return {"student_name": self.student_name,
+        resp = {"student_name": self.student_name,
                 "student_number": self.student_number,
                 "netid": self.netid,
                 "priority_score": self.priority_score,
                 "activity_score": self.activity_score,
                 "assignment_score": self.assignment_score,
                 "grade_score": self.grade_score,
-                "is_premajor": self.premajor
+                "is_premajor": self.premajor,
                 }
+        if self.advisor is not None:
+            resp["advisor_name"] = self.advisor.advisor_name
+            resp["advisor_netid"] = self.advisor.advisor_netid
+
+        return resp
 
 
 class Upload(models.Model):
@@ -102,3 +119,25 @@ class Upload(models.Model):
 
     class Meta:
         unique_together = ('type', 'week',)
+
+
+class Advisor(models.Model):
+    advisor_name = models.TextField()
+    advisor_netid = models.CharField(max_length=12)
+    advisor_type = models.PositiveSmallIntegerField(
+        choices=DataPoint.TYPE_CHOICES)
+
+    class Meta:
+        unique_together = ('advisor_netid', 'advisor_type')
+
+    @staticmethod
+    def get_all_advisors():
+        eop = Advisor.objects.filter(advisor_type=2).\
+            values('advisor_name', 'advisor_netid')
+        prem = Advisor.objects.filter(advisor_type=1).\
+            values('advisor_name', 'advisor_netid')
+        inter = Advisor.objects.filter(advisor_type=3).\
+            values('advisor_name', 'advisor_netid')
+        return {"EOP": list(eop),
+                "Premajor": list(prem),
+                "International": list(inter)}

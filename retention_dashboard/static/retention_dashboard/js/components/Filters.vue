@@ -1,10 +1,10 @@
 <template>
   <b-row class="rd-filters-container justify-content-center">
     <b-col order="1" />
-    <b-col class="col-6 col-sm-2" order="3" order-sm="2">
+    <b-col class="col-6 col-md-2 rd-filter-border" order="3" order-md="2" v-if="show_pred">
       <b-form-group
-        v-if="show_pred"
         label="Priority"
+        aria-controls="data_table"
       >
         <b-form-checkbox-group id="pred_filters" v-model="prediction_filter" stacked>
           <b-form-checkbox value="low">
@@ -17,11 +17,20 @@
             Bottom
           </b-form-checkbox>
         </b-form-checkbox-group>
+        <b-form-select
+          id="advisor_filter"
+          v-model="eop_advisor_selected"
+          class="rd-advisor-filter"
+          :options="eop_advisors"
+          value-field="advisor_netid"
+          text-field="advisor_name"
+          size="sm"
+        />
       </b-form-group>
     </b-col>
-    <b-col class="col-12 col-sm-6" order="2" order-sm="3">
+    <b-col class="col-12 col-md-auto" order="2" order-md="3">
       <b-row>
-        <b-col class="col-4">
+        <b-col class="col rd-filter-border">
           <b-form-group
             label="Activity"
           >
@@ -38,7 +47,7 @@
             </b-form-checkbox-group>
           </b-form-group>
         </b-col>
-        <b-col class="col-4">
+        <b-col class="col rd-filter-border">
           <b-form-group
             label="Assignments"
           >
@@ -55,7 +64,7 @@
             </b-form-checkbox-group>
           </b-form-group>
         </b-col>
-        <b-col class="col-4">
+        <b-col class="col">
           <b-form-group
             label="Grades"
           >
@@ -79,7 +88,7 @@
         </div>
       </b-row>
     </b-col>
-    <b-col class="col-6 col-sm-2" order="4">
+    <b-col class="col-6 col-md-2 rd-filter-border-end" order="4">
       <b-form-group
         class="rd-major-filters"
         label="Major Type"
@@ -117,15 +126,19 @@
         prediction_filter: [],
         premajor_filter: false,
         keyword_filter: "",
+        eop_advisor_selected: "1",
+        eop_advisors: []
       };
     },
     computed: {
       ...Vuex.mapState({
         current_file: state => state.dataselect.current_file,
+        advisor_list: state => state.advisors.advisors,
       }),
       show_pred (){
         return this.current_file === "EOP";
       }
+
     },
     watch: {
       assignment_filter: function () {
@@ -145,6 +158,12 @@
       },
       keyword_filter: function () {
         this.debouncedKeywordFilters();
+      },
+      eop_advisor_selected: function () {
+        this.$store.dispatch('filters/set_advisor_filter', this.eop_advisor_selected);
+      },
+      advisor_list: function() {
+        this.eop_advisors = this.advisor_list["EOP"];
       }
     },
     created: function () {
@@ -164,24 +183,34 @@
   /* filter styles */
 
   .rd-filters-container {
-    padding: 0 15px 1rem;
+    margin: auto;
+    padding: 0 0 1rem;
 
-    fieldset {
+    .rd-filter-border {
       border: 1px $grey-border solid;
       border-style: none solid none none;
-      padding: 0;
     }
 
-    .rd-major-filters {
-      border-style: none;
+    .rd-filter-border-end {
+      border: 1px $grey-border solid;
+      border-style: none none none solid;
     }
 
     fieldset .rd-keyword-filter {
-      border-style: none;
       margin-right: 0;
       margin-top: 0.5rem;
       padding-right: 0;
     }
+
+    .rd-advisor-filter {
+      margin-top: 0.5rem;
+      width: 90%;
+    }
+
+    .form-group {
+      min-width: 100px;
+    }
+
   }
 
   .rd-filters-container fieldset legend {
@@ -191,7 +220,7 @@
   .rd-form-note {
     clear: both;
     font-size: 85%;
-    padding-left: 15px;
+    margin: 0 auto;
     padding-top: 1rem;
   }
 
@@ -208,11 +237,14 @@
     /* small screen filter styles */
 
     .rd-filters-container {
-      fieldset {
+      .rd-filter-border,
+      .rd-filter-border-end {
         border-style: none;
+      }
+
+      fieldset {
         margin: 0;
         padding: 0;
-        width: 130px;
       }
 
       .rd-grades-filters {
@@ -225,10 +257,16 @@
         margin: 0;
         padding: 0;
       }
+
+      .form-group {
+        min-width: auto;
+      }
     }
 
     .rd-form-note {
+      margin: 0;
       padding-bottom: 2rem;
+      padding-left: 15px;
     }
 
   }
