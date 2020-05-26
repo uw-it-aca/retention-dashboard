@@ -417,6 +417,7 @@
           // don't fire ajax unless week and type are set
           return;
         }
+        this.isBusy = true;
 
         axios({
           method: 'get',
@@ -428,6 +429,7 @@
         })
           .then(function(response){
             if(query_token === vue.request_id){
+              vue.isBusy = false;
               vue.csv_data = response.data.rows;
             }
           });
