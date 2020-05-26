@@ -174,9 +174,6 @@
       },
       current_file: function() {
         this.reset_filters();
-      },
-      current_week: function() {
-        this.reset_filters();
       }
     },
     created: function () {
