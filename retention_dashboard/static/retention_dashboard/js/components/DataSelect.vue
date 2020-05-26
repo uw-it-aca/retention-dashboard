@@ -29,7 +29,7 @@
           <b-form-select
             id="week_dropdown"
             v-model="currentweek"
-            :options="weeks"
+            :options="sorted_weeks"
             aria-controls="data_table"
             size="sm"
           />
@@ -57,6 +57,13 @@
       };
     },
     computed: {
+      sorted_weeks () {
+        var sorted = this.weeks;
+        if(sorted.length > 0){
+          sorted.sort((a, b) => (a.value > b.value) ? 1 : -1);
+        }
+        return sorted;
+      },
       ...Vuex.mapState({
         current_file: state => state.dataselect.current_file,
         current_week: state => state.dataselect.current_week

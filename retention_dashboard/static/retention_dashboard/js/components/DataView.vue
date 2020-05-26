@@ -128,7 +128,6 @@
           <strong>Loading...</strong>
         </div>
       </template>
-
     </b-table>
     <b-pagination
       v-model="currentPage"
