@@ -88,7 +88,7 @@
       </b-row>
       <b-row>
         <div class="rd-form-note">
-          <span class="rd-form-key"><strong>Low</strong> -5 to -3</span><span class="rd-form-key"><strong class="rd-label">Average</strong> -2 to +2</span><span><strong>High</strong> +3 to +5</span>
+          <span class="rd-form-key"><strong>Low</strong> -5 to -3</span><span class="rd-form-key"><strong class="rd-label">Average</strong> -2.9 to +2.9</span><span><strong>High</strong> +3 to +5</span>
         </div>
       </b-row>
     </b-col>
