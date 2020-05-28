@@ -1,4 +1,23 @@
+import os
 from retention_dashboard.models import Week, DataPoint, Upload, Advisor
+from django.test.utils import override_settings
+from django.test import Client, TestCase
+from django.test.client import RequestFactory
+from django.contrib.auth.models import User
+from django.urls import reverse
+
+
+def create_upload():
+    w1 = Week.objects.create(quarter=1, number=1, year=2020)
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    file_path = os.path.join(current_dir, "../data/2/eop-students.csv")
+    with open(file_path, 'r') as datafile:
+        csv_file = datafile.read()
+    upload = Upload.objects.create(file=csv_file,
+                                   type=1,
+                                   uploaded_by="javerage",
+                                   week=w1)
+    return upload
 
 
 def create_initial_data():
@@ -130,3 +149,70 @@ def create_initial_data():
                              upload=upload,
                              advisor=a3
                              )
+
+
+AUTH_BACKEND = 'django.contrib.auth.backends.ModelBackend'
+AUTH_GROUP = 'authz_group.authz_implementation.all_ok.AllOK'
+
+view_test_override = override_settings(
+    AUTHENTICATION_BACKENDS=(AUTH_BACKEND,),
+    AUTHZ_GROUP_BACKEND=AUTH_GROUP,
+    USERSERVICE_ADMIN_GROUP="x",
+    MIDDLEWARE_CLASSES=(
+        'django.middleware.security.SecurityMiddleware',
+        'django.contrib.sessions.middleware.SessionMiddleware',
+        'django.middleware.locale.LocaleMiddleware',
+        'django.middleware.common.CommonMiddleware',
+        'django.middleware.csrf.CsrfViewMiddleware',
+        'django.contrib.auth.middleware.AuthenticationMiddleware',
+        'django.contrib.auth.middleware.PersistentRemoteUserMiddleware',
+        'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+        'django.contrib.messages.middleware.MessageMiddleware',
+        'django.middleware.clickjacking.XFrameOptionsMiddleware',
+        'django_mobileesp.middleware.UserAgentDetectionMiddleware',
+        'userservice.user.UserServiceMiddleware',
+        ),
+    )
+
+
+def get_user(netid):
+    try:
+        user = User.objects.get(username=netid)
+        return user
+    except Exception as ex:
+        user = User.objects.create_user(
+            netid, password=get_user_pass(netid))
+        return user
+
+
+def get_user_pass(netid):
+    return 'pass'
+
+
+@view_test_override
+class TestViewApi(TestCase):
+
+    def setUp(self):
+        self.client = Client(HTTP_USER_AGENT='Mozilla/5.0')
+
+    def _set_user(self, netid):
+        get_user(netid)
+        self.client.login(username=netid,
+                          password=get_user_pass(netid))
+
+    def _set_group(self, group):
+        session = self.client.session
+        session['samlUserdata'] = {'isMemberOf': [group]}
+        session.save()
+
+    def get_request(self, url, netid, group):
+        self._set_user(netid)
+        self._set_group(group)
+        request = RequestFactory().get(url)
+        request.user = get_user(netid)
+        request.session = self.client.session
+        return request
+
+    def get_response(self, url_name, **kwargs):
+        url = reverse(url_name, **kwargs)
+        return self.client.get(url, **kwargs)
