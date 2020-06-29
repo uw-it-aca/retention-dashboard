@@ -25,8 +25,8 @@ const debugMode = $("body").data("django-debug");
 VueClipboard.config.autoSetContainer = true;
 
 Vue.use(VueRouter);
-Vue.use(BootstrapVue);
-Vue.use(BootstrapVueIcons);
+Vue.use(BootstrapVue, {});
+Vue.use(BootstrapVueIcons, {});
 Vue.use(VuePluralize);
 Vue.use(VueMoment, {moment});
 Vue.use(underscore);

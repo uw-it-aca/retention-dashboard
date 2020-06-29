@@ -52,7 +52,7 @@
       :current-page="currentPage"
       sort-icon-left
     >
-      <template v-slot:head(pred)="data">
+      <template v-slot:head(priority_score)="data">
         {{ data.label }}<a id="pred_info" href="#" class="rd-info-link" role="button" title="What is the Priority score?"><span class="sr-only">What is the Priority Score?</span><b-icon icon="info-circle-fill" variant="primary" /></a>
         <b-popover target="pred_info" triggers="hover focus">
           <template v-slot:title>
@@ -62,7 +62,7 @@
         </b-popover>
       </template>
 
-      <template v-slot:head(activity)="data">
+      <template v-slot:head(activity_score)="data">
         {{ data.label }}<a id="activity_info" href="#" class="rd-info-link" role="button" title="What is the Activity score?"><span class="sr-only">What is the Activity Score?</span><b-icon icon="info-circle-fill" variant="primary" /></a>
         <b-popover target="activity_info" triggers="hover focus">
           <template v-slot:title>
@@ -72,7 +72,7 @@
         </b-popover>
       </template>
 
-      <template v-slot:head(assignments)="data">
+      <template v-slot:head(assignment_score)="data">
         {{ data.label }}<a id="assignments_info" href="#" class="rd-info-link" role="button" title="What is the Assignments score?"><span class="sr-only">What is the Assignments Score?</span><b-icon icon="info-circle-fill" variant="primary" /></a>
         <b-popover target="assignments_info" triggers="hover focus">
           <template v-slot:title>
@@ -82,7 +82,7 @@
         </b-popover>
       </template>
 
-      <template v-slot:head(grades)="data">
+      <template v-slot:head(grade_score)="data">
         {{ data.label }}<a id="grades_info" href="#" class="rd-info-link" role="button" title="What is the Grades score?"><span class="sr-only">What is the Grades Score?</span><b-icon icon="info-circle-fill" variant="primary" /></a>
         <b-popover target="grades_info" triggers="hover focus">
           <template v-slot:title>
@@ -108,7 +108,7 @@
       </template>
 
       <template v-slot:cell(is_premajor)="row">
-        <span v-if="row.item.is_premajor === true"><b-icon icon="check-box" scale="1.5" /><span class="sr-only">{{ row.item.is_premajor }}</span></span>
+        <span v-if="row.item.is_premajor === true"><b-icon icon="check2-square" scale="1.5" /><span class="sr-only">{{ row.item.is_premajor }}</span></span>
         <span v-else class="sr-only">{{ row.item.is_premajor }}</span>
       </template>
 
