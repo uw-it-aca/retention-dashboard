@@ -17,7 +17,7 @@ def scramble(in_path, out_path):
         for row in reader:
             if len(headers) == 0:
                 headers = [i for i in row]
-            clean_rows.append(get_row(row))
+            clean_rows.append(get_row(row, headers))
 
     with open(out_path, "w", newline='') as f:
         writer = csv.writer(f, delimiter=',')
@@ -52,7 +52,7 @@ advisors = [("Fred Johnson", "fj123"),
             (names.get_full_name(), gen_netid())]
 
 
-def get_row(row):
+def get_row(row, headers):
     stu_num = gen_stu_num()
     netid = gen_netid()
     name = names.get_full_name()
@@ -63,6 +63,8 @@ def get_row(row):
     pred = row['pred']
 
     advisor_name, advisor_netid = random.choice(advisors)
-
-    return [netid, stu_num, name, premajor, acti, assi, grade, pred,
-            advisor_name, advisor_netid]
+    summer = row['summer']
+    if "adviser_name" in headers:
+        return [netid, stu_num, name, premajor, acti, assi, grade, summer,
+                pred, advisor_name, advisor_netid]
+    return [netid, stu_num, name, premajor, acti, assi, grade, summer, pred]

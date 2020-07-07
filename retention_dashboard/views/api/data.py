@@ -5,7 +5,7 @@ from uw_saml.decorators import group_required
 from retention_dashboard.views.api import RESTDispatch
 from retention_dashboard.dao.data import get_weeks_with_data, get_filtered_data
 from retention_dashboard.dao.auth import get_type_authorizations
-from retention_dashboard.models import Advisor
+from retention_dashboard.models import Advisor, Week
 
 
 @method_decorator(group_required(settings.ALLOWED_USERS_GROUP),
@@ -56,6 +56,10 @@ class FilteredDataView(RESTDispatch):
 
         if week is None or type is None:
             return self.error_response(status=400)
+
+        week_obj = Week.objects.get(id=week)
+        is_summer = week_obj.quarter == 3
+
         auth_list = get_type_authorizations(request)
         if type not in auth_list:
             err_msg = "Not authorized for type " + type
@@ -73,6 +77,7 @@ class FilteredDataView(RESTDispatch):
         for point in data_points:
             response_data.append(point.json_data())
         return self.json_response(content={"count": len(data_points),
+                                           "is_summer": is_summer,
                                            "rows": response_data})
 
 

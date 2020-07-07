@@ -208,6 +208,13 @@
             label: 'Advisor',
             class: 'text-center',
             sortable: true
+          },
+          {
+            key: 'summer_term_string',
+            label: 'Summer Terms',
+            class: 'text-center',
+            sortable: true,
+            summer: true
           }
         ],
         standard_fields: [
@@ -250,6 +257,13 @@
             label: 'Pre-Major',
             class: 'text-center',
             sortable: true
+          },
+          {
+            key: 'summer_term_string',
+            label: 'Summer Terms',
+            class: 'text-center',
+            sortable: true,
+            summer: true
           }
         ],
         items: [],
@@ -264,15 +278,22 @@
         average_max: 2.999999999999999,
         high_min: 3,
         high_max: 5,
-        request_id: 0
+        request_id: 0,
+        is_summer: false,
       };
     },
     computed: {
       fields (){
+        var fields;
         if (this.current_file === "EOP"){
-          return this.eop_fields;
+          fields = this.eop_fields;
         } else {
-          return this.standard_fields;
+          fields = this.standard_fields;
+        }
+        if(!this.is_summer) {
+          return fields.filter(field => !field.summer);
+        } else {
+          return fields;
         }
       },
       filename (){
@@ -430,6 +451,7 @@
             if(query_token === vue.request_id){
               vue.isBusy = false;
               vue.csv_data = response.data.rows;
+              vue.is_summer = response.data.is_summer;
             }
           });
       },
