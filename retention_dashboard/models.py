@@ -119,7 +119,7 @@ class DataPoint(models.Model):
             term_list.append("B")
         if self.has_full_term:
             term_list.append("Full")
-        return '-'.join(map(str, term_list))
+        return ', '.join(map(str, term_list))
 
     def json_data(self):
         resp = {"student_name": self.student_name,

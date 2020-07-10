@@ -94,7 +94,7 @@
 
       <template v-slot:cell(student_name)="row">
         <span>{{row.item.student_name}}</span>
-        <span v-if="is_summer"><br />{{row.item.summer_term_string}}</span>
+        <span v-if="is_summer" class="rd-student-meta"><br />{{row.item.summer_term_string}}</span>
       </template>
 
       <template v-slot:cell(grade_score)="row">
@@ -496,6 +496,15 @@
 
   .rd-table-container {
     margin-top: 2rem;
+  }
+
+  .table td {
+    vertical-align: middle;
+  }
+
+  .rd-student-meta {
+    font-size: 90%;
+    font-style: italic;
   }
 
   /* Loading message */
