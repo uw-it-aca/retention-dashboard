@@ -97,9 +97,6 @@ class DataPoint(models.Model):
             query |= item
         return data_queryset.filter(query)
 
-
-
-
     @staticmethod
     def filter_by_premajor(data_queryset, is_premajor):
         return data_queryset.filter(premajor=is_premajor)
