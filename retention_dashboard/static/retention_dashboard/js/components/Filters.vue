@@ -110,19 +110,6 @@
         >
           <b-form-input v-model="keyword_filter" size="sm" placeholder="Student name, #, NetID" />
         </b-form-group>
-        <b-form-group v-if="is_summer">
-          <b-form-checkbox-group id="summer_filters" v-model="summer_filter" stacked>
-              <b-form-checkbox value="a">
-                A
-              </b-form-checkbox>
-              <b-form-checkbox value="b">
-                B
-              </b-form-checkbox>
-              <b-form-checkbox value="full">
-                Full
-              </b-form-checkbox>
-            </b-form-checkbox-group>
-        </b-form-group>
       </b-form-group>
     </b-col>
     <b-col order="5" />

@@ -36,6 +36,36 @@
         </b-form-group>
       </b-form>
     </span>
+    <span class="rd-summer-term-select">
+      <b-dropdown id="dropdown-form" class="rd-select-dropdown" :text="summerterm + ' Term'" ref="dropdown" size="sm">
+        <b-dropdown-form>
+            <b-form-checkbox-group
+              v-model="summerterm"
+              :options="summer_terms"
+              stacked
+            ></b-form-checkbox-group>
+
+            <!-- checkboxes (devights created in filters) 
+
+            <b-form-group v-if="is_summer">
+              <b-form-checkbox-group id="summer_filters" v-model="summer_filter" stacked>
+                  <b-form-checkbox value="a">
+                    A
+                  </b-form-checkbox>
+                  <b-form-checkbox value="b">
+                    B
+                  </b-form-checkbox>
+                  <b-form-checkbox value="full">
+                    Full
+                  </b-form-checkbox>
+                </b-form-checkbox-group>
+            </b-form-group>
+
+            -->
+
+        </b-dropdown-form>
+      </b-dropdown>
+    </span>
   </div>
 </template>
 
@@ -53,7 +83,13 @@
         auth_list: [],
         advisors: [],
         type: '',
-        currentweek: ''
+        currentweek: '',
+        summerterm: ['a', 'b', 'full'],
+        summer_terms: [
+          { value: 'a', text: 'A Term' },
+          { value: 'b', text: 'B Term' },
+          { value: 'full', text: 'Full Term' }
+        ],
       };
     },
     computed: {
@@ -138,14 +174,20 @@
   @import '../../css/_variables.scss';
   /* main content styles */
 
-  .rd-file-select {
+  .rd-file-select,.rd-date-select {
     float: left;
     margin-right: 0.5rem;
   }
 
-  /* date select  */
-  .rd-date-select {
+  /* summer term select  */
+  .rd-summer-term-select {
     float: left;
+  }
+
+  .rd-select-dropdown button, .rd-select-dropdown button:hover, .rd-select-dropdown button:focus, .rd-select-dropdown.show button.btn-secondary.dropdown-toggle {
+    background-color: white;
+    color: #495057;
+    border-color: #ced4da;
   }
 
   @media only screen and (max-width: 768px) {
