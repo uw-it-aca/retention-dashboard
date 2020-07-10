@@ -83,6 +83,24 @@ class DataPoint(models.Model):
         return data_queryset
 
     @staticmethod
+    def filter_by_summer(data_queryset, summer_terms):
+        queries = []
+        if "a" in summer_terms:
+            queries.append(Q(has_a_term=True))
+        if "b" in summer_terms:
+            queries.append(Q(has_b_term=True))
+        if "full" in summer_terms:
+            queries.append(Q(has_full_term=True))
+
+        query = queries.pop()
+        for item in queries:
+            query |= item
+        return data_queryset.filter(query)
+
+
+
+
+    @staticmethod
     def filter_by_premajor(data_queryset, is_premajor):
         return data_queryset.filter(premajor=is_premajor)
 

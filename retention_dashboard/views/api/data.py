@@ -50,6 +50,7 @@ class FilteredDataView(RESTDispatch):
         priority_filters = request.GET.getlist("priority_filters", None)
         activity_filters = request.GET.getlist("activity_filters", None)
         advisor_filter = request.GET.get("advisor_filter", None)
+        summer_filters = request.GET.get("summer_filters", None)
         premajor_filter = request.GET.get("premajor_filter", None)
         if premajor_filter == "true":
             premajor_filter = True
@@ -64,6 +65,7 @@ class FilteredDataView(RESTDispatch):
         if type not in auth_list:
             err_msg = "Not authorized for type " + type
             return self.error_response(403, content={"msg": err_msg})
+
         data_points = get_filtered_data(type, week,
                                         text_filter=text_filter,
                                         grade_filters=grade_filters,
@@ -71,14 +73,18 @@ class FilteredDataView(RESTDispatch):
                                         priority_filters=priority_filters,
                                         activity_filters=activity_filters,
                                         premajor_filter=premajor_filter,
-                                        advisor_filter=advisor_filter)
+                                        advisor_filter=advisor_filter,
+                                        summer_filters=summer_filters)
 
         response_data = []
-        for point in data_points:
-            response_data.append(point.json_data())
-        return self.json_response(content={"count": len(data_points),
-                                           "is_summer": is_summer,
-                                           "rows": response_data})
+        try:
+            for point in data_points:
+                response_data.append(point.json_data())
+            return self.json_response(content={"count": len(data_points),
+                                               "is_summer": is_summer,
+                                               "rows": response_data})
+        except TypeError:
+            return self.error_response(status=404)
 
 
 @method_decorator(group_required(settings.ALLOWED_USERS_GROUP),

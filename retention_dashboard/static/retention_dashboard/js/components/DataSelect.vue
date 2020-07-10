@@ -98,7 +98,13 @@
         this.$store.dispatch('dataselect/set_file', page);
       },
       selectWeek(week){
+        var week_idx = week-1;
         this.$store.dispatch('dataselect/set_week', week);
+        if(this.weeks[week_idx] !== undefined && this.weeks[week_idx].text.includes("Summer")){
+          this.$store.dispatch('dataselect/set_summer', true);
+        } else {
+          this.$store.dispatch('dataselect/set_summer', false);
+        }
       },
       setAdvisors(advisors){
         this.$store.dispatch('advisors/set_advisors', advisors);

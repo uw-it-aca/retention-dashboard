@@ -92,6 +92,11 @@
         </b-popover>
       </template>
 
+      <template v-slot:cell(student_name)="row">
+        <span>{{row.item.student_name}}</span>
+        <span v-if="is_summer"><br />{{row.item.summer_term_string}}</span>
+      </template>
+
       <template v-slot:cell(grade_score)="row">
         <span v-if="row.item.grade_score === -99">No data</span>
         <span v-else>{{ row.item.grade_score }}</span>
@@ -208,13 +213,6 @@
             label: 'Advisor',
             class: 'text-center',
             sortable: true
-          },
-          {
-            key: 'summer_term_string',
-            label: 'Summer Terms',
-            class: 'text-center',
-            sortable: true,
-            summer: true
           }
         ],
         standard_fields: [
@@ -257,13 +255,6 @@
             label: 'Pre-Major',
             class: 'text-center',
             sortable: true
-          },
-          {
-            key: 'summer_term_string',
-            label: 'Summer Terms',
-            class: 'text-center',
-            sortable: true,
-            summer: true
           }
         ],
         items: [],
@@ -290,11 +281,7 @@
         } else {
           fields = this.standard_fields;
         }
-        if(!this.is_summer) {
-          return fields.filter(field => !field.summer);
-        } else {
-          return fields;
-        }
+        return fields;
       },
       filename (){
         return this.$store.state.current_file;
@@ -335,6 +322,9 @@
         if(this.advisor_filter.length > 0){
           params['advisor_filter'] = this.advisor_filter;
         }
+        if(this.summer_filter.length > 0){
+          params['summer_filters'] = this.summer_filter;
+        }
         return params;
       },
       ...Vuex.mapState({
@@ -347,6 +337,7 @@
         premajor_filter: state => state.filters.filters.premajor_filter,
         keyword_filter: state => state.filters.filters.keyword_filter,
         advisor_filter: state => state.filters.filters.advisor_filter,
+        summer_filter: state => state.filters.filters.summer_filter,
       })
     },
     watch: {
@@ -386,6 +377,9 @@
         this.run_filters();
       },
       current_file: function () {
+        this.run_filters();
+      },
+      summer_filter: function () {
         this.run_filters();
       },
 

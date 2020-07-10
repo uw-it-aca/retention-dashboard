@@ -2,7 +2,8 @@ const state = {
   current_year: '',
   current_quarter: '',
   current_week: '',
-  current_file: ''
+  current_file: '',
+  is_summer: false
 };
 
 // getters
@@ -15,6 +16,9 @@ const actions = {
   },
   set_week ({ commit }, value) {
     commit('set_week', value);
+  },
+  set_summer ({ commit }, value) {
+    commit('set_summer', value);
   }
 };
 
@@ -25,6 +29,9 @@ const mutations = {
   },
   set_week (state, value){
     state.current_week = value;
+  },
+  set_summer (state, value){
+    state.is_summer = value;
   }
 };
 

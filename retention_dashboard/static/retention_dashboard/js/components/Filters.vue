@@ -110,6 +110,19 @@
         >
           <b-form-input v-model="keyword_filter" size="sm" placeholder="Student name, #, NetID" />
         </b-form-group>
+        <b-form-group v-if="is_summer">
+          <b-form-checkbox-group id="summer_filters" v-model="summer_filter" stacked>
+              <b-form-checkbox value="a">
+                A
+              </b-form-checkbox>
+              <b-form-checkbox value="b">
+                B
+              </b-form-checkbox>
+              <b-form-checkbox value="full">
+                Full
+              </b-form-checkbox>
+            </b-form-checkbox-group>
+        </b-form-group>
       </b-form-group>
     </b-col>
     <b-col order="5" />
@@ -133,13 +146,15 @@
         premajor_filter: false,
         keyword_filter: "",
         eop_advisor_selected: 1,
-        eop_advisors: []
+        eop_advisors: [],
+        summer_filter: []
       };
     },
     computed: {
       ...Vuex.mapState({
         current_file: state => state.dataselect.current_file,
         current_week: state => state.dataselect.current_week,
+        is_summer: state => state.dataselect.is_summer,
         advisor_list: state => state.advisors.advisors,
       }),
       show_pred (){
@@ -171,6 +186,9 @@
       },
       advisor_list: function() {
         this.eop_advisors = this.advisor_list["EOP"];
+      },
+      summer_filter: function () {
+        this.$store.dispatch('filters/set_summer_filter', this.summer_filter);
       },
       current_file: function() {
         this.reset_filters();

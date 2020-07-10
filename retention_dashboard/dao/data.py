@@ -17,7 +17,8 @@ def get_filtered_data(type, week,
                       priority_filters=None,
                       premajor_filter=None,
                       text_filter=None,
-                      advisor_filter=None
+                      advisor_filter=None,
+                      summer_filters=None
                       ):
     dataset = DataPoint.get_data_by_type_week(type, week)
     if grade_filters:
@@ -43,5 +44,7 @@ def get_filtered_data(type, week,
         dataset = DataPoint.filter_by_text(dataset, text_filter)
     if advisor_filter:
         dataset = DataPoint.filter_by_advisor(dataset, advisor_filter)
+    if summer_filters:
+        dataset = DataPoint.filter_by_summer(dataset, summer_filters)
 
     return dataset
