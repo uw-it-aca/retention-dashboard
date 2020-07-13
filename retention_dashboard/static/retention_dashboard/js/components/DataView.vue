@@ -403,8 +403,12 @@
 
           var row_string = "";
           fields.forEach(function(field){
-            if(item[field] === -99){
+            if (item[field] === -99) {
               row_string += "NA,";
+            } else if (field === "summer_term_string") {
+              var term_string = item[field].replace(/ /g,'');
+              term_string = term_string.replace(/,/g,'-');
+              row_string += term_string + ",";
             } else {
               row_string += item[field] + ",";
             }

@@ -38,55 +38,13 @@
       <b-col class="col-12 col-md-auto" order="2" order-md="3">
         <b-row>
           <b-col class="col rd-filter-border">
-            <b-form-group
-              label="Activity"
-            >
-              <b-form-checkbox-group id="activity_filters" v-model="activity_filter" stacked>
-                <b-form-checkbox value="high">
-                  High
-                </b-form-checkbox>
-                <b-form-checkbox value="avg">
-                  Average
-                </b-form-checkbox>
-                <b-form-checkbox value="low">
-                  Low
-                </b-form-checkbox>
-              </b-form-checkbox-group>
-            </b-form-group>
+            <range-filter filter-name="Activity" filter-store="filters/set_activity_filter" />
           </b-col>
           <b-col class="col rd-filter-border">
-            <b-form-group
-              label="Assignments"
-            >
-              <b-form-checkbox-group id="assignment_filters" v-model="assignment_filter" stacked>
-                <b-form-checkbox value="high">
-                  High
-                </b-form-checkbox>
-                <b-form-checkbox value="avg">
-                  Average
-                </b-form-checkbox>
-                <b-form-checkbox value="low">
-                  Low
-                </b-form-checkbox>
-              </b-form-checkbox-group>
-            </b-form-group>
+            <range-filter filter-name="Assignments" filter-store="filters/set_assignment_filter" />
           </b-col>
           <b-col class="col">
-            <b-form-group
-              label="Grades"
-            >
-              <b-form-checkbox-group id="grade_filters" v-model="grade_filter" stacked>
-                <b-form-checkbox value="high">
-                  High
-                </b-form-checkbox>
-                <b-form-checkbox value="avg">
-                  Average
-                </b-form-checkbox>
-                <b-form-checkbox value="low">
-                  Low
-                </b-form-checkbox>
-              </b-form-checkbox-group>
-            </b-form-group>
+            <range-filter filter-name="Grades" filter-store="filters/set_grade_filter" />
           </b-col>
         </b-row>
         <b-row>
@@ -174,15 +132,14 @@
   import {_} from "vue-underscore";
   import Vuex from "vuex";
   import axios from 'axios';
+  import RangeFilter from "./RangeFilter";
+
   export default {
     name: "Filters",
-    components: {},
+    components: {RangeFilter},
     props: {},
     data(){
       return {
-        activity_filter: [],
-        assignment_filter: [],
-        grade_filter: [],
         prediction_filter: [],
         premajor_filter: false,
         keyword_filter: "",
@@ -234,15 +191,6 @@
 
     },
     watch: {
-      assignment_filter: function () {
-        this.$store.dispatch('filters/set_assignment_filter', this.assignment_filter);
-      },
-      grade_filter: function () {
-        this.$store.dispatch('filters/set_grade_filter', this.grade_filter);
-      },
-      activity_filter: function () {
-        this.$store.dispatch('filters/set_activity_filter', this.activity_filter);
-      },
       prediction_filter: function () {
         this.$store.dispatch('filters/set_prediction_filter', this.prediction_filter);
       },
@@ -431,7 +379,8 @@
 
   }
 
-    .rd-file-select,.rd-date-select {
+  .rd-file-select,
+  .rd-date-select {
     float: left;
     margin-right: 0.5rem;
   }
@@ -441,10 +390,13 @@
     float: left;
   }
 
-  .rd-select-dropdown button, .rd-select-dropdown button:hover, .rd-select-dropdown button:focus, .rd-select-dropdown.show button.btn-secondary.dropdown-toggle {
-    background-color: white;
-    color: #495057;
+  .rd-select-dropdown button,
+  .rd-select-dropdown button:hover,
+  .rd-select-dropdown button:focus,
+  .rd-select-dropdown.show button.btn-secondary.dropdown-toggle {
+    background-color: #fff;
     border-color: #ced4da;
+    color: #495057;
   }
 
   @media only screen and (max-width: 768px) {
