@@ -50,7 +50,7 @@ class FilteredDataView(RESTDispatch):
         priority_filters = request.GET.getlist("priority_filters", None)
         activity_filters = request.GET.getlist("activity_filters", None)
         advisor_filter = request.GET.get("advisor_filter", None)
-        summer_filters = request.GET.get("summer_filters", None)
+        summer_filters = request.GET.getlist("summer_filters", None)
         premajor_filter = request.GET.get("premajor_filter", None)
         if premajor_filter == "true":
             premajor_filter = True

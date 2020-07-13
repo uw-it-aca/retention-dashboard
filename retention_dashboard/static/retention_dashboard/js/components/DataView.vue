@@ -23,9 +23,6 @@
     </b-row>
     <filters />
     <b-row class="rd-table-container">
-      <b-col cols="5" md="9">
-        <dataselect />
-      </b-col>
       <b-col cols="7" md="3" class="rd-pagination-container">
         <b-pagination
           v-model="currentPage"
@@ -93,8 +90,8 @@
       </template>
 
       <template v-slot:cell(student_name)="row">
-        <span>{{row.item.student_name}}</span>
-        <span v-if="is_summer" class="rd-student-meta"><br />{{row.item.summer_term_string}}</span>
+        <span>{{ row.item.student_name }}</span>
+        <span v-if="is_summer" class="rd-student-meta"><br>{{ row.item.summer_term_string }}</span>
       </template>
 
       <template v-slot:cell(grade_score)="row">
@@ -147,7 +144,6 @@
   </b-container>
 </template>
 <script>
-  import DataSelect from "./DataSelect.vue";
   import Filters from "./Filters.vue";
   import Vuex from 'vuex';
   import axios from 'axios';
@@ -157,7 +153,6 @@
   export default {
     name: "DataView",
     components: {
-      dataselect: DataSelect,
       filters: Filters
     },
     data: function() {
