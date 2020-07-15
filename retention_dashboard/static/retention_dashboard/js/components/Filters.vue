@@ -392,7 +392,7 @@
   .rd-select-dropdown button,
   .rd-select-dropdown button:hover,
   .rd-select-dropdown button:focus,
-  .rd-select-dropdown.show button.btn-secondary.dropdown-toggle {
+  .rd-select-dropdown.show .btn.btn-secondary.dropdown-toggle {
     background-color: #fff;
     border-color: #ced4da;
     color: #495057;
