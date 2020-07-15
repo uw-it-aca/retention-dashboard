@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <span>
     <b-row class="rd-filters-container justify-content-center">
       <b-col order="1" />
       <b-col v-if="show_pred" class="col-6 col-md-2 rd-filter-border" order="3" order-md="2">
@@ -73,58 +73,56 @@
       </b-col>
       <b-col order="5" />
     </b-row>
-    <b-row>
-      <div>
-        <span class="rd-file-select">
-          <b-form inline>
-            <b-form-group
-              id="file-dropdown"
-              label="Select Data"
-              label-class="sr-only"
-              label-for="type_dropdown"
-            >
-              <b-form-select
-                id="type_dropdown"
-                v-model="type"
-                :options="auth_list"
-                aria-controls="data_table"
-                size="sm"
-              />
-            </b-form-group>
-          </b-form>
-        </span>
-        <span class="rd-date-select">
-          <b-form inline>
-            <b-form-group
-              id="date_select"
-              label="Select week"
-              label-class="sr-only"
-              label-for="week_dropdown"
-            >
-              <b-form-select
-                id="week_dropdown"
-                v-model="currentweek"
-                :options="sorted_weeks"
-                aria-controls="data_table"
-                size="sm"
-              />
-            </b-form-group>
-          </b-form>
-        </span>
-        <span class="rd-summer-term-select">
-          <b-dropdown id="dropdown-form" ref="dropdown" class="rd-select-dropdown" :text="summer_display" size="sm">
-            <b-dropdown-form>
-              <b-form-checkbox-group
-                v-model="summer_filter"
-                :options="summer_terms"
-                stacked
-              />
-            </b-dropdown-form>
-          </b-dropdown>
-        </span>
-      </div>
-    </b-row>
-  </div>
+    <div class="rd-table-container"> 
+      <span class="rd-file-select">
+        <b-form inline>
+          <b-form-group
+            id="file-dropdown"
+            label="Select Data"
+            label-class="sr-only"
+            label-for="type_dropdown"
+          >
+            <b-form-select
+              id="type_dropdown"
+              v-model="type"
+              :options="auth_list"
+              aria-controls="data_table"
+              size="sm"
+            />
+          </b-form-group>
+        </b-form>
+      </span>
+      <span class="rd-date-select">
+        <b-form inline>
+          <b-form-group
+            id="date_select"
+            label="Select week"
+            label-class="sr-only"
+            label-for="week_dropdown"
+          >
+            <b-form-select
+              id="week_dropdown"
+              v-model="currentweek"
+              :options="sorted_weeks"
+              aria-controls="data_table"
+              size="sm"
+            />
+          </b-form-group>
+        </b-form>
+      </span>
+      <span class="rd-summer-term-select">
+        <b-dropdown id="dropdown-form" ref="dropdown" class="rd-select-dropdown" :text="summer_display" size="sm">
+          <b-dropdown-form>
+            <b-form-checkbox-group
+              v-model="summer_filter"
+              :options="summer_terms"
+              stacked
+            />
+          </b-dropdown-form>
+        </b-dropdown>
+      </span>
+    </div>
+  </span>
 </template>
 
 <script>
@@ -288,6 +286,7 @@
 <style lang="scss">
   @import '../../css/_variables.scss';
   /* main content styles */
+  
   /* filter styles */
 
   .rd-filters-container {
@@ -403,10 +402,6 @@
     /* small screen date picker*/
     .rd-file-select {
       margin-bottom: 0.5rem;
-    }
-
-    .rd-date-select {
-      margin: 0 0 1rem;
     }
 
     .rd-file-select .form-group,

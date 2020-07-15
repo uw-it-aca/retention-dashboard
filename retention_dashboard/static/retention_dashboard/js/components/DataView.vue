@@ -22,20 +22,18 @@
       </b-col>
     </b-row>
     <filters />
-    <b-row class="rd-table-container">
-      <b-col cols="7" md="3" class="rd-pagination-container">
-        <b-pagination
-          v-model="currentPage"
-          align="right"
-          class="pagination-sm"
-          :total-rows="rows"
-          :per-page="perPage"
-          aria-controls="data_table"
-          first-number
-          last-number
-        />
-      </b-col>
-    </b-row>
+    <span class="rd-pagination-container">
+      <b-pagination
+        v-model="currentPage"
+        align="right"
+        class="pagination-sm"
+        :total-rows="rows"
+        :per-page="perPage"
+        aria-controls="data_table"
+        first-number
+        last-number
+      />
+    </span>
     <b-table
       id="data_table"
       no-border-collapse
@@ -481,7 +479,7 @@
 
   /* Pagination */
   .rd-pagination-container {
-    align-self: flex-end;
+    float: right;
   }
 
   /* main content styles */
@@ -540,5 +538,12 @@
 
   .rd-pred-label-bottom {
     color: #129562;
+  }
+
+  @media only screen and (max-width: 768px) {
+    /* Pagination */
+    .rd-pagination-container {
+      clear: both;
+    }
   }
 </style>
