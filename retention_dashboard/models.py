@@ -94,7 +94,7 @@ class DataPoint(models.Model):
 
         query = queries.pop()
         for item in queries:
-            query |= item
+            query &= item
         return data_queryset.filter(query)
 
     @staticmethod
