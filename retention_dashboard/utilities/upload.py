@@ -23,6 +23,8 @@ def process_upload(upload):
                 advisor_dict[advisor_netid] = advisor
             else:
                 advisor = advisor_dict[advisor_netid]
+        has_a, has_b, has_full = \
+            _get_summer_terms_from_string(row.get('summer'))
 
         dp = DataPoint()
         dp.type = upload.type
@@ -37,5 +39,22 @@ def process_upload(upload):
         dp.grade_score = row.get("grades")
         dp.priority_score = row.get("pred")
         dp.advisor = advisor
+        dp.has_a_term = has_a
+        dp.has_b_term = has_b
+        dp.has_full_term = has_full
         data_points.append(dp)
     DataPoint.objects.bulk_create(data_points)
+
+
+def _get_summer_terms_from_string(term_string):
+    has_a = False
+    has_b = False
+    has_full = False
+    if term_string is not None:
+        if "A" in term_string:
+            has_a = True
+        if "B" in term_string:
+            has_b = True
+        if "Full" in term_string:
+            has_full = True
+    return has_a, has_b, has_full
