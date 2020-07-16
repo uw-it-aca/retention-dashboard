@@ -34,6 +34,9 @@ class DataPoint(models.Model):
     grade_score = models.FloatField()
     upload = models.ForeignKey("Upload", on_delete=models.CASCADE)
     advisor = models.ForeignKey("Advisor", on_delete=models.PROTECT, null=True)
+    has_a_term = models.BooleanField(default=False)
+    has_b_term = models.BooleanField(default=False)
+    has_full_term = models.BooleanField(default=False)
 
     @staticmethod
     def get_data_by_type_week(type, week):
@@ -80,6 +83,21 @@ class DataPoint(models.Model):
         return data_queryset
 
     @staticmethod
+    def filter_by_summer(data_queryset, summer_terms):
+        queries = []
+        if "a" in summer_terms:
+            queries.append(Q(has_a_term=True))
+        if "b" in summer_terms:
+            queries.append(Q(has_b_term=True))
+        if "full" in summer_terms:
+            queries.append(Q(has_full_term=True))
+
+        query = queries.pop()
+        for item in queries:
+            query &= item
+        return data_queryset.filter(query)
+
+    @staticmethod
     def filter_by_premajor(data_queryset, is_premajor):
         return data_queryset.filter(premajor=is_premajor)
 
@@ -93,6 +111,16 @@ class DataPoint(models.Model):
                                       advisor_type=2)
         return data_queryset.filter(advisor=advisor)
 
+    def get_summer_string(self):
+        term_list = []
+        if self.has_a_term:
+            term_list.append("A")
+        if self.has_b_term:
+            term_list.append("B")
+        if self.has_full_term:
+            term_list.append("Full")
+        return ', '.join(map(str, term_list))
+
     def json_data(self):
         resp = {"student_name": self.student_name,
                 "student_number": self.student_number,
@@ -102,6 +130,7 @@ class DataPoint(models.Model):
                 "assignment_score": self.assignment_score,
                 "grade_score": self.grade_score,
                 "is_premajor": self.premajor,
+                "summer_term_string": self.get_summer_string()
                 }
         if self.advisor is not None:
             resp["advisor_name"] = self.advisor.advisor_name

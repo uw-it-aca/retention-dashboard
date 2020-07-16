@@ -22,23 +22,18 @@
       </b-col>
     </b-row>
     <filters />
-    <b-row class="rd-table-container">
-      <b-col cols="5" md="9">
-        <dataselect />
-      </b-col>
-      <b-col cols="7" md="3" class="rd-pagination-container">
-        <b-pagination
-          v-model="currentPage"
-          align="right"
-          class="pagination-sm"
-          :total-rows="rows"
-          :per-page="perPage"
-          aria-controls="data_table"
-          first-number
-          last-number
-        />
-      </b-col>
-    </b-row>
+    <span class="rd-pagination-container">
+      <b-pagination
+        v-model="currentPage"
+        align="right"
+        class="pagination-sm"
+        :total-rows="rows"
+        :per-page="perPage"
+        aria-controls="data_table"
+        first-number
+        last-number
+      />
+    </span>
     <b-table
       id="data_table"
       no-border-collapse
@@ -92,6 +87,11 @@
         </b-popover>
       </template>
 
+      <template v-slot:cell(student_name)="row">
+        <span>{{ row.item.student_name }}</span>
+        <span v-if="is_summer" class="rd-student-meta"><br>{{ row.item.summer_term_string }}</span>
+      </template>
+
       <template v-slot:cell(grade_score)="row">
         <span v-if="row.item.grade_score === -99">No data</span>
         <span v-else>{{ row.item.grade_score }}</span>
@@ -142,7 +142,6 @@
   </b-container>
 </template>
 <script>
-  import DataSelect from "./DataSelect.vue";
   import Filters from "./Filters.vue";
   import Vuex from 'vuex';
   import axios from 'axios';
@@ -152,7 +151,6 @@
   export default {
     name: "DataView",
     components: {
-      dataselect: DataSelect,
       filters: Filters
     },
     data: function() {
@@ -264,16 +262,19 @@
         average_max: 2.999999999999999,
         high_min: 3,
         high_max: 5,
-        request_id: 0
+        request_id: 0,
+        is_summer: false,
       };
     },
     computed: {
       fields (){
+        var fields;
         if (this.current_file === "EOP"){
-          return this.eop_fields;
+          fields = this.eop_fields;
         } else {
-          return this.standard_fields;
+          fields = this.standard_fields;
         }
+        return fields;
       },
       filename (){
         return this.$store.state.current_file;
@@ -314,6 +315,9 @@
         if(this.advisor_filter.length > 0){
           params['advisor_filter'] = this.advisor_filter;
         }
+        if(this.summer_filter.length > 0){
+          params['summer_filters'] = this.summer_filter;
+        }
         return params;
       },
       ...Vuex.mapState({
@@ -326,6 +330,7 @@
         premajor_filter: state => state.filters.filters.premajor_filter,
         keyword_filter: state => state.filters.filters.keyword_filter,
         advisor_filter: state => state.filters.filters.advisor_filter,
+        summer_filter: state => state.filters.filters.summer_filter,
       })
     },
     watch: {
@@ -367,6 +372,9 @@
       current_file: function () {
         this.run_filters();
       },
+      summer_filter: function () {
+        this.run_filters();
+      },
 
     },
     methods: {
@@ -393,8 +401,12 @@
 
           var row_string = "";
           fields.forEach(function(field){
-            if(item[field] === -99){
+            if (item[field] === -99) {
               row_string += "NA,";
+            } else if (field === "summer_term_string") {
+              var term_string = item[field].replace(/ /g,'');
+              term_string = term_string.replace(/,/g,'-');
+              row_string += term_string + ",";
             } else {
               row_string += item[field] + ",";
             }
@@ -430,6 +442,7 @@
             if(query_token === vue.request_id){
               vue.isBusy = false;
               vue.csv_data = response.data.rows;
+              vue.is_summer = response.data.is_summer;
             }
           });
       },
@@ -466,7 +479,7 @@
 
   /* Pagination */
   .rd-pagination-container {
-    align-self: flex-end;
+    float: right;
   }
 
   /* main content styles */
@@ -480,6 +493,15 @@
 
   .rd-table-container {
     margin-top: 2rem;
+  }
+
+  .table td {
+    vertical-align: middle;
+  }
+
+  .rd-student-meta {
+    font-size: 90%;
+    font-style: italic;
   }
 
   /* Loading message */
@@ -516,5 +538,12 @@
 
   .rd-pred-label-bottom {
     color: #129562;
+  }
+
+  @media only screen and (max-width: 768px) {
+    /* Pagination */
+    .rd-pagination-container {
+      clear: both;
+    }
   }
 </style>
