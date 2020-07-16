@@ -73,7 +73,7 @@
       </b-col>
       <b-col order="5" />
     </b-row>
-    <div class="rd-table-container"> 
+    <div class="rd-table-container">
       <span class="rd-file-select">
         <b-form inline>
           <b-form-group
@@ -110,7 +110,7 @@
           </b-form-group>
         </b-form>
       </span>
-      <span class="rd-summer-term-select">
+      <span v-if="is_summer" class="rd-summer-term-select">
         <b-dropdown id="dropdown-form" ref="dropdown" class="rd-select-dropdown" :text="summer_display" size="sm">
           <b-dropdown-form>
             <b-form-checkbox-group
@@ -286,7 +286,7 @@
 <style lang="scss">
   @import '../../css/_variables.scss';
   /* main content styles */
-  
+
   /* filter styles */
 
   .rd-filters-container {
