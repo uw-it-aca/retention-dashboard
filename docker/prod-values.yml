@@ -53,3 +53,8 @@ environmentVariablesSecrets:
     name: DJANGO_SECRET
     secretName: retention-prod-django-secret
     secretKey: django-secret
+
+metrics:
+  enabled: false
+  serviceMonitor:
+    enabled: false
