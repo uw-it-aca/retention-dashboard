@@ -49,7 +49,6 @@ class DataPoint(models.Model):
             except IndexError:
                 return "", self.student_name
 
-
     @staticmethod
     def get_data_by_type_week(type, week):
         type_int = [item for item in
