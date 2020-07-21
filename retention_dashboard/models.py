@@ -38,17 +38,6 @@ class DataPoint(models.Model):
     has_b_term = models.BooleanField(default=False)
     has_full_term = models.BooleanField(default=False)
 
-    def get_first_last_name(self):
-        try:
-            parts = self.student_name.split(",", 1)
-            return parts[1], parts[0]
-        except IndexError:
-            try:
-                parts = self.student_name.split(" ", 1)
-                return parts[1], parts[0]
-            except IndexError:
-                return "", self.student_name
-
     @staticmethod
     def get_data_by_type_week(type, week):
         type_int = [item for item in
@@ -133,9 +122,7 @@ class DataPoint(models.Model):
         return ', '.join(map(str, term_list))
 
     def json_data(self):
-        first, last = self.get_first_last_name()
-        resp = {"student_first_name": first,
-                "student_last_name": last,
+        resp = {"student_name": self.student_name,
                 "student_number": self.student_number,
                 "netid": self.netid,
                 "priority_score": self.priority_score,

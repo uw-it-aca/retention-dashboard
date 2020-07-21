@@ -88,7 +88,7 @@
       </template>
 
       <template v-slot:cell(student_name)="row">
-        <span>{{ row.item.student_last_name }}, {{ row.item.student_first_name }}</span>
+        <span>{{ row.item.student_name }}</span>
         <span v-if="is_summer" class="rd-student-meta"><br>{{ row.item.summer_term_string }}</span>
       </template>
 
@@ -264,56 +264,6 @@
         high_max: 5,
         request_id: 0,
         is_summer: false,
-        download: {
-          fields: [
-            "student_last_name",
-            "student_first_name",
-            "student_number",
-            "netid",
-            "activity_score",
-            "assignment_score",
-            "grade_score",
-            "is_premajor",
-          ],
-          summer_fields: [
-            "student_last_name",
-            "student_first_name",
-            "student_number",
-            "netid",
-            "activity_score",
-            "assignment_score",
-            "grade_score",
-            "is_premajor",
-            "summer_term_string"
-          ],
-          fields_eop: [
-            "student_last_name",
-            "student_first_name",
-            "student_number",
-            "netid",
-            "activity_score",
-            "assignment_score",
-            "grade_score",
-            "priority_score",
-            "is_premajor",
-            "advisor_name",
-            "advisor_netid",
-          ],
-          summer_fields_eop: [
-            "student_last_name",
-            "student_first_name",
-            "student_number",
-            "netid",
-            "activity_score",
-            "assignment_score",
-            "grade_score",
-            "priority_score",
-            "is_premajor",
-            "advisor_name",
-            "advisor_netid",
-            "summer_term_string"
-          ]
-        }
       };
     },
     computed: {
@@ -325,21 +275,6 @@
           fields = this.standard_fields;
         }
         return fields;
-      },
-      download_fields () {
-        if (this.current_file === "EOP"){
-          if(this.is_summer){
-            return this.download.summer_fields_eop;
-          } else {
-            return this.download.fields_eop;
-          }
-        } else {
-          if(this.is_summer){
-            return this.download.summer_fields;
-          } else {
-            return this.download.fields;
-          }
-        }
       },
       filename (){
         return this.$store.state.current_file;
@@ -457,9 +392,10 @@
             csv_string = "";
 
         // Header
-        var fields = this.download_fields;
+        var fields = Object.keys(to_download[0]);
         csv_string += fields.join(",");
         csv_string += "\n";
+
         // Data
         to_download.forEach(function(item){
 
@@ -472,7 +408,7 @@
               term_string = term_string.replace(/,/g,'-');
               row_string += term_string + ",";
             } else {
-              row_string += JSON.stringify(item[field]) + ",";
+              row_string += item[field] + ",";
             }
           });
           //remove trailing comma
