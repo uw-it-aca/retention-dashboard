@@ -88,7 +88,7 @@
       </template>
 
       <template v-slot:cell(student_name)="row">
-        <span>{{ row.item.student_name }}</span>
+        <span>{{ row.item.student_last_name }}, {{ row.item.student_first_name }}</span>
         <span v-if="is_summer" class="rd-student-meta"><br>{{ row.item.summer_term_string }}</span>
       </template>
 
@@ -266,7 +266,8 @@
         is_summer: false,
         download: {
           fields: [
-            "student_name",
+            "student_last_name",
+            "student_first_name",
             "student_number",
             "netid",
             "activity_score",
@@ -275,7 +276,8 @@
             "is_premajor",
           ],
           summer_fields: [
-            "student_name",
+            "student_last_name",
+            "student_first_name",
             "student_number",
             "netid",
             "activity_score",
@@ -285,7 +287,8 @@
             "summer_term_string"
           ],
           fields_eop: [
-            "student_name",
+            "student_last_name",
+            "student_first_name",
             "student_number",
             "netid",
             "activity_score",
@@ -297,7 +300,8 @@
             "advisor_netid",
           ],
           summer_fields_eop: [
-            "student_name",
+            "student_last_name",
+            "student_first_name",
             "student_number",
             "netid",
             "activity_score",
