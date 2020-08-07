@@ -25,6 +25,16 @@ externalService:
   type: ClusterIP
   serviceAddress: 172.18.1.39
   servicePort: 5432
+externalSecrets:
+  enabled: true
+  secrets:
+    - name: test.retention.uw.edu-secrets
+      externalKey: axdd/kv/data/retention/test/secrets
+      data:
+        - name: django-secret
+          property: django-secret
+        - name: ga_key
+            property: ga_key
 repo: retention-dashboard
 instance: test
 branch: develop
@@ -53,9 +63,13 @@ environmentVariables:
     value: "True"
 
 environmentVariablesSecrets:
+  gaKey:
+    name: GA_KEY
+    secretName: test.retention.uw.edu-secrets
+    secretKey: ga_key
   djangoSecret:
     name: DJANGO_SECRET
-    secretName: retention-test-django-secret
+    secretName: test.retention.uw.edu-secrets
     secretKey: django-secret
 
 metrics:

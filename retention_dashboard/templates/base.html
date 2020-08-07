@@ -3,6 +3,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
+    {% if ga_key %}
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-126674428-2"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', '{{ ga_key }}');
+    </script>
+    {% endif %}
+
     <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
     <meta content="utf-8" http-equiv="encoding">
     <meta content="{{ csrf_token }}=" name="csrf-token" />
