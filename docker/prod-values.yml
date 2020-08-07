@@ -34,7 +34,7 @@ externalSecrets:
         - name: django-secret
           property: django-secret
         - name: ga_key
-            property: ga_key
+          property: ga_key
 repo: retention-dashboard
 instance: prod
 branch: develop
