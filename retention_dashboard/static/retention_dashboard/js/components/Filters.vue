@@ -55,14 +55,19 @@
       </b-col>
       <b-col class="col-6 col-md-2 rd-filter-border-end" order="4">
         <b-form-group
-          class="rd-major-filters"
-          label="Major Type"
+          class="rd-student-filters"
+          label="Student Type"
           label-class="rd-vis-hidden"
         >
           <b-form-checkbox v-model="premajor_filter">
             Is Pre-Major
           </b-form-checkbox>
-          <!-- <b-form-checkbox v-model="stem_filter">Is STEM</b-form-checkbox> -->
+          <b-form-checkbox v-model="stem_filter">
+            Is STEM
+          </b-form-checkbox>
+          <b-form-checkbox v-model="freshman_filter">
+            Is Freshman
+          </b-form-checkbox>
           <b-form-group
             class="rd-keyword-filter"
             label="Keyword"
@@ -324,6 +329,10 @@
     font-weight: bold;
   }
 
+  .rd-student-filters legend.rd-vis-hidden {
+    margin-bottom: -2em;
+  }
+
   .rd-form-note {
     clear: both;
     font-size: 85%;
@@ -359,7 +368,7 @@
         padding: 0;
       }
 
-      .rd-major-filters {
+      .rd-student-filters {
         border-style: none;
         margin: 0;
         padding: 0;
