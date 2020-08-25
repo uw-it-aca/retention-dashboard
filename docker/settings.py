@@ -66,6 +66,7 @@ elif os.getenv("ENV") == "localdev":
                                'member@washington.edu'],
         'isMemberOf': ['u_test_group', 'u_admin_group'],
     }
+GA_KEY = os.getenv("GA_KEY")
 
 
 from django.urls import reverse_lazy

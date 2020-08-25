@@ -11,6 +11,7 @@ class PageView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['netid'] = get_user(self.request)
+        context['ga_key'] = getattr(settings, "GA_KEY", None)
         return context
 
 
