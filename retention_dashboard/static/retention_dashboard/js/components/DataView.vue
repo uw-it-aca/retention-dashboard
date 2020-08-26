@@ -63,7 +63,7 @@
           <template v-slot:title>
             Sign-Ons Score
           </template>
-          This score [needs text].<br><br><strong>No Data</strong> indicates [needs text].
+          This score represents how often a student is signing in to UW online systems that require a NetID. Any number above or below zero indicates a student is signing in more or less than other undergrads, respectively.<br><br><strong>No Data</strong> indicates that the student has not signed in to any UW system during the specific time range.
         </b-popover>
       </template>
 
