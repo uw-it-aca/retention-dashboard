@@ -57,6 +57,16 @@
         </b-popover>
       </template>
 
+      <template v-slot:head(sign_on_score)="data">
+        {{ data.label }}<a id="sign_on_info" href="#" class="rd-info-link" role="button" title="What is the Sign-Ons score?"><span class="sr-only">What is the Sign-Ons Score?</span><b-icon icon="info-circle-fill" variant="primary" /></a>
+        <b-popover target="sign_on_info" triggers="hover focus">
+          <template v-slot:title>
+            Sign-Ons Score
+          </template>
+          This score [needs text].<br><br><strong>No Data</strong> indicates [needs text].
+        </b-popover>
+      </template>
+
       <template v-slot:head(activity_score)="data">
         {{ data.label }}<a id="activity_info" href="#" class="rd-info-link" role="button" title="What is the Activity score?"><span class="sr-only">What is the Activity Score?</span><b-icon icon="info-circle-fill" variant="primary" /></a>
         <b-popover target="activity_info" triggers="hover focus">
