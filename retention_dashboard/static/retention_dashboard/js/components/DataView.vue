@@ -99,8 +99,8 @@
 
       <template v-slot:cell(student_name)="row">
         <span>{{ row.item.student_last_name }}, {{ row.item.student_first_name }}</span>
-        <span class="rd-student-meta"><br/>{{ row.item.netid }}</span>
-        <span v-if="is_summer" class="rd-student-meta rd-italic"><br/>{{ row.item.summer_term_string }}</span>
+        <div class="rd-student-meta">{{ row.item.netid }}</div>
+        <div v-if="is_summer" class="rd-student-meta rd-italic">{{ row.item.summer_term_string }}</div>
       </template>
 
       <template v-slot:cell(grade_score)="row">
