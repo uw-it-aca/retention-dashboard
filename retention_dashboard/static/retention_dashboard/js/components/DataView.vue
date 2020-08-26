@@ -89,7 +89,8 @@
 
       <template v-slot:cell(student_name)="row">
         <span>{{ row.item.student_last_name }}, {{ row.item.student_first_name }}</span>
-        <span v-if="is_summer" class="rd-student-meta"><br>{{ row.item.summer_term_string }}</span>
+        <span class="rd-student-meta"><br/>{{ row.item.netid }}</span>
+        <span v-if="is_summer" class="rd-student-meta"><br/>{{ row.item.summer_term_string }}</span>
       </template>
 
       <template v-slot:cell(grade_score)="row">
@@ -105,6 +106,11 @@
       <template v-slot:cell(assignment_score)="row">
         <span v-if="row.item.assignment_score === -99">No data</span>
         <span v-else>{{ row.item.assignment_score }}</span>
+      </template>
+
+      <template v-slot:cell(sign_on_score)="row">
+        <span v-if="row.item.sign_on_score === -99">No data</span>
+        <span v-else>{{ row.item.sign_on_score }}</span>
       </template>
 
       <template v-slot:cell(is_premajor)="row">
@@ -166,15 +172,15 @@
             label: "Student Number",
             class: 'text-center'
           },
-
-          {
-            key: 'netid',
-            label: 'UWNetid',
-            class: 'text-center'
-          },
           {
             key: 'priority_score',
             label: 'Priority',
+            sortable: true
+          },
+          {
+            key: 'sign_on_score',
+            label: 'Sign-Ons',
+            class: 'text-center',
             sortable: true
           },
           {
@@ -219,11 +225,11 @@
             label: "Student Number",
             class: 'text-center'
           },
-
           {
-            key: 'netid',
-            label: 'UWNetid',
-            class: 'text-center'
+            key: 'sign_on_score',
+            label: 'Sign-Ons',
+            class: 'text-center',
+            sortable: true
           },
           {
             key: 'activity_score',
