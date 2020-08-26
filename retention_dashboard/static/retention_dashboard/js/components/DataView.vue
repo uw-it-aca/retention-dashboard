@@ -100,7 +100,7 @@
       <template v-slot:cell(student_name)="row">
         <span>{{ row.item.student_last_name }}, {{ row.item.student_first_name }}</span>
         <span class="rd-student-meta"><br/>{{ row.item.netid }}</span>
-        <span v-if="is_summer" class="rd-student-meta"><br/>{{ row.item.summer_term_string }}</span>
+        <span v-if="is_summer" class="rd-student-meta rd-italic"><br/>{{ row.item.summer_term_string }}</span>
       </template>
 
       <template v-slot:cell(grade_score)="row">
@@ -550,6 +550,11 @@
     }
   }
 
+  /* Generic Styles */
+  .rd-italic {
+    font-style: italic;
+  }
+
   /* Top banner styles */
 
   .rd-info-link {
@@ -581,7 +586,6 @@
 
   .rd-student-meta {
     font-size: 90%;
-    font-style: italic;
   }
 
   /* Loading message */
