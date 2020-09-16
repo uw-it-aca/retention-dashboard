@@ -145,6 +145,8 @@
       return {
         prediction_filter: [],
         premajor_filter: false,
+        stem_filter: false,
+        freshman_filter: false,
         keyword_filter: "",
         eop_advisor_selected: 1,
         eop_advisors: [],
@@ -199,6 +201,12 @@
       },
       premajor_filter: function () {
         this.$store.dispatch('filters/set_premajor_filter', this.premajor_filter);
+      },
+      stem_filter: function () {
+        this.$store.dispatch('filters/set_stem_filter', this.stem_filter);
+      },
+      freshman_filter: function () {
+        this.$store.dispatch('filters/set_freshman_filter', this.freshman_filter);
       },
       keyword_filter: function () {
         this.debouncedKeywordFilters();

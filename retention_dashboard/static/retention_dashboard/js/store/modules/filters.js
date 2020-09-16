@@ -4,6 +4,8 @@ const state = {
     assignment_filter: [],
     grade_filter: [],
     premajor_filter: false,
+    stem_filter: false,
+    freshman_filter: false,
     keyword_filter: "",
     prediction_filter: [],
     advisor_filter: "",
@@ -38,6 +40,18 @@ const actions = {
   set_premajor_filter ({ commit }, value) {
     commit('set_filters', {
       'type': 'premajor_filter',
+      'value':value
+    });
+  },
+  set_stem_filter ({ commit }, value) {
+    commit('set_filters', {
+      'type': 'stem_filter',
+      'value':value
+    });
+  },
+  set_freshman_filter ({ commit }, value) {
+    commit('set_filters', {
+      'type': 'freshman_filter',
       'value':value
     });
   },

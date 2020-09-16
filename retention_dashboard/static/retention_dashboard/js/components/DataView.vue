@@ -374,6 +374,12 @@
         if(this.premajor_filter === true){
           params['premajor_filter'] = this.premajor_filter;
         }
+        if(this.stem_filter === true){
+          params['stem_filter'] = this.stem_filter;
+        }
+        if(this.freshman_filter === true){
+          params['freshman_filter'] = this.freshman_filter;
+        }
         if(this.keyword_filter.length > 0){
           params['text_filter'] = this.keyword_filter;
         }
@@ -393,6 +399,8 @@
         grade_filter: state => state.filters.filters.grade_filter,
         prediction_filter: state => state.filters.filters.prediction_filter,
         premajor_filter: state => state.filters.filters.premajor_filter,
+        stem_filter: state => state.filters.filters.stem_filter,
+        freshman_filter: state => state.filters.filters.freshman_filter,
         keyword_filter: state => state.filters.filters.keyword_filter,
         advisor_filter: state => state.filters.filters.advisor_filter,
         summer_filter: state => state.filters.filters.summer_filter,
@@ -423,6 +431,12 @@
         this.run_filters();
       },
       premajor_filter: function () {
+        this.run_filters();
+      },
+      stem_filter: function () {
+        this.run_filters();
+      },
+      freshman_filter: function () {
         this.run_filters();
       },
       keyword_filter: function () {
