@@ -57,11 +57,11 @@
         </b-popover>
       </template>
 
-      <template v-slot:head(sign_on_score)="data">
-        {{ data.label }}<a id="sign_on_info" href="#" class="rd-info-link" role="button" title="What is the Sign-Ons score?"><span class="sr-only">What is the Sign-Ons Score?</span><b-icon icon="info-circle-fill" variant="primary" /></a>
-        <b-popover target="sign_on_info" triggers="hover focus">
+      <template v-slot:head(sign_in_score)="data">
+        {{ data.label }}<a id="sign_in_info" href="#" class="rd-info-link" role="button" title="What is the Sign-Ins score?"><span class="sr-only">What is the Sign-Ins Score?</span><b-icon icon="info-circle-fill" variant="primary" /></a>
+        <b-popover target="sign_in_info" triggers="hover focus">
           <template v-slot:title>
-            Sign-Ons Score
+            Sign-Ins Score
           </template>
           This score represents how often a student is signing in to UW online systems that require a NetID. Any number above or below zero indicates a student is signing in more or less than other undergrads, respectively.<br><br><strong>No Data</strong> indicates that the student has not signed in to any UW system during the specific time range.
         </b-popover>
@@ -118,9 +118,9 @@
         <span v-else>{{ row.item.assignment_score }}</span>
       </template>
 
-      <template v-slot:cell(sign_on_score)="row">
-        <span v-if="row.item.sign_on_score === -99">No data</span>
-        <span v-else>{{ row.item.sign_on_score }}</span>
+      <template v-slot:cell(sign_in_score)="row">
+        <span v-if="row.item.sign_in_score === -99">No data</span>
+        <span v-else>{{ row.item.sign_in_score }}</span>
       </template>
 
       <template v-slot:cell(is_premajor)="row">
@@ -188,8 +188,8 @@
             sortable: true
           },
           {
-            key: 'sign_on_score',
-            label: 'Sign-Ons',
+            key: 'sign_in_score',
+            label: 'Sign-Ins',
             class: 'text-center',
             sortable: true
           },
@@ -236,8 +236,8 @@
             class: 'text-center'
           },
           {
-            key: 'sign_on_score',
-            label: 'Sign-Ons',
+            key: 'sign_in_score',
+            label: 'Sign-Ins',
             class: 'text-center',
             sortable: true
           },
