@@ -99,8 +99,12 @@
 
       <template v-slot:cell(student_name)="row">
         <span>{{ row.item.student_last_name }}, {{ row.item.student_first_name }}</span>
-        <div class="rd-student-meta">{{ row.item.netid }}</div>
-        <div v-if="is_summer" class="rd-student-meta rd-italic">{{ row.item.summer_term_string }}</div>
+        <div class="rd-student-meta">
+          {{ row.item.netid }}
+        </div>
+        <div v-if="is_summer" class="rd-student-meta rd-italic">
+          {{ row.item.summer_term_string }}
+        </div>
       </template>
 
       <template v-slot:cell(grade_score)="row">
@@ -399,6 +403,9 @@
         if(this.summer_filter.length > 0){
           params['summer_filters'] = this.summer_filter;
         }
+        if(this.signins_filter.length > 0){
+          params['signins_filters'] = this.signins_filter;
+        }
         return params;
       },
       ...Vuex.mapState({
@@ -412,6 +419,7 @@
         keyword_filter: state => state.filters.filters.keyword_filter,
         advisor_filter: state => state.filters.filters.advisor_filter,
         summer_filter: state => state.filters.filters.summer_filter,
+        signins_filter: state => state.filters.filters.signins_filter,
       })
     },
     watch: {
@@ -456,6 +464,9 @@
       summer_filter: function () {
         this.run_filters();
       },
+      signins_filter: function () {
+        this.run_filters();
+      }
 
     },
     methods: {

@@ -3,6 +3,7 @@ const state = {
     activity_filter: [],
     assignment_filter: [],
     grade_filter: [],
+    signins_filter: [],
     premajor_filter: false,
     keyword_filter: "",
     prediction_filter: [],
@@ -62,6 +63,12 @@ const actions = {
     set_summer_filter ({ commit }, value) {
     commit('set_filters', {
       'type': 'summer_filter',
+      'value':value
+    });
+  },
+  set_signins_filter ({ commit }, value) {
+    commit('set_filters', {
+      'type': 'signins_filter',
       'value':value
     });
   },
