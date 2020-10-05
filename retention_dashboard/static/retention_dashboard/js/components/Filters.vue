@@ -38,6 +38,9 @@
       <b-col class="col-12 col-md-auto" order="2" order-md="3">
         <b-row>
           <b-col class="col rd-filter-border">
+            <range-filter filter-name="Sign-Ins" filter-store="filters/set_signins_filter" />
+          </b-col>
+          <b-col class="col rd-filter-border">
             <range-filter filter-name="Activity" filter-store="filters/set_activity_filter" />
           </b-col>
           <b-col class="col rd-filter-border">
