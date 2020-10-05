@@ -37,7 +37,10 @@ def create_initial_data():
                              assignment_score=-4,
                              grade_score=-4,
                              upload=upload,
-                             advisor=a1
+                             advisor=a1,
+                             is_stem=False,
+                             is_freshman=True,
+                             signin_score=2.1
                              )
     DataPoint.objects.create(type=1,
                              week=w1,
@@ -50,7 +53,10 @@ def create_initial_data():
                              assignment_score=-1,
                              grade_score=-1,
                              upload=upload,
-                             advisor=a2
+                             advisor=a2,
+                             is_stem=True,
+                             is_freshman=True,
+                             signin_score=-2.1
                              )
 
     DataPoint.objects.create(type=1,
@@ -64,7 +70,10 @@ def create_initial_data():
                              assignment_score=4,
                              grade_score=4,
                              upload=upload,
-                             advisor=a2
+                             advisor=a2,
+                             is_stem=False,
+                             is_freshman=False,
+                             signin_score=3.1
                              )
     DataPoint.objects.create(type=1,
                              week=w1,
@@ -76,7 +85,10 @@ def create_initial_data():
                              activity_score=-3,
                              assignment_score=-3,
                              grade_score=-3,
-                             upload=upload
+                             upload=upload,
+                             is_stem=False,
+                             is_freshman=True,
+                             signin_score=2.1
                              )
     DataPoint.objects.create(type=1,
                              week=w1,
@@ -89,7 +101,10 @@ def create_initial_data():
                              assignment_score=0,
                              grade_score=0,
                              upload=upload,
-                             advisor=a2
+                             advisor=a2,
+                             is_stem=False,
+                             is_freshman=True,
+                             signin_score=-4.1
                              )
     DataPoint.objects.create(type=1,
                              week=w2,
@@ -102,7 +117,10 @@ def create_initial_data():
                              assignment_score=1,
                              grade_score=1,
                              upload=upload,
-                             advisor=a2
+                             advisor=a2,
+                             is_stem=False,
+                             is_freshman=True,
+                             signin_score=-4.1
                              )
     DataPoint.objects.create(type=2,
                              week=w1,
@@ -115,7 +133,10 @@ def create_initial_data():
                              assignment_score=3,
                              grade_score=3,
                              upload=upload,
-                             advisor=a2
+                             advisor=a2,
+                             is_stem=False,
+                             is_freshman=True,
+                             signin_score=-4.1
                              )
     DataPoint.objects.create(type=3,
                              week=w1,
@@ -128,5 +149,8 @@ def create_initial_data():
                              assignment_score=3,
                              grade_score=3,
                              upload=upload,
-                             advisor=a3
+                             advisor=a3,
+                             is_stem=False,
+                             is_freshman=True,
+                             signin_score=2.1
                              )
