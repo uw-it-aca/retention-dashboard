@@ -49,8 +49,8 @@ class DataAdmin(RESTDispatch):
                                            week=week,
                                            uploaded_by=user)
             process_upload(upload)
-        except IntegrityError:
-            return self.error_response(400)
+        except IntegrityError as ex:
+            return self.error_response(400, message=ex)
         return self.json_response({"created": True})
 
     def delete(self, request, upload_id):
