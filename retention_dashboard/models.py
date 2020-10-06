@@ -155,6 +155,8 @@ class DataPoint(models.Model):
                 "grade_score": self.grade_score,
                 "signin_score": self.signin_score,
                 "is_premajor": self.premajor,
+                "is_freshman": self.is_freshman,
+                "is_stem": self.is_stem,
                 "summer_term_string": self.get_summer_string()
                 }
         if self.advisor is not None:

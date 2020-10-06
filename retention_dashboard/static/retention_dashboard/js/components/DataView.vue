@@ -294,6 +294,9 @@
             "assignment_score",
             "grade_score",
             "is_premajor",
+            "is_freshman",
+            "is_stem",
+            "signin_score"
           ],
           summer_fields: [
             "student_last_name",
@@ -304,7 +307,10 @@
             "assignment_score",
             "grade_score",
             "is_premajor",
-            "summer_term_string"
+            "summer_term_string",
+            "is_freshman",
+            "is_stem",
+            "signin_score"
           ],
           fields_eop: [
             "student_last_name",
@@ -318,6 +324,9 @@
             "is_premajor",
             "advisor_name",
             "advisor_netid",
+            "is_freshman",
+            "is_stem",
+            "signin_score"
           ],
           summer_fields_eop: [
             "student_last_name",
@@ -331,7 +340,10 @@
             "is_premajor",
             "advisor_name",
             "advisor_netid",
-            "summer_term_string"
+            "summer_term_string",
+            "is_freshman",
+            "is_stem",
+            "signin_score"
           ]
         }
       };
