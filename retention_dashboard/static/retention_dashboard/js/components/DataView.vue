@@ -57,6 +57,16 @@
         </b-popover>
       </template>
 
+      <template v-slot:head(signin_score)="data">
+        {{ data.label }}<a id="sign_in_info" href="#" class="rd-info-link" role="button" title="What is the Sign-Ins score?"><span class="sr-only">What is the Sign-Ins Score?</span><b-icon icon="info-circle-fill" variant="primary" /></a>
+        <b-popover target="sign_in_info" triggers="hover focus">
+          <template v-slot:title>
+            Sign-Ins Score
+          </template>
+          This score represents how often a student is signing in to UW online systems that require a NetID. Any number above or below zero indicates a student is signing in more or less than other undergrads, respectively.<br><br><strong>No Data</strong> indicates that the student has not signed in to any UW system during the specific time range.
+        </b-popover>
+      </template>
+
       <template v-slot:head(activity_score)="data">
         {{ data.label }}<a id="activity_info" href="#" class="rd-info-link" role="button" title="What is the Activity score?"><span class="sr-only">What is the Activity Score?</span><b-icon icon="info-circle-fill" variant="primary" /></a>
         <b-popover target="activity_info" triggers="hover focus">
@@ -89,7 +99,12 @@
 
       <template v-slot:cell(student_name)="row">
         <span>{{ row.item.student_last_name }}, {{ row.item.student_first_name }}</span>
-        <span v-if="is_summer" class="rd-student-meta"><br>{{ row.item.summer_term_string }}</span>
+        <div class="rd-student-meta">
+          {{ row.item.netid }}
+        </div>
+        <div v-if="is_summer" class="rd-student-meta rd-italic">
+          {{ row.item.summer_term_string }}
+        </div>
       </template>
 
       <template v-slot:cell(grade_score)="row">
@@ -105,6 +120,11 @@
       <template v-slot:cell(assignment_score)="row">
         <span v-if="row.item.assignment_score === -99">No data</span>
         <span v-else>{{ row.item.assignment_score }}</span>
+      </template>
+
+      <template v-slot:cell(signin_score)="row">
+        <span v-if="row.item.signin_score === -99">No data</span>
+        <span v-else>{{ row.item.signin_score }}</span>
       </template>
 
       <template v-slot:cell(is_premajor)="row">
@@ -166,15 +186,15 @@
             label: "Student Number",
             class: 'text-center'
           },
-
-          {
-            key: 'netid',
-            label: 'UWNetid',
-            class: 'text-center'
-          },
           {
             key: 'priority_score',
             label: 'Priority',
+            sortable: true
+          },
+          {
+            key: 'signin_score',
+            label: 'Sign-Ins',
+            class: 'text-center',
             sortable: true
           },
           {
@@ -219,11 +239,11 @@
             label: "Student Number",
             class: 'text-center'
           },
-
           {
-            key: 'netid',
-            label: 'UWNetid',
-            class: 'text-center'
+            key: 'signin_score',
+            label: 'Sign-Ins',
+            class: 'text-center',
+            sortable: true
           },
           {
             key: 'activity_score',
@@ -274,6 +294,9 @@
             "assignment_score",
             "grade_score",
             "is_premajor",
+            "is_freshman",
+            "is_stem",
+            "signin_score"
           ],
           summer_fields: [
             "student_last_name",
@@ -284,7 +307,10 @@
             "assignment_score",
             "grade_score",
             "is_premajor",
-            "summer_term_string"
+            "summer_term_string",
+            "is_freshman",
+            "is_stem",
+            "signin_score"
           ],
           fields_eop: [
             "student_last_name",
@@ -298,6 +324,9 @@
             "is_premajor",
             "advisor_name",
             "advisor_netid",
+            "is_freshman",
+            "is_stem",
+            "signin_score"
           ],
           summer_fields_eop: [
             "student_last_name",
@@ -311,7 +340,10 @@
             "is_premajor",
             "advisor_name",
             "advisor_netid",
-            "summer_term_string"
+            "summer_term_string",
+            "is_freshman",
+            "is_stem",
+            "signin_score"
           ]
         }
       };
@@ -374,6 +406,12 @@
         if(this.premajor_filter === true){
           params['premajor_filter'] = this.premajor_filter;
         }
+        if(this.stem_filter === true){
+          params['stem_filter'] = this.stem_filter;
+        }
+        if(this.freshman_filter === true){
+          params['freshman_filter'] = this.freshman_filter;
+        }
         if(this.keyword_filter.length > 0){
           params['text_filter'] = this.keyword_filter;
         }
@@ -382,6 +420,9 @@
         }
         if(this.summer_filter.length > 0){
           params['summer_filters'] = this.summer_filter;
+        }
+        if(this.signins_filter.length > 0){
+          params['signins_filters'] = this.signins_filter;
         }
         return params;
       },
@@ -393,9 +434,12 @@
         grade_filter: state => state.filters.filters.grade_filter,
         prediction_filter: state => state.filters.filters.prediction_filter,
         premajor_filter: state => state.filters.filters.premajor_filter,
+        stem_filter: state => state.filters.filters.stem_filter,
+        freshman_filter: state => state.filters.filters.freshman_filter,
         keyword_filter: state => state.filters.filters.keyword_filter,
         advisor_filter: state => state.filters.filters.advisor_filter,
         summer_filter: state => state.filters.filters.summer_filter,
+        signins_filter: state => state.filters.filters.signins_filter,
       })
     },
     watch: {
@@ -425,6 +469,12 @@
       premajor_filter: function () {
         this.run_filters();
       },
+      stem_filter: function () {
+        this.run_filters();
+      },
+      freshman_filter: function () {
+        this.run_filters();
+      },
       keyword_filter: function () {
         this.run_filters();
       },
@@ -440,6 +490,9 @@
       summer_filter: function () {
         this.run_filters();
       },
+      signins_filter: function () {
+        this.run_filters();
+      }
 
     },
     methods: {
@@ -534,6 +587,11 @@
     }
   }
 
+  /* Generic Styles */
+  .rd-italic {
+    font-style: italic;
+  }
+
   /* Top banner styles */
 
   .rd-info-link {
@@ -565,7 +623,6 @@
 
   .rd-student-meta {
     font-size: 90%;
-    font-style: italic;
   }
 
   /* Loading message */

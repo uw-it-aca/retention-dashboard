@@ -49,11 +49,18 @@ class FilteredDataView(RESTDispatch):
         assignment_filters = request.GET.getlist("assignment_filters", None)
         priority_filters = request.GET.getlist("priority_filters", None)
         activity_filters = request.GET.getlist("activity_filters", None)
+        signins_filters = request.GET.getlist("signins_filters", None)
         advisor_filter = request.GET.get("advisor_filter", None)
         summer_filters = request.GET.getlist("summer_filters", None)
         premajor_filter = request.GET.get("premajor_filter", None)
+        stem_filter = request.GET.get("stem_filter", None)
+        freshman_filter = request.GET.get("freshman_filter", None)
         if premajor_filter == "true":
             premajor_filter = True
+        if stem_filter == "true":
+            stem_filter = True
+        if freshman_filter == "true":
+            freshman_filter = True
 
         if week is None or type is None:
             return self.error_response(status=400)
@@ -72,9 +79,12 @@ class FilteredDataView(RESTDispatch):
                                         assignment_filters=assignment_filters,
                                         priority_filters=priority_filters,
                                         activity_filters=activity_filters,
+                                        signins_filters=signins_filters,
                                         premajor_filter=premajor_filter,
                                         advisor_filter=advisor_filter,
-                                        summer_filters=summer_filters)
+                                        summer_filters=summer_filters,
+                                        stem_filter=stem_filter,
+                                        freshman_filter=freshman_filter)
 
         response_data = []
         try:

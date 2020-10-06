@@ -3,7 +3,10 @@ const state = {
     activity_filter: [],
     assignment_filter: [],
     grade_filter: [],
+    signins_filter: [],
     premajor_filter: false,
+    stem_filter: false,
+    freshman_filter: false,
     keyword_filter: "",
     prediction_filter: [],
     advisor_filter: "",
@@ -41,6 +44,18 @@ const actions = {
       'value':value
     });
   },
+  set_stem_filter ({ commit }, value) {
+    commit('set_filters', {
+      'type': 'stem_filter',
+      'value':value
+    });
+  },
+  set_freshman_filter ({ commit }, value) {
+    commit('set_filters', {
+      'type': 'freshman_filter',
+      'value':value
+    });
+  },
   set_keyword_filter ({ commit }, value) {
     commit('set_filters', {
       'type': 'keyword_filter',
@@ -62,6 +77,12 @@ const actions = {
     set_summer_filter ({ commit }, value) {
     commit('set_filters', {
       'type': 'summer_filter',
+      'value':value
+    });
+  },
+  set_signins_filter ({ commit }, value) {
+    commit('set_filters', {
+      'type': 'signins_filter',
       'value':value
     });
   },

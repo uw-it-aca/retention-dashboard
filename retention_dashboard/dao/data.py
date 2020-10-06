@@ -18,7 +18,10 @@ def get_filtered_data(type, week,
                       premajor_filter=None,
                       text_filter=None,
                       advisor_filter=None,
-                      summer_filters=None
+                      summer_filters=None,
+                      stem_filter=None,
+                      freshman_filter=None,
+                      signins_filters=None
                       ):
     dataset = DataPoint.get_data_by_type_week(type, week)
     if grade_filters:
@@ -37,8 +40,16 @@ def get_filtered_data(type, week,
         dataset = DataPoint.filter_by_ranges(dataset,
                                              priority_filters,
                                              "priority_score")
+    if signins_filters:
+        dataset = DataPoint.filter_by_ranges(dataset,
+                                             signins_filters,
+                                             "signin_score")
     if premajor_filter:
         dataset = DataPoint.filter_by_premajor(dataset, premajor_filter)
+    if stem_filter:
+        dataset = DataPoint.filter_by_stem(dataset, stem_filter)
+    if freshman_filter:
+        dataset = DataPoint.filter_by_freshman(dataset, freshman_filter)
 
     if text_filter:
         dataset = DataPoint.filter_by_text(dataset, text_filter)
