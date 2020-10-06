@@ -153,6 +153,7 @@ class DataPoint(models.Model):
                 "activity_score": self.activity_score,
                 "assignment_score": self.assignment_score,
                 "grade_score": self.grade_score,
+                "signin_score": self.signin_score,
                 "is_premajor": self.premajor,
                 "summer_term_string": self.get_summer_string()
                 }

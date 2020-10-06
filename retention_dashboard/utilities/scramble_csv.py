@@ -71,8 +71,8 @@ def get_row(row, headers):
         if "adviser_name" in headers:
             return [netid, stu_num, name, premajor, acti, assi, grade, summer,
                     pred, advisor_name, advisor_netid, sign_in, stem, freshman]
-        return [netid, stu_num, name, premajor, acti, assi, grade, summer, pred,
-                sign_in, stem, freshman]
+        return [netid, stu_num, name, premajor, acti, assi, grade, summer,
+                pred, sign_in, stem, freshman]
     else:
         if "adviser_name" in headers:
             return [netid, stu_num, name, premajor, acti, assi, grade, pred,

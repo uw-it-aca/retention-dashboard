@@ -57,7 +57,7 @@
         </b-popover>
       </template>
 
-      <template v-slot:head(sign_in_score)="data">
+      <template v-slot:head(signin_score)="data">
         {{ data.label }}<a id="sign_in_info" href="#" class="rd-info-link" role="button" title="What is the Sign-Ins score?"><span class="sr-only">What is the Sign-Ins Score?</span><b-icon icon="info-circle-fill" variant="primary" /></a>
         <b-popover target="sign_in_info" triggers="hover focus">
           <template v-slot:title>
@@ -122,9 +122,9 @@
         <span v-else>{{ row.item.assignment_score }}</span>
       </template>
 
-      <template v-slot:cell(sign_in_score)="row">
-        <span v-if="row.item.sign_in_score === -99">No data</span>
-        <span v-else>{{ row.item.sign_in_score }}</span>
+      <template v-slot:cell(signin_score)="row">
+        <span v-if="row.item.signin_score === -99">No data</span>
+        <span v-else>{{ row.item.signin_score }}</span>
       </template>
 
       <template v-slot:cell(is_premajor)="row">
@@ -192,7 +192,7 @@
             sortable: true
           },
           {
-            key: 'sign_in_score',
+            key: 'signin_score',
             label: 'Sign-Ins',
             class: 'text-center',
             sortable: true
@@ -240,7 +240,7 @@
             class: 'text-center'
           },
           {
-            key: 'sign_in_score',
+            key: 'signin_score',
             label: 'Sign-Ins',
             class: 'text-center',
             sortable: true

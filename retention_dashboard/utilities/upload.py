@@ -34,10 +34,13 @@ def process_upload(upload):
         dp.student_number = row.get("student_no")
         dp.netid = row.get("uw_netid")
         dp.premajor = row.get("premajor")
+        dp.is_stem = row.get("stem")
+        dp.is_freshman = row.get("incoming_freshman")
         dp.activity_score = row.get("activity")
         dp.assignment_score = row.get("assignments")
         dp.grade_score = row.get("grades")
         dp.priority_score = row.get("pred")
+        dp.signin_score = row.get("sign_in")
         dp.advisor = advisor
         dp.has_a_term = has_a
         dp.has_b_term = has_b
