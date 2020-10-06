@@ -16,5 +16,8 @@
   },
   "globals": {
     "$cookies": false
+  },
+  "parserOptions": {
+    "ecmaVersion": 9
   }
 }

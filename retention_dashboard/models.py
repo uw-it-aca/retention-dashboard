@@ -28,10 +28,13 @@ class DataPoint(models.Model):
     student_number = models.IntegerField()
     netid = models.CharField(max_length=12)
     premajor = models.BooleanField()
+    is_stem = models.BooleanField(default=False)
+    is_freshman = models.BooleanField(default=False)
     priority_score = models.FloatField()
     activity_score = models.FloatField()
     assignment_score = models.FloatField()
     grade_score = models.FloatField()
+    signin_score = models.FloatField(default=0.0)
     upload = models.ForeignKey("Upload", on_delete=models.CASCADE)
     advisor = models.ForeignKey("Advisor", on_delete=models.PROTECT, null=True)
     has_a_term = models.BooleanField(default=False)
@@ -113,6 +116,14 @@ class DataPoint(models.Model):
         return data_queryset.filter(premajor=is_premajor)
 
     @staticmethod
+    def filter_by_freshman(data_queryset, is_freshman):
+        return data_queryset.filter(is_freshman=is_freshman)
+
+    @staticmethod
+    def filter_by_stem(data_queryset, is_stem):
+        return data_queryset.filter(is_stem=is_stem)
+
+    @staticmethod
     def filter_by_advisor(data_queryset, advisor_netid):
         """
         Hard code this to EOP advisors for now, if we get other types add that
@@ -142,7 +153,10 @@ class DataPoint(models.Model):
                 "activity_score": self.activity_score,
                 "assignment_score": self.assignment_score,
                 "grade_score": self.grade_score,
+                "signin_score": self.signin_score,
                 "is_premajor": self.premajor,
+                "is_freshman": self.is_freshman,
+                "is_stem": self.is_stem,
                 "summer_term_string": self.get_summer_string()
                 }
         if self.advisor is not None:

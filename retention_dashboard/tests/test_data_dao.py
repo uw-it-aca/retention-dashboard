@@ -61,6 +61,22 @@ class DataTest(TestCase):
         data = get_filtered_data("Premajor", self.week, text_filter="J")
         self.assertEqual(len(data), 3)
 
+    def test_stem_filter(self):
+        data = get_filtered_data("Premajor", self.week, stem_filter=True)
+        self.assertEqual(len(data), 1)
+
+    def test_freshman_filter(self):
+        data = get_filtered_data("Premajor", self.week, freshman_filter=True)
+        self.assertEqual(len(data), 4)
+
+    def test_signins_filter(self):
+        data = get_filtered_data("Premajor", self.week,
+                                 signins_filters=["low"])
+        self.assertEqual(len(data), 1)
+        data = get_filtered_data("Premajor", self.week,
+                                 signins_filters=["avg"])
+        self.assertEqual(len(data), 3)
+
 
 class AdvisorTest(TestCase):
     def setUp(self):

@@ -61,10 +61,21 @@ def get_row(row, headers):
     assi = row['assignments']
     grade = row['grades']
     pred = row['pred']
+    freshman = row['incoming_freshman']
+    stem = row['stem']
+    sign_in = row['sign_in']
 
     advisor_name, advisor_netid = random.choice(advisors)
-    summer = row['summer']
-    if "adviser_name" in headers:
+    if "summer" in headers:
+        summer = row['summer']
+        if "adviser_name" in headers:
+            return [netid, stu_num, name, premajor, acti, assi, grade, summer,
+                    pred, advisor_name, advisor_netid, sign_in, stem, freshman]
         return [netid, stu_num, name, premajor, acti, assi, grade, summer,
-                pred, advisor_name, advisor_netid]
-    return [netid, stu_num, name, premajor, acti, assi, grade, summer, pred]
+                pred, sign_in, stem, freshman]
+    else:
+        if "adviser_name" in headers:
+            return [netid, stu_num, name, premajor, acti, assi, grade, pred,
+                    advisor_name, advisor_netid, sign_in, stem, freshman]
+        return [netid, stu_num, name, premajor, acti, assi, grade, pred,
+                sign_in, stem, freshman]
