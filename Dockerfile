@@ -2,7 +2,7 @@ FROM acait/django-container:1.0.22 as django
 
 USER root
 RUN apt-get update
-RUN apt-get install -y libpq-dev postgresql
+RUN apt-get install -y libpq-dev postgresql-client
 USER acait
 
 ADD --chown=acait:acait retention_dashboard/VERSION /app/retention_dashboard/
