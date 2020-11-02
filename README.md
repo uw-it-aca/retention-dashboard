@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.com/uw-it-aca/retention-dashboard.svg?branch=master)](https://travis-ci.com/uw-it-aca/retention-dashboard)
 # retention-dashboard
 
 Build Instructions:
