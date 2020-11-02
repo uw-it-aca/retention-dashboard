@@ -2,47 +2,92 @@ ingress:
   enabled: true
   type: nginx
   tls:
-    prereq:
-      secretName: retention.uw.edu
+    retention-dashboard:
+      secretName: retention.uw.edu-ingress-cert
       hosts:
         - retention.uw.edu
   hosts:
-    prereq:
+    retention-dashboard:
       host: retention.uw.edu
       paths:
         - "/"
   annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
     nginx.ingress.kubernetes.io/proxy-body-size: "50m"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "500"
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 4
+targetAverageUtilization: 100
+resources:
+  limits:
+    cpu: 1.0
+    memory: 768Mi
+  requests:
+    cpu: 100m
+    memory: 700Mi
+lifecycle:
+  enabled: true
+  preStop:
+    enabled: true
+affinity:
+   podsSpanNodes: true
+readiness:
+  enabled: true
 database:
   engine: postgres
-  secretName: retention-v1-prod-gcp-sql-credentials
-  hostname: retention-v1
+  secretName: retention.uw.edu-sql-secrets
+  hostname: retention-db
   name: retention-prod
 externalService:
   enabled: true
-  name: retention-v1
+  name: retention-db
   type: ClusterIP
   serviceAddress: 172.18.1.39
   servicePort: 5432
 externalSecrets:
   enabled: true
   secrets:
-    - name: prod.retention.uw.edu-secrets
+    - name: retention.uw.edu-secrets
       externalKey: axdd/kv/data/retention/prod/secrets
       data:
         - name: django-secret
           property: django-secret
-        - name: ga_key
-          property: ga_key
+        - name: ga-key
+          property: ga-key
+    - name: retention.uw.edu-sql-secrets
+      externalKey: axdd/kv/data/retention/prod/sql-secrets
+      data:
+        - name: username
+          property: username
+        - name: password
+          property: password
+    - name: retention.uw.edu-uwca-certs
+      externalKey: axdd/kv/data/retention/prod/uwca-certs
+      data:
+        - name: retention.uw.edu-uwca.cert
+          property: retention.uw.edu-uwca.cert
+        - name: retention.uw.edu-uwca.key
+          property: retention.uw.edu-uwca.key
+    - name: retention.uw.edu-ic-certs
+      externalKey: axdd/kv/data/retention/prod/ic-certs
+      data:
+        - name: retention.uw.edu-ic.cert
+          property: retention.uw.edu-ic.cert
+    - name: retention.uw.edu-uw-idp-cert
+      externalKey: axdd/kv/data/idp-cert
+      data:
+        - name: uw-idp-cert
+          property: cert
 repo: retention-dashboard
 instance: prod
 branch: develop
 certs:
   mounted: true
-  certPath: /certs/tls.crt
-  keyPath: /certs/tls.key
-  secretName: retention-prod-uwca
+  certPath: /certs/retention.uw.edu-uwca.cert
+  keyPath: /certs/retention.uw.edu-uwca.key
+  secretName: retention.uw.edu-uwca-certs
 image:
   repository: registry.hub.docker.com/acait/retention-dashboard
   tag: IMAGE_TAG
@@ -53,26 +98,24 @@ environmentVariables:
     value: SAML
   - name: CLUSTER_CNAME
     value: retention.uw.edu
-  - name: SP_CERT
-    value: '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'
-  - name: IDP_CERT
-    value: 'MIID/TCCAuWgAwIBAgIJAMoYJbDt9lKKMA0GCSqGSIb3DQEBBQUAMFwxCzAJBgNVBAYTAlVTMQswCQYDVQQIEwJXQTEhMB8GA1UEChMYVW5pdmVyc2l0eSBvZiBXYXNoaW5ndG9uMR0wGwYDVQQDExRpZHAudS53YXNoaW5ndG9uLmVkdTAeFw0xMTA0MjYxOTEwMzlaFw0yMTA0MjMxOTEwMzlaMFwxCzAJBgNVBAYTAlVTMQswCQYDVQQIEwJXQTEhMB8GA1UEChMYVW5pdmVyc2l0eSBvZiBXYXNoaW5ndG9uMR0wGwYDVQQDExRpZHAudS53YXNoaW5ndG9uLmVkdTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMH9G8m68L0Hf9bmf4/7c+ERxgDQrbq50NfSi2YTQWc1veUIPYbZy1agSNuc4dwn3RtC0uOQbdNTYUAiVTcYgaYceJVB7syWf9QyGIrglZPMu98c5hWb7vqwvs6d3s2Sm7tBib2v6xQDDiZ4KJxpdAvsoPQlmGdgpFfmAsiYrnYFXLTHgbgCc/YhV8lubTakUdI3bMYWfh9dkj+DVGUmt2gLtQUzbuH8EU44vnXgrQYSXNQkmRcyoE3rj4Rhhbu/p5D3P+nuOukLYFOLRaNeiiGyTu3P7gtc/dy/UjUrf+pH75UUU7Lb369dGEfZwvVtITXsdyp0pBfun4CP808H9N0CAwEAAaOBwTCBvjAdBgNVHQ4EFgQUP5smx3ZYKODMkDglkTbduvLcGYAwgY4GA1UdIwSBhjCBg4AUP5smx3ZYKODMkDglkTbduvLcGYChYKReMFwxCzAJBgNVBAYTAlVTMQswCQYDVQQIEwJXQTEhMB8GA1UEChMYVW5pdmVyc2l0eSBvZiBXYXNoaW5ndG9uMR0wGwYDVQQDExRpZHAudS53YXNoaW5ndG9uLmVkdYIJAMoYJbDt9lKKMAwGA1UdEwQFMAMBAf8wDQYJKoZIhvcNAQEFBQADggEBAEo7c2CNHEI+Fvz5DhwumU+WHXqwSOK47MxXwNJVpFQ9GPR2ZGDAq6hzLJLAVWcY4kB3ECDkRtysAWSFHm1roOU7xsU9f0C17QokoXfLNC0d7KoivPM6ctl8aRftU5moyFJkkJX3qSExXrl053uxTOQVPms4ypkYv1A/FBZWgSC8eNoYnBnv1Mhy4m8bfeEN7qT9rFoxh4cVjMH1Ykq7JWyFXLEB4ifzH4KHyplt5Ryv61eh6J1YPFa2RurVTyGpHJZeOLUIBvJu15GzcexuDDXe0kg7sHD6PbK0xzEF/QeXP/hXzMxR9kQXB/IR/b2k4ien+EM3eY/ueBcTZ95dgVM='
   - name: SAML_FORCE_AUTHN
     value: "True"
   - name: SP_USE_2FA
     value: "True"
-
 environmentVariablesSecrets:
   gaKey:
     name: GA_KEY
-    secretName: prod.retention.uw.edu-secrets
-    secretKey: ga_key
+    secretName: retention.uw.edu-secrets
+    secretKey: ga-key
   djangoSecret:
     name: DJANGO_SECRET
-    secretName: prod.retention.uw.edu-secrets
+    secretName: retention.uw.edu-secrets
     secretKey: django-secret
-
-metrics:
-  enabled: false
-  serviceMonitor:
-    enabled: false
+  samlSPCert:
+    name: SP_CERT
+    secretName: retention.uw.edu-ic-certs
+    secretKey: retention.uw.edu-ic.cert
+  samlIDPCert:
+    name: IDP_CERT
+    secretName: retention.uw.edu-uw-idp-cert
+    secretKey: uw-idp-cert
