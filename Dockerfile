@@ -1,4 +1,4 @@
-FROM acait/django-container:1.0.22 as django
+FROM acait/django-container:1.1.17 as app-container
 
 USER root
 RUN apt-get update
@@ -11,13 +11,10 @@ ADD --chown=acait:acait requirements.txt /app/
 
 RUN . /app/bin/activate && pip install -r requirements.txt
 RUN . /app/bin/activate && pip install psycopg2
-
-ADD --chown=acait:acait . /app/
-ADD --chown=acait:acait docker/app_deploy.sh /scripts/app_deploy.sh
-ADD --chown=acait:acait docker/ project/
-RUN chmod u+x /scripts/app_deploy.sh
 RUN . /app/bin/activate && pip install django-webpack-loader
 
+ADD --chown=acait:acait . /app/
+ADD --chown=acait:acait docker/ project/
 
 FROM node:8.15.1-jessie AS wpack
 ADD . /app/
@@ -25,8 +22,7 @@ WORKDIR /app/
 RUN npm install .
 RUN npx webpack --mode=production
 
-FROM django
-
+FROM app-container
 
 COPY --chown=acait:acait --from=wpack /app/retention_dashboard/static/retention_dashboard/bundles/* /app/retention_dashboard/static/retention_dashboard/bundles/
 COPY --chown=acait:acait --from=wpack /app/retention_dashboard/static/ /static/
