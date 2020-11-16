@@ -69,9 +69,9 @@
             Is STEM <span><a id="stem_info" href="#" class="rd-info-link" role="button" title="What is STEM filter?"><span class="sr-only">What is the STEM filter?</span><b-icon icon="info-circle-fill" variant="primary" /></a>
             <b-popover target="stem_info" triggers="hover focus">
               <template v-slot:title>
-                STEM filter
+                Is STEM 
               </template>
-              Info text about STEM filter goes here.
+              Includes students in pre-science, pre-engineering and related pre-majors.
             </b-popover></span>
           </b-form-checkbox>
           <b-form-checkbox v-model="freshman_filter">
