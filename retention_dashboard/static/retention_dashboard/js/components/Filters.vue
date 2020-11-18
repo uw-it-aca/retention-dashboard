@@ -337,7 +337,7 @@
     }
 
     .rd-student-filters .rd-info-link {
-        font-size: 0.9rem;
+      font-size: 0.9rem;
     }
 
     .rd-student-filters .bi-info-circle-fill {
