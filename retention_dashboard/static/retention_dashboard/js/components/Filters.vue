@@ -66,7 +66,7 @@
             Is Pre-Major
           </b-form-checkbox>
           <b-form-checkbox v-model="stem_filter">
-            Is STEM <span><a id="stem_info" href="#" class="rd-info-link" role="button" title="What is STEM filter?"><span class="sr-only">What is the STEM filter?</span><b-icon icon="info-circle-fill" variant="primary" /></a>
+            Is STEM<span><a id="stem_info" href="#" class="rd-info-link" role="button" title="What is the 'Is STEM' filter?"><span class="sr-only"> What is the 'Is STEM' filter?</span><b-icon icon="info-circle-fill" variant="primary" /></a>
             <b-popover target="stem_info" triggers="hover focus">
               <template v-slot:title>
                 Is STEM 
@@ -334,6 +334,12 @@
     .rd-advisor-filter {
       margin-top: 0.5rem;
       width: 90%;
+    }
+
+    .rd-student-filters {
+      .rd-info-link {
+        font-size: .9rem;
+      }
     }
 
     .form-group {
