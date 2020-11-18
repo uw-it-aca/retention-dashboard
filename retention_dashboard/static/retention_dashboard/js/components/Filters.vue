@@ -336,10 +336,12 @@
       width: 90%;
     }
 
-    .rd-student-filters {
-      .rd-info-link {
-        font-size: .9rem;
-      }
+    .rd-student-filters .rd-info-link {
+        font-size: 0.9rem;
+    }
+
+    .rd-student-filters .bi-info-circle-fill {
+      transform: translateY(-4%);
     }
 
     .form-group {
