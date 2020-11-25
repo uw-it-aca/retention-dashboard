@@ -27,24 +27,42 @@ def process_upload(upload):
             _get_summer_terms_from_string(row.get('summer'))
 
         dp = DataPoint()
-        dp.type = upload.type
-        dp.week = upload.week
-        dp.upload = upload
-        dp.student_name = row.get("student_name_lowc")
-        dp.student_number = row.get("student_no")
-        dp.netid = row.get("uw_netid")
-        dp.premajor = row.get("premajor")
-        dp.is_stem = row.get("stem")
-        dp.is_freshman = row.get("incoming_freshman")
-        dp.activity_score = row.get("activity")
-        dp.assignment_score = row.get("assignments")
-        dp.grade_score = row.get("grades")
-        dp.priority_score = row.get("pred")
-        dp.signin_score = row.get("sign_in")
-        dp.advisor = advisor
-        dp.has_a_term = has_a
-        dp.has_b_term = has_b
-        dp.has_full_term = has_full
+        if upload.type:
+            dp.type = upload.type
+        if upload.week:
+            dp.week = upload.week
+        if upload:
+            dp.upload = upload
+        if row.get("student_name_lowc"):
+            dp.student_name = row.get("student_name_lowc")
+        if row.get("student_no"):
+            dp.student_number = row.get("student_no")
+        if row.get("uw_netid"):
+            dp.netid = row.get("uw_netid")
+        if row.get("premajor"):
+            dp.premajor = row.get("premajor")
+        if row.get("stem"):
+            dp.is_stem = row.get("stem")
+        if row.get("incoming_freshman"):
+            dp.is_freshman = row.get("incoming_freshman")
+        if row.get("activity"):
+            dp.activity_score = row.get("activity")
+        if row.get("assignments"):
+            dp.assignment_score = row.get("assignments")
+        if row.get("grades"):
+            dp.grade_score = row.get("grades")
+        if row.get("pred"):
+            dp.priority_score = row.get("pred")
+        if row.get("sign_in"):
+            dp.signin_score = row.get("sign_in")
+        if advisor:
+            dp.advisor = advisor
+        if has_a:
+            dp.has_a_term = has_a
+        if has_b:
+            dp.has_b_term = has_b
+        if has_full:
+            dp.has_full_term = has_full
         data_points.append(dp)
     DataPoint.objects.bulk_create(data_points)
 

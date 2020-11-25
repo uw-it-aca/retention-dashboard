@@ -43,7 +43,7 @@
           mimeType: 'multipart/form-data',
           contentType: false,
           processData: false,
-          dataTyte: 'json',
+          dataType: 'json',
           headers: {
             'X-CSRFToken': csrf
           }
@@ -65,7 +65,7 @@
           method: "DELETE",
           contentType: false,
           processData: false,
-          dataTyte: 'json',
+          dataType: 'json',
           headers: {
             'X-CSRFToken': csrf
           }
@@ -133,7 +133,8 @@
   </div>
   <div>
     <h2>Data Admin</h2>
-  <p>Only one file upload is allowed per type (eg Premajor) and week combination.  Add a new week above if it isn't in the dropdown.</p>
+    <h3>Single file upload</h3>
+    <p>Only one file upload is allowed per type (eg Premajor) and week combination.  Add a new week above if it isn't in the dropdown.</p>
     <form id="data_form">
       <input id="file" type="file">
       <br />
@@ -150,16 +151,43 @@
       </select>
     <input type="submit" value="Add Dataset">
     </form>
-  <div>
-    <h3>Existing Uploads</h3>
-  <p>Deleting a upload will delete all data associated with it, so this has user facing consequences.  Should only be needed if a file is erroneously uploaded</p>
-    <table>
-      <tr><th>Date</th><th>User</th><th>Type</th><th>Week</th><th>Delete</th></tr>
-      {% for upload in uploads %}
-        <tr><td>{{upload.created_on}}</td><td>{{upload.uploaded_by}}</td><td>{{upload.get_type_display}}</td><td>{{ upload.week.year }} - {{ upload.week.get_quarter_display }} - Week {{ upload.week.number }}</td><td><button class="delete" value="{{ upload.id }}">x</button></td></tr>
-      {% endfor %}
-    </table>
-  </div>
+    <div>
+      <h3>Bulk upload</h2>
+      <p>Upload a directory of files. The directory structure must follow a standard format. For example:</p>
+      <pre>
+  +-- data/<br/>
+      +-- spr20/<br/>
+      |    +-- 1/ or week-01/<br/>
+      |    |    |-- premajor-students.csv<br/>
+      |    |    |-- eop-students.csv<br/>
+      |    |    |-- international-students.csv<br/>
+      |    +-- 2/ or week-02/<br/>
+      |    |    |-- premajor-students.csv<br/>
+      |    |    |-- eop-students.csv<br/>
+      |    |    |-- international-students.csv<br/>
+      |    +-- 3/, 4/, ... etc<br/>
+      +-- su20/, au20/, wtr20/ ... etc<br/>
+      </pre>
+      <p>Important notes:
+        <ul>
+          <li>The quarter, year, and week values are automatically extracted from the directory names.</li>
+          <li>Quarter directory names must be "spr" (Spring), "su" (Summer), "au" (Autumn), or "wtr" (Winter), followed by a two digit year.</li>
+          <li>Week directory names must be plain numbers or include the "week-" prefix.</li>
+          <li>File names must be either "premajor-students.csv", "eop-students.csv", or "international-students.csv".</li>
+          <li>Week objects are automatically created by the bulk upload.</li>
+        </ul>
+      </p>
+    </div>
+    <div>
+      <h3>Existing Uploads</h3>
+      <p>Deleting a upload will delete all data associated with it, so this has user facing consequences.  Should only be needed if a file is erroneously uploaded</p>
+      <table>
+        <tr><th>Date</th><th>User</th><th>Type</th><th>Week</th><th>Delete</th></tr>
+        {% for upload in uploads %}
+          <tr><td>{{upload.created_on}}</td><td>{{upload.uploaded_by}}</td><td>{{upload.get_type_display}}</td><td>{{ upload.week.year }} - {{ upload.week.get_quarter_display }} - Week {{ upload.week.number }}</td><td><button class="delete" value="{{ upload.id }}">x</button></td></tr>
+        {% endfor %}
+      </table>
+    </div>
   </div>
 </div>
 </body>

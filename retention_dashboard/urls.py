@@ -33,6 +33,6 @@ urlpatterns = [
     re_path(r'^api/admin/dataset/',
             DataAdmin.as_view(),
             name="dataset_admin_view"),
-    re_path(r'^admin/', AdminView.as_view()),
+    re_path(r'^admin/?$', AdminView.as_view()),
     re_path(r'^', LandingView.as_view()),
 ]
