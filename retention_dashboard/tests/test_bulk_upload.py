@@ -1,23 +1,10 @@
 import os
 import unittest
-from django.core.management import call_command
 from retention_dashboard.management.commands.bulk_upload import Command
-from io import StringIO
 from unittest import mock
 
 
 class TestBulkUpload(unittest.TestCase):
-
-    def call_command(self, *args, **kwargs):
-        out = StringIO()
-        call_command(
-            "bulk_upload",
-            *args,
-            stdout=out,
-            stderr=StringIO(),
-            **kwargs,
-        )
-        return out.getvalue()
 
     def test_parse_directories_and_files(self):
 
