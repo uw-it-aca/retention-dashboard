@@ -155,7 +155,7 @@ class Command(BaseCommand):
             file_type = 3
         else:
             raise ValueError("File type for {} is unknown."
-                                .format(file_name))
+                             .format(file_name))
         return file_type
 
     def get_quarter_info(self, quarter_code):
@@ -175,8 +175,8 @@ class Command(BaseCommand):
             return quarter_definitions[quarter_code.upper()]
         except KeyError:
             raise ValueError("Quarter code {} is undefined. Options are "
-                                "SPR, SPR, AU, and WTR."
-                                .format(quarter_code))
+                             "SPR, SPR, AU, and WTR."
+                             .format(quarter_code))
 
     def get_week_from_dir_name(self, dir_name):
         """
@@ -196,9 +196,9 @@ class Command(BaseCommand):
                 week = int(dn)
         except ValueError:
             raise ValueError("Unable to parse the week number from "
-                                "directory {}. The directory name be either "
-                                "numeric or follow the pattern week-##."
-                                .format(dir_name))
+                             "directory {}. The directory name be either "
+                             "numeric or follow the pattern week-##."
+                             .format(dir_name))
         return week
 
     def is_quarater_dir(self, dir_name):
@@ -211,9 +211,9 @@ class Command(BaseCommand):
         """
         dn = dir_name.upper()
         if(dn.startswith("SPR") or
-            dn.startswith("SU") or
-            dn.startswith("AU") or
-            dn.startswith("WTR")):
+           dn.startswith("SU") or
+           dn.startswith("AU") or
+           dn.startswith("WTR")):
             return True
         else:
             return False

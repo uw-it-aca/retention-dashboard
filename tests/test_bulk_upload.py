@@ -67,7 +67,7 @@ class TestBulkUpload(unittest.TestCase):
         self.assertEqual(week2file2["type"], 3)
         self.assertEqual(week2file2["path"],
                          "retention_dashboard/data/international-students.csv")
-    
+
         week3 = weeks[1]
         self.assertEqual(week3["number"], 3)
         week3files = sorted(week3["files"], key=lambda x: x["type"])
