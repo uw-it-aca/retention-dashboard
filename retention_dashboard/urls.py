@@ -2,6 +2,7 @@ from django.urls import re_path
 from retention_dashboard.views.pages import LandingView, AdminView
 from retention_dashboard.views.api.admin import (WeekAdmin,
                                                  DataAdmin,
+                                                 BulkDataAdmin,
                                                  MockDataAdmin)
 from retention_dashboard.views.api.data import (DataView,
                                                 WeekView,
@@ -33,6 +34,9 @@ urlpatterns = [
     re_path(r'^api/admin/dataset/',
             DataAdmin.as_view(),
             name="dataset_admin_view"),
+    re_path(r'^api/admin/bulk_dataset/',
+            BulkDataAdmin.as_view(),
+            name="bulk_dataset_admin_view"),
     re_path(r'^admin/?$', AdminView.as_view()),
     re_path(r'^', LandingView.as_view()),
 ]

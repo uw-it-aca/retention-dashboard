@@ -44,32 +44,38 @@ class TestBulkUpload(unittest.TestCase):
         week2files = sorted(week2["files"], key=lambda x: x["type"])
         week2file0 = week2files[0]
         self.assertEqual(week2file0["type"], 1)
-        self.assertEqual(week2file0["path"],
-                         "retention_dashboard/data/premajor-students.csv")
+        self.assertEqual(
+            week2file0["path"],
+            "retention_dashboard/data/su20/2/premajor-students.csv")
         week2file1 = week2files[1]
         self.assertEqual(week2file1["type"], 2)
-        self.assertEqual(week2file1["path"],
-                         "retention_dashboard/data/eop-students.csv")
+        self.assertEqual(
+            week2file1["path"],
+            "retention_dashboard/data/su20/2/eop-students.csv")
         week2file2 = week2files[2]
         self.assertEqual(week2file2["type"], 3)
-        self.assertEqual(week2file2["path"],
-                         "retention_dashboard/data/international-students.csv")
+        self.assertEqual(
+            week2file2["path"],
+            "retention_dashboard/data/su20/2/international-students.csv")
 
         week3 = weeks[1]
         self.assertEqual(week3["number"], 3)
         week3files = sorted(week3["files"], key=lambda x: x["type"])
         week3file0 = week3files[0]
         self.assertEqual(week3file0["type"], 1)
-        self.assertEqual(week3file0["path"],
-                         "retention_dashboard/data/premajor-students.csv")
+        self.assertEqual(
+            week3file0["path"],
+            "retention_dashboard/data/su20/week-3/premajor-students.csv")
         week3file1 = week3files[1]
         self.assertEqual(week3file1["type"], 2)
-        self.assertEqual(week3file1["path"],
-                         "retention_dashboard/data/eop-students.csv")
+        self.assertEqual(
+            week3file1["path"],
+            "retention_dashboard/data/su20/week-3/eop-students.csv")
         week3file2 = week3files[2]
         self.assertEqual(week3file2["type"], 3)
-        self.assertEqual(week3file2["path"],
-                         "retention_dashboard/data/international-students.csv")
+        self.assertEqual(
+            week3file2["path"],
+            "retention_dashboard/data/su20/week-3/international-students.csv")
 
 
 if __name__ == "__main__":
