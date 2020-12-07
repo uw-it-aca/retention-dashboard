@@ -1,10 +1,12 @@
-import json
+import io
 import os
+import tempfile
 import zipfile
 from django.conf import settings
 from django.utils.decorators import method_decorator
 from django.db.utils import IntegrityError
 from django.core.files.uploadhandler import TemporaryFileUploadHandler
+from django.http import HttpResponse, FileResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.core.management import call_command
 from uw_saml.decorators import group_required
@@ -91,6 +93,7 @@ class BulkDataAdmin(RESTDispatch):
 
     def post(self, request):
         form = BulkDataForm(request.POST, request.FILES)
+        logfile_name = None
         if form.is_valid():
             uploaded_file = request.FILES.get("upload")
             uploaded_file_path = uploaded_file.file.name
@@ -105,30 +108,40 @@ class BulkDataAdmin(RESTDispatch):
                         extracted = zip_file.namelist()
                         extracted_data_dir, _ = \
                             os.path.split(os.path.join(tmp_path, extracted[0]))
-                        command_args = \
-                            ["--path={}".format(extracted_data_dir),
-                             "--user={}".format(request.user.username)]
-                        if request.POST.get("skip_unknown_files") == "true":
-                            command_args.append("--skip_unknown_files")
-                        json_results = call_command("bulk_upload",
-                                                    *command_args)
-                        results = json.loads(json_results)
-                        return self.json_response(
-                            {"created": True,
-                             "uploads": results["uploads"],
-                             "attempted_uploads": results["attempted_uploads"],
-                             "duplicate_skips": results["duplicate_skips"]})
+                        with tempfile.NamedTemporaryFile(delete=False) as \
+                                log_file:
+                            logfile_name = log_file.name
+                            command_args = \
+                                ["--path={}".format(extracted_data_dir),
+                                 "--user={}".format(request.user.username),
+                                 "--log_file={}".format(logfile_name)]
+                            call_command("bulk_upload",
+                                         *command_args)
+
                 except InvalidFileException as ex:
                     return self.error_response(status=400, message=ex)
                 except InvalidUploadException as ex:
                     return self.error_response(status=400, message=ex)
                 except Exception as ex:
                     return self.error_response(status=500, message=ex)
-                return self.json_response({"created": True})
+                _, logfile_name = os.path.split(logfile_name)
+                return self.json_response({"created": True,
+                                           "logfile": logfile_name})
         else:
             return self.error_response(
                 status=400,
                 message=(form.errors))
+
+
+@method_decorator(group_required(settings.ADMIN_USERS_GROUP),
+                  name='dispatch')
+class BulkDataLogFile(RESTDispatch):
+
+    def get(self, request, logfile):
+        result = os.path.join(tempfile.gettempdir(), logfile)
+        return FileResponse(open(result, 'r').read(),
+                            as_attachment=True,
+                            filename="bulk_upload.txt")
 
 
 @method_decorator(group_required(settings.ADMIN_USERS_GROUP),

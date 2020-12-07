@@ -185,7 +185,8 @@
       sorted_weeks () {
         var sorted = this.weeks;
         if(sorted.length > 0){
-          sorted.sort((a, b) => (a.value > b.value) ? 1 : -1);
+          sorted.sort((a, b) => ((a.quarter, a.year, b.number) >
+                                 (b.quarter, b.year, b.number)) ? -1 : 1);
         }
         return sorted;
       },

@@ -2,7 +2,9 @@ from retention_dashboard.models import DataPoint, Week
 
 
 def get_weeks_with_data():
-    unique_weeks = DataPoint.objects.values('week').distinct()
+    unique_weeks = DataPoint.objects.values('week').distinct().order_by(
+                    'week__year', 'week__quarter', 'week__number'
+                   )
     week_objects = []
     for week in unique_weeks:
         week_obj = Week.objects.get(id=week['week'])

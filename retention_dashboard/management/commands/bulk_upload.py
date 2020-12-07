@@ -7,6 +7,7 @@ from django.db.utils import IntegrityError
 from django.core.management.base import BaseCommand
 from retention_dashboard.models import Upload, Week
 from retention_dashboard.utilities.upload import process_upload
+from retention_dashboard.utilities.logger import RetentionLogger
 
 
 class InvalidUploadException(Exception):
@@ -41,10 +42,11 @@ class Command(BaseCommand):
                             type=str,
                             help="Username label for upload",
                             required=True)
-        parser.add_argument("--skip_unknown_files",
-                            help=("Skip files that don't match the "
-                                  "standard naming convention"),
-                            action="store_true")
+        parser.add_argument("--log_file",
+                            type=str,
+                            help=("Path of log file. If no log path is "
+                                  "supplied then stdout is used"),
+                            required=False)
         group = parser.add_argument_group(
             """
             The year, quarter, and week arguments for this utility are by
@@ -97,18 +99,12 @@ class Command(BaseCommand):
         2.) Filters the  abstracted directory structure to remove any undesired
         directories.
         3.) Parses and uploads all filtered files to the database.
-
-       :return: Tuple containing number of successfully loaded files,
-            number of attempted unique file loads, and number of files that we
-            skipped because they already exists in the database.
-        :rtype: tuple(int, int)
         """
+        self.logger = RetentionLogger(options["log_file"])
         path = options["path"]
         user = options["user"]
-        skip_unknown_files = options["skip_unknown_files"]
         dir_and_files = \
-            self.parse_directories_and_files(
-                path, skip_unknown_files=skip_unknown_files)
+            self.parse_directories_and_files(path)
         filtered = self.filter_dir_and_files(dir_and_files,
                                              options["year_filter"],
                                              options["quarter_filter"],
@@ -116,7 +112,10 @@ class Command(BaseCommand):
         if filtered:
             uploaded_files_count = 0
             attempted_file_uploads = 0
-            duplicate_file_uploads = 0
+            # files with an unrecognized name
+            invalid_files_count = 0
+            # files that attempt to load but results in an IntegrityError
+            integrity_errors_count = 0
             for params in filtered:
                 for wk in params["weeks"]:
                     for f in wk["files"]:
@@ -124,9 +123,10 @@ class Command(BaseCommand):
                         try:
                             document = fd.read()
                         except UnicodeDecodeError as ex:
+                            invalid_files_count += 1
                             raise InvalidFileException(
                                 message=("Error reading: {}. {}"
-                                         .format(f["path"], ex))
+                                         .format(f["relative_path"], ex))
                             )
                         attempted_file_uploads += 1
                         try:
@@ -141,23 +141,25 @@ class Command(BaseCommand):
                                                             week=week_obj,
                                                             uploaded_by=user)
                             process_upload(upload)
-                            if created:
-                                uploaded_files_count += 1
-                            else:
-                                duplicate_file_uploads += 1
-                        except IntegrityError:
+                            uploaded_files_count += 1
+                        except IntegrityError as ex:
                             # continue if unique constraint is violated
-                            duplicate_file_uploads += 1
+                            self.logger.warning(
+                                "IntegrityError File: {}"
+                                .format(f["relative_path"]))
+                            self.logger.warning("IntegrityError: {}"
+                                                .format(ex))
+                            integrity_errors_count += 1
                             pass
                         fd.close()
-            print("Successfully loaded {} of {} files. Skipped {} already "
-                  "loaded files."
-                  .format(uploaded_files_count, attempted_file_uploads,
-                          duplicate_file_uploads))
-            return json.dumps({
-                        "uploads": uploaded_files_count,
-                        "attempted_uploads": attempted_file_uploads,
-                        "duplicate_skips": duplicate_file_uploads})
+            self.logger.info("Skipped {} files that had an error when reading."
+                             .format(invalid_files_count))
+            self.logger.info("Skipped {} files that resulted in an "
+                             "IntegrityError."
+                             .format(integrity_errors_count))
+            self.logger.info("Successfully loaded {} of {} files."
+                             .format(uploaded_files_count,
+                                     attempted_file_uploads))
         else:
             raise Exception("No files under {} matching quarter_filter={}, "
                             "week_filter={}, year_filter={}"
@@ -198,11 +200,11 @@ class Command(BaseCommand):
         """
         file_type = None
         file_name = file_name.upper()
-        if ("PREMAJOR" in file_name and file_name.endswith(".CSV")):
+        if (file_name == "PREMAJOR-STUDENTS.CSV"):
             file_type = 1
-        elif ("EOP" in file_name and file_name.endswith(".CSV")):
+        elif (file_name == "EOP-STUDENTS.CSV"):
             file_type = 2
-        elif ("INTERNATIONAL" in file_name and file_name.endswith(".CSV")):
+        elif (file_name == "INTERNATIONAL-STUDENTS.CSV"):
             file_type = 3
         else:
             raise ValueError("File type for {} is unknown."
@@ -217,16 +219,17 @@ class Command(BaseCommand):
         :type value: str
         """
         quarter_definitions = {
-            "SPR": {"quarter_name": "Spring", "quarter": 1},
-            "SU": {"quarter_name": "Summer", "quarter": 2},
-            "AU": {"quarter_name": "August", "quarter": 3},
-            "WTR": {"quarter_name": "Winter", "quarter": 4},
+            "WTR": {"quarter_name": "Winter", "quarter": 1},
+            "SPR": {"quarter_name": "Spring", "quarter": 2},
+            "SU": {"quarter_name": "Summer", "quarter": 3},
+            "AU": {"quarter_name": "Autumn", "quarter": 4},
+            
         }
         try:
             return quarter_definitions[quarter_code.upper()]
         except KeyError:
             raise ValueError("Quarter code {} is undefined. Options are "
-                             "SPR, SPR, AU, and WTR."
+                             "WTR, SPR, SU, and AU."
                              .format(quarter_code))
 
     def get_week_from_dir_name(self, dir_name):
@@ -246,10 +249,14 @@ class Command(BaseCommand):
             else:
                 week = int(dn)
         except ValueError:
-            raise ValueError("Unable to parse the week number from "
-                             "directory {}. The directory name be either "
-                             "numeric or follow the pattern week-##."
-                             .format(dir_name))
+            raise ValueError("Skipping week directory. Unable to parse the "
+                             "week number from the directory {}. The "
+                             "directory name be either numeric or follow the "
+                             "pattern week-##.".format(dir_name))
+        if week < 1 or week > 52:
+            raise ValueError("Skipping week directory {}. Week {} is out of "
+                             "range. Weeks must be from 1-52."
+                             .format(dir_name, week))
         return week
 
     def is_quarater_dir(self, dir_name):
@@ -283,7 +290,7 @@ class Command(BaseCommand):
         else:
             return False
 
-    def parse_directories_and_files(self, path, skip_unknown_files=False):
+    def parse_directories_and_files(self, path):
         """
         Iterates over a standard directory structure to produce a list
         of dictionaries representing the data to upload.
@@ -333,6 +340,7 @@ class Command(BaseCommand):
         """
         params_list = []
         params = None
+        skipped_files_count = 0
         for root_path, qtr_dir_name in self.listdir_fullpath(path):
             params = {"quarter": None, "quarter_name": None, "year": None,
                       "weeks": []}
@@ -347,26 +355,33 @@ class Command(BaseCommand):
                 params["quarter"] = qtr_info["quarter"]
                 params["quarter_name"] = qtr_info["quarter_name"]
                 params["year"] = "20" + year
-                for _, week_dir in self.listdir_fullpath(qtr_dir):
-                    if self.is_week_dir(week_dir):
+                for _, week_dir_name in self.listdir_fullpath(qtr_dir):
+                    if self.is_week_dir(week_dir_name):
                         try:
                             # Parse week from second directory name
-                            week = self.get_week_from_dir_name(week_dir)
+                            week = self.get_week_from_dir_name(week_dir_name)
                         except ValueError as ex:
-                            raise InvalidUploadException(message=ex)
+                            self.logger.warning(ex)
+                            continue
                         # Process files
                         wk = {"number": week, "files": []}
-                        week_dir = os.path.join(qtr_dir, week_dir)
+                        week_dir = os.path.join(qtr_dir, week_dir_name)
                         for f in os.listdir(week_dir):
+                            relative_path = \
+                                ("{}/{}/{}"
+                                 .format(qtr_dir_name, week_dir_name, f))
                             try:
                                 file_type = self.get_file_type(f)
                             except ValueError:
-                                if skip_unknown_files:
-                                    print("Skipping {}. File type is unknown."
-                                          .format(f))
-                                    continue
+                                skipped_files_count += 1
+                                self.logger.warning(
+                                    "Skipping {}. File type is unknown."
+                                    .format(relative_path))
+                                continue
                             wk["files"].append({"path":
                                                 os.path.join(week_dir, f),
+                                                "relative_path":
+                                                relative_path,
                                                 "type": file_type})
                         if wk.get("files") is not None:
                             params["weeks"].append(wk)
@@ -384,6 +399,8 @@ class Command(BaseCommand):
                   message=("No files to process. Are you using the correct "
                            "directory structure. See the example on the "
                            "example in the docs."))
+        self.logger.info("Skipped {} unrecognized files."
+                         .format(skipped_files_count))
         return params_list
 
     def filter_dir_and_files(self, dir_and_files, year_filter,

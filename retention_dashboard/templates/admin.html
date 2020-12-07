@@ -20,7 +20,6 @@
         $('#add_dataset').prop( "disabled", disabled)
         // bulk upload form
         $('#id_upload').prop( "disabled", disabled);
-        $('#id_skip_unknown_files').prop( "disabled", disabled);
         $('#id_submit_bulk_upload').prop( "disabled", disabled);
         // delete buttons
         $('.delete').prop( "disabled", disabled);
@@ -124,8 +123,6 @@
         var csrf = jQuery("[name=csrfmiddlewaretoken]").val(),
                 data = new FormData();
         data.append('upload', $('#id_upload').get(0).files[0]);
-        data.append('skip_unknown_files',
-                    $('#id_skip_unknown_files').is(":checked"));
 
         $.ajax({
           url: "/api/admin/bulk_dataset/",
@@ -138,15 +135,18 @@
           headers: {
             'X-CSRFToken': csrf
           },
-          beforeSend: function (xhr) {
+          beforeSend: function (xhr) {  
             toggleDisabled(true);
           }
         }).done(function (response) {
           toggleDisabled(false);
-          alert("Successfully loaded " + response["uploads"] +
-                " of " + response["attempted_uploads"] + " files. " +
-                "Skipped " + response["duplicate_skips"] + " files.");
-          location.reload();
+          const a = document.createElement('a');
+          //a.style.display = 'none';
+          a.href = "/api/admin/bulk_dataset/" + response["logfile"] + "/";
+          // the filename you want
+          a.download = 'bulk_upload_log.txt';
+          document.body.appendChild(a);
+          a.click();
         }).fail(function (response){
           toggleDisabled(false);
           if (response.status === 400){
@@ -164,7 +164,7 @@
         $.ajax({
           url: "/api/admin/mock_data/",
           method: "PUT",
-          dataTyte: 'json',
+          dataType: 'json',
           headers: {
             'X-CSRFToken': csrf
           },
@@ -264,7 +264,7 @@
           <li>Week objects are automatically created by the bulk upload.</li>
           <li>File names must be either "premajor-students.csv", "eop-students.csv", or "international-students.csv".</li>
           <li>Files that fail the unique combined week and file-type database contraint will be skipped.</li>
-          <li>Use the "Skip unknown files" form option to not fail when when a unknown file is found.</li>
+          <li>A log file is downloaded once the upload process is completed.</li>
         </ul>
       </p>
       <form id="bulk_data_form">

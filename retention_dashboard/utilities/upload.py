@@ -16,6 +16,7 @@ def process_upload(upload):
         advisor = None
         if advisor_netid is not None and advisor_name is not None:
             if advisor_netid not in advisor_dict:
+                advisor_name = advisor_name.strip()
                 advisor, created = Advisor.objects.\
                     get_or_create(advisor_netid=advisor_netid,
                                   advisor_type=upload.type,
