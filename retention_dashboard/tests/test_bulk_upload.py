@@ -34,7 +34,7 @@ class TestBulkUpload(unittest.TestCase):
                     f["path"] = os.path.relpath(f["path"])
 
         result0 = result[0]
-        self.assertEqual(result0["quarter"], 2)
+        self.assertEqual(result0["quarter"], 3)
         self.assertEqual(result0["quarter_name"], "Summer")
         self.assertEqual(result0["year"], "2020")
 

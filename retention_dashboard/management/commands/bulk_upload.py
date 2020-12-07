@@ -1,5 +1,4 @@
 import fnmatch
-import json
 import os
 import re
 from copy import copy
@@ -32,6 +31,12 @@ class InvalidFileException(Exception):
 
 class Command(BaseCommand):
     help = "Upload a directory of data files in bulk."
+
+    def __init__(self, *args, **kwargs):
+        if not hasattr(self, "logger"):
+            # log to stdout
+            self.logger = RetentionLogger()
+        super().__init__(*args, **kwargs)
 
     def add_arguments(self, parser):
         parser.add_argument("--path",
@@ -223,7 +228,6 @@ class Command(BaseCommand):
             "SPR": {"quarter_name": "Spring", "quarter": 2},
             "SU": {"quarter_name": "Summer", "quarter": 3},
             "AU": {"quarter_name": "Autumn", "quarter": 4},
-            
         }
         try:
             return quarter_definitions[quarter_code.upper()]

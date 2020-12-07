@@ -1,4 +1,3 @@
-import io
 import os
 import tempfile
 import zipfile
@@ -6,7 +5,7 @@ from django.conf import settings
 from django.utils.decorators import method_decorator
 from django.db.utils import IntegrityError
 from django.core.files.uploadhandler import TemporaryFileUploadHandler
-from django.http import HttpResponse, FileResponse
+from django.http import FileResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.core.management import call_command
 from uw_saml.decorators import group_required
