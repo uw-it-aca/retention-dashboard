@@ -1,8 +1,7 @@
-import json
-from django.test import TestCase, Client
+from django.test import TestCase
 from retention_dashboard.dao.data import get_filtered_data, get_weeks_with_data
 from retention_dashboard.tests import create_initial_data
-from retention_dashboard.models import Week, Advisor, Upload
+from retention_dashboard.models import Week, Advisor
 
 
 class WeekTest(TestCase):

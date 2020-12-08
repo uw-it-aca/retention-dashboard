@@ -5,6 +5,7 @@ from uw_saml.decorators import group_required
 from django.conf import settings
 from retention_dashboard.models import Week, Upload
 from django.utils.decorators import method_decorator
+from retention_dashboard.views.api.forms import BulkDataForm
 
 
 class PageView(TemplateView):
@@ -35,6 +36,8 @@ class AdminView(PageView):
         context['weeks'] = Week.objects.all().order_by('year',
                                                        'quarter',
                                                        'number')
-        context['uploads'] = Upload.objects.all().order_by('week', 'type')
+        context['uploads'] = Upload.objects.all().order_by(
+                'week__year', 'week__quarter', 'week__number', 'type')
         context['debug'] = settings.DEBUG
+        context['bulkdataform'] = BulkDataForm()
         return context

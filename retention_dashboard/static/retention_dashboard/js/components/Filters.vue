@@ -67,12 +67,12 @@
           </b-form-checkbox>
           <b-form-checkbox v-model="stem_filter">
             Is STEM<span><a id="stem_info" href="#" class="rd-info-link" role="button" title="What is the 'Is STEM' filter?"><span class="sr-only"> What is the 'Is STEM' filter?</span><b-icon icon="info-circle-fill" variant="primary" /></a>
-            <b-popover target="stem_info" triggers="hover focus">
-              <template v-slot:title>
-                Is STEM 
-              </template>
-              Includes students in pre-science, pre-engineering and related pre-majors.
-            </b-popover></span>
+              <b-popover target="stem_info" triggers="hover focus">
+                <template v-slot:title>
+                  Is STEM 
+                </template>
+                Includes students in pre-science, pre-engineering and related pre-majors.
+              </b-popover></span>
           </b-form-checkbox>
           <b-form-checkbox v-model="freshman_filter">
             Is Freshman
@@ -185,7 +185,8 @@
       sorted_weeks () {
         var sorted = this.weeks;
         if(sorted.length > 0){
-          sorted.sort((a, b) => (a.value > b.value) ? 1 : -1);
+          sorted.sort((a, b) => ((a.quarter, a.year, b.number) >
+            (b.quarter, b.year, b.number)) ? -1 : 1);
         }
         return sorted;
       },

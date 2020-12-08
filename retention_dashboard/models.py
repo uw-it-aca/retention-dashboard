@@ -17,6 +17,9 @@ class Week(models.Model):
                                                  self.year,
                                                  self.number)
         return {"value": self.id,
+                "year": self.year,
+                "quarter": self.get_quarter_display(),
+                "number": self.number,
                 "text": display_string}
 
 
