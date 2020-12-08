@@ -1,6 +1,7 @@
 import os
 import unittest
 from retention_dashboard.management.commands.bulk_upload import Command
+from retention_dashboard.utilities.logger import RetentionLogger
 from unittest import mock
 
 
@@ -20,6 +21,7 @@ class TestBulkUpload(unittest.TestCase):
         data_dir = os.path.join(os.path.dirname(__file__),
                                 "retention_dashboard/data/")
         command = Command()
+        command.logger = RetentionLogger()
         command.listdir_fullpath = \
             mock.Mock(side_effect=mock_listdir_fullpath)
         os.listdir = mock.MagicMock(
