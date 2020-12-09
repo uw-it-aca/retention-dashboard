@@ -19,6 +19,7 @@
         $('#file').prop( "disabled", disabled);
         $('#add_dataset').prop( "disabled", disabled)
         // bulk upload form
+        $('#id_delete_existing_data').prop( "disabled", disabled);
         $('#id_upload').prop( "disabled", disabled);
         $('#id_submit_bulk_upload').prop( "disabled", disabled);
         // delete buttons
@@ -122,6 +123,8 @@
         e.preventDefault();
         var csrf = jQuery("[name=csrfmiddlewaretoken]").val(),
                 data = new FormData();
+        data.append('delete_existing_data',
+            $('#id_delete_existing_data').is(":checked"));
         data.append('upload', $('#id_upload').get(0).files[0]);
 
         $.ajax({
@@ -140,13 +143,8 @@
           }
         }).done(function (response) {
           toggleDisabled(false);
-          const a = document.createElement('a');
-          //a.style.display = 'none';
-          a.href = "/api/admin/bulk_dataset/" + response["logfile"] + "/";
-          // the filename you want
-          a.download = 'bulk_upload_log.txt';
-          document.body.appendChild(a);
-          a.click();
+          alert('Bulk uloaded successful.');
+          location.reload()
         }).fail(function (response){
           toggleDisabled(false);
           if (response.status === 400){
@@ -258,6 +256,7 @@
       <p>Important notes:
         <ul>
           <li>Requires a zip file of the directory structure.</li>
+          <li>The "Delete existing data" removes all Advisor, Week, Datapoint, and Upload entries before the bulk upload.</li>
           <li>The quarter, year, and week values are automatically extracted from the directory names.</li>
           <li>Quarter directory names must be "spr" (Spring), "su" (Summer), "au" (Autumn), or "wtr" (Winter), followed by a two digit year.</li>
           <li>Week directory names must be plain numbers or include the "week-" prefix.</li>
