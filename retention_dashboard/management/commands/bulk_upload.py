@@ -4,7 +4,7 @@ import re
 from copy import copy
 from django.db.utils import IntegrityError
 from django.core.management.base import BaseCommand
-from retention_dashboard.models import Upload, Week
+from retention_dashboard.models import Upload, Week, DataPoint, Advisor
 from retention_dashboard.utilities.upload import process_upload
 from retention_dashboard.utilities.logger import RetentionLogger
 
@@ -46,6 +46,10 @@ class Command(BaseCommand):
                             help=("Path of log file. If no log path is "
                                   "supplied then stdout is used"),
                             required=False)
+        parser.add_argument("--delete_existing_data",
+                            help=("Delete all Advisor, Week, Datapoint, and "
+                                  "Upload entries before the bulk upload"),
+                            action="store_true")
         group = parser.add_argument_group(
             """
             The year, quarter, and week arguments for this utility are by
@@ -102,6 +106,9 @@ class Command(BaseCommand):
         self.logger = RetentionLogger(logpath=options["log_file"])
         path = options["path"]
         user = options["user"]
+        delete_existing_data = options["delete_existing_data"]
+        if delete_existing_data:
+            self.delete_existing_data()
         dir_and_files = \
             self.parse_directories_and_files(path)
         filtered = self.filter_dir_and_files(dir_and_files,
@@ -166,6 +173,17 @@ class Command(BaseCommand):
                                     options["year"],
                                     options["quarter"],
                                     options["week"]))
+
+    def delete_existing_data(self):
+        self.logger.info("Deleting all existing entries before upload.")
+        Upload.objects.all().delete()
+        self.logger.info("Deleted all Upload entries.")
+        Week.objects.all().delete()
+        self.logger.info("Deleted all Week entries.")
+        DataPoint.objects.all().delete()
+        self.logger.info("Deleted all DataPoint entries.")
+        Advisor.objects.all().delete()
+        self.logger.info("Deleted all Advisor entries.")
 
     def split_alpha_numeric(self, value):
         """

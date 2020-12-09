@@ -1,11 +1,9 @@
 import os
-import tempfile
 import zipfile
 from django.conf import settings
 from django.utils.decorators import method_decorator
 from django.db.utils import IntegrityError
 from django.core.files.uploadhandler import TemporaryFileUploadHandler
-from django.http import FileResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.core.management import call_command
 from uw_saml.decorators import group_required
@@ -92,8 +90,8 @@ class BulkDataAdmin(RESTDispatch):
 
     def post(self, request):
         form = BulkDataForm(request.POST, request.FILES)
-        logfile_name = None
         if form.is_valid():
+            delete_existing_data = request.POST.get("delete_existing_data")
             uploaded_file = request.FILES.get("upload")
             uploaded_file_path = uploaded_file.file.name
             if zipfile.is_zipfile(uploaded_file) is False:
@@ -107,15 +105,14 @@ class BulkDataAdmin(RESTDispatch):
                         extracted = zip_file.namelist()
                         extracted_data_dir, _ = \
                             os.path.split(os.path.join(tmp_path, extracted[0]))
-                        with tempfile.NamedTemporaryFile(delete=False) as \
-                                log_file:
-                            logfile_name = log_file.name
-                            command_args = \
-                                ["--path={}".format(extracted_data_dir),
-                                 "--user={}".format(request.user.username),
-                                 "--log_file={}".format(logfile_name)]
-                            call_command("bulk_upload",
-                                         *command_args)
+                        command_args = \
+                            ["--path={}".format(extracted_data_dir),
+                             "--user={}".format(request.user.username)]
+                        if delete_existing_data == "true":
+                            command_args.append("--delete_existing_data")
+
+                        call_command("bulk_upload",
+                                     *command_args)
 
                 except InvalidFileException as ex:
                     return self.error_response(status=400, message=ex)
@@ -123,24 +120,11 @@ class BulkDataAdmin(RESTDispatch):
                     return self.error_response(status=400, message=ex)
                 except Exception as ex:
                     return self.error_response(status=500, message=ex)
-                _, logfile_name = os.path.split(logfile_name)
-                return self.json_response({"created": True,
-                                           "logfile": logfile_name})
+                return self.json_response({"created": True})
         else:
             return self.error_response(
                 status=400,
                 message=(form.errors))
-
-
-@method_decorator(group_required(settings.ADMIN_USERS_GROUP),
-                  name='dispatch')
-class BulkDataLogFile(RESTDispatch):
-
-    def get(self, request, logfile):
-        result = os.path.join(tempfile.gettempdir(), logfile)
-        return FileResponse(open(result, 'r').read(),
-                            as_attachment=True,
-                            filename="bulk_upload.txt")
 
 
 @method_decorator(group_required(settings.ADMIN_USERS_GROUP),
