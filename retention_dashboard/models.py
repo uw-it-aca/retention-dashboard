@@ -193,12 +193,15 @@ class Advisor(models.Model):
     def get_all_advisors():
         eop = Advisor.objects.filter(advisor_type=2) \
             .order_by('advisor_name') \
+            .filter(~Q(advisor_name="")) \
             .values('advisor_name', 'advisor_netid')
         prem = Advisor.objects.filter(advisor_type=1) \
+            .filter(~Q(advisor_name="")) \
             .order_by('advisor_name') \
             .values('advisor_name', 'advisor_netid')
         inter = Advisor.objects.filter(advisor_type=3) \
             .order_by('advisor_name') \
+            .filter(~Q(advisor_name="")) \
             .values('advisor_name', 'advisor_netid')
         return {"EOP": list(eop),
                 "Premajor": list(prem),
