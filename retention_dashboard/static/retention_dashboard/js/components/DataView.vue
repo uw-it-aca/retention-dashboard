@@ -63,7 +63,7 @@
           <template v-slot:title>
             Sign-Ins Score
           </template>
-          This score represents how often a student is signing in to UW online systems that require a NetID. Any number above or below zero indicates a student is signing in more or less than other undergrads, respectively.<br><br><strong>No Data</strong> indicates that the student has not signed in to any UW system during the specific time range.
+          This score represents how often a student is signing in to UW online systems that require a NetID <em>during the past week</em>. Any number above or below zero indicates a student is signing in more or less than other undergrads, respectively.<br><br><strong>No Data</strong> indicates that the student has not signed in to any UW system during the specific time range.
         </b-popover>
       </template>
 
@@ -73,7 +73,7 @@
           <template v-slot:title>
             Activity Score
           </template>
-          This score is indicative of the level a student is interacting with Canvas relative to her classmates. Any number above or below zero indicates a student has greater or less than average activity, respectively. If a student is taking more than one course in Canvas, her score is an average across the courses she is taking.<br><br><strong>No Data</strong> indicates Canvas use is not a course requirement.
+          This score is indicative of the level a student is interacting with Canvas relative to her classmates <em>up to this point in the quarter</em>. Any number above or below zero indicates a student has greater or less than average activity, respectively. If a student is taking more than one course in Canvas, her score is an average across the courses she is taking.<br><br><strong>No Data</strong> indicates Canvas use is not a course requirement.
         </b-popover>
       </template>
 
@@ -83,7 +83,7 @@
           <template v-slot:title>
             Assignments Score
           </template>
-          This score is indicative of how the student is doing relative to her classmates with regards to the status of assignments (e.g. # of missing assignments). Any number above or below zero indicates a student is doing better or worse than average. If the student is taking more than one course in Canvas, her score is an average across the courses she is taking.<br><br><strong>No Data</strong> indicates Canvas use is not a course requirement.
+          This score is indicative of how the student is doing relative to her classmates with regards to the status of assignments (e.g. # of missing assignments) <em>up to this point in the quarter</em>. Any number above or below zero indicates a student is doing better or worse than average. If the student is taking more than one course in Canvas, her score is an average across the courses she is taking.<br><br><strong>No Data</strong> indicates Canvas use is not a course requirement.
         </b-popover>
       </template>
 
@@ -93,7 +93,7 @@
           <template v-slot:title>
             Grades Score
           </template>
-          This score represents the student’s grade in Canvas relative to her classmates. Any number above or below zero indicates a student has a better or worse grade than the course average. If the student is taking more than one course in Canvas, her grades are averaged across the courses she is taking.<br><br><strong>No Data</strong> indicates Canvas use is not a course requirement.
+          This score represents the student’s grade in Canvas relative to her classmates <em>up to this point in the quarter</em>. Any number above or below zero indicates a student has a better or worse grade than the course average. If the student is taking more than one course in Canvas, her grades are averaged across the courses she is taking.<br><br><strong>No Data</strong> indicates Canvas use is not a course requirement.
         </b-popover>
       </template>
 

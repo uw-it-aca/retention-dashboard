@@ -1,7 +1,5 @@
 from .base_settings import *
 
-ALLOWED_HOSTS = ['*']
-
 INSTALLED_APPS += [
     'webpack_loader',
     'retention_dashboard',
@@ -67,9 +65,3 @@ elif os.getenv("ENV") == "localdev":
         'isMemberOf': ['u_test_group', 'u_admin_group'],
     }
 GA_KEY = os.getenv("GA_KEY")
-
-
-from django.urls import reverse_lazy
-
-LOGIN_URL = reverse_lazy('saml_login')
-LOGOUT_URL = reverse_lazy('saml_logout')
