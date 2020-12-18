@@ -31,6 +31,9 @@
               <b-form-select-option :value="1" selected>
                 All advisors
               </b-form-select-option>
+              <b-form-select-option :value="'no_assigned_adviser'" selected>
+                No assigned adviser
+              </b-form-select-option>
             </template>
           </b-form-select>
         </b-form-group>
