@@ -56,6 +56,8 @@ def get_filtered_data(type, week,
     if text_filter:
         dataset = DataPoint.filter_by_text(dataset, text_filter)
     if advisor_filter:
+        if advisor_filter == "no_assigned_adviser":
+            advisor_filter = ""  # query using empty string
         dataset = DataPoint.filter_by_advisor(dataset, advisor_filter)
     if summer_filters:
         dataset = DataPoint.filter_by_summer(dataset, summer_filters)
