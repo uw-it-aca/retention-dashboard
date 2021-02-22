@@ -24,7 +24,8 @@ class Week(models.Model):
 
 
 class DataPoint(models.Model):
-    TYPE_CHOICES = ((1, "Premajor"), (2, "EOP"), (3, "International"))
+    TYPE_CHOICES = ((1, "Premajor"), (2, "EOP"), (3, "International"),
+                    (4, "Integrated Social Science (ISS)"))
     type = models.PositiveSmallIntegerField(choices=TYPE_CHOICES)
     week = models.ForeignKey("Week", on_delete=models.PROTECT)
     student_name = models.TextField()

@@ -223,6 +223,8 @@ class Command(BaseCommand):
             file_type = 2
         elif (file_name == "INTERNATIONAL-STUDENTS.CSV"):
             file_type = 3
+        elif (file_name == "ISS-STUDENTS.CSV"):
+            file_type = 4
         else:
             raise ValueError("File type for {} is unknown."
                              .format(file_name))
@@ -349,6 +351,9 @@ class Command(BaseCommand):
                         }, {
                         "path":"data/su20/week-08/international-students.csv",
                         "type":3
+                        }, {
+                        "path":"data/su20/week-08/iss-students.csv",
+                        "type":4
                         }]
                 }]
         }
