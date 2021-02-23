@@ -32,6 +32,7 @@ nvm use node
 node -v
 
 npm install -g eslint@7.0.0 stylelint@13.3.3 eslint-plugin-vue@latest
+npm install
 
 run_test "eslint --ext .js,.vue retention_dashboard/static/retention_dashboard/js/"
 
