@@ -13,11 +13,18 @@ source bin/activate
 # install test tooling
 pip install pycodestyle coverage
 apt-get install -y nodejs npm
-npm install -g npm@latest
-hash -r
+
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+nvm install 14.15
+nvm use node
+node -v
 
 npm install -g eslint@5.0.0 stylelint@10.0.1 eslint-plugin-vue
-npm install
+hash -r
 
 function run_test {
     echo "##########################"
