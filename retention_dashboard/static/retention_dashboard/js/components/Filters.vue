@@ -184,7 +184,7 @@
       }),
       show_pred (){
         return (this.current_file === "EOP" ||
-                this.current_file == "Integrated Social Science (ISS)");
+          this.current_file == "Integrated Social Science (ISS)");
       },
       sorted_weeks () {
         var sorted = this.weeks;
