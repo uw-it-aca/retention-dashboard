@@ -2,9 +2,10 @@
   <b-container id="app" class="rd-content-container" fluid>
     <b-row class="rd-app-banner" role="banner">
       <b-col class="col-10 col-md-8">
-        <h1 class="rd-app-title">
+        <h1 class="rd-app-title sr-only">
           <span>Retention Analytics Dashboard</span>
         </h1>
+        <a href="/" class="nav-link p-0 rd-action-link"><img src="/static/retention_dashboard/img/RAD-logo.png" alt="RAD Logo" class="rd-logo" /></a>
       </b-col>
       <b-col class="rd-login-info col-2 col-md-4">
         <h3 id="rd_login_header" class="sr-only">
@@ -78,10 +79,10 @@
   .rd-app-banner {
     align-items: center;
     background-color: $uw-purple;
-    background-image: url('/static/retention_dashboard/img/uw-logo-white.png');
+    /*background-image: url('/static/retention_dashboard/img/uw-logo-white.png');
     background-position: left 18px;
     background-repeat: no-repeat;
-    background-size: 60px;
+    background-size: 60px;*/
     border-bottom: 3px solid $banner-border;
     color: $white-text;
     font-size: 0.75rem;
@@ -113,6 +114,10 @@
   .rd-page-header {
     font-size: 2rem;
     padding: 1.5rem 0;
+  }
+
+  .rd-logo {
+    width:250px;
   }
 
   /* footer styles */
