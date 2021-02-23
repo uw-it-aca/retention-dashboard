@@ -12,6 +12,7 @@ source bin/activate
 
 # install test tooling
 pip install pycodestyle coverage
+apt-get install -y nodejs npm
 
 function run_test {
     echo "##########################"
@@ -30,7 +31,7 @@ nvm install 14.15
 nvm use node
 node -v
 
-npm install -g eslint@7.0.0 stylelint@13.3.3 eslint-plugin-vue
+npm install -g eslint@7.0.0 stylelint@13.3.3 eslint-plugin-vue@latest
 
 run_test "eslint --ext .js,.vue retention_dashboard/static/retention_dashboard/js/"
 
