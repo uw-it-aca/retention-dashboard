@@ -72,7 +72,7 @@
             Is STEM<span><a id="stem_info" href="#" class="rd-info-link" role="button" title="What is the 'Is STEM' filter?"><span class="sr-only"> What is the 'Is STEM' filter?</span><b-icon icon="info-circle-fill" variant="primary" /></a>
               <b-popover target="stem_info" triggers="hover focus">
                 <template v-slot:title>
-                  Is STEM 
+                  Is STEM
                 </template>
                 Includes students in pre-science, pre-engineering and related pre-majors.
               </b-popover></span>
@@ -350,6 +350,10 @@
 
     .form-group {
       min-width: 100px;
+    }
+
+    .custom-control-label {
+      min-width: -webkit-fill-available;
     }
 
   }
