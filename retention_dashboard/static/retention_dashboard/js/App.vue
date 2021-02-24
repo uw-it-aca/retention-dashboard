@@ -24,7 +24,7 @@
         <div class="rd-footer-links">
           <a href="https://www.washington.edu/online/privacy/">Privacy</a> / <a href="https://www.washington.edu/online/terms/">Terms</a> / <a href="mailto:lyle3@uw.edu?subject=Support: Retention Analytics Dashboard">Support</a>
         </div>
-        <div>© 2020 University of Washington  |  Seattle, WA</div>
+        <div>© 2021 University of Washington  |  Seattle, WA</div>
       </footer>
     </b-row>
   </b-container>
