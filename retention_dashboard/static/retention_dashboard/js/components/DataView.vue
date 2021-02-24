@@ -576,11 +576,10 @@
   /* Structure */
 
   .row.rd-listactions-container {
-    background-color: $grey-bkgnd;
-    border-bottom: solid 2px $grey-border;
+    background-color: $uw-metallic;
     line-height: 2;
     margin-bottom: 2rem;
-    padding: 1rem 0;
+    padding: 0.5rem 0;
 
     .col {
       text-align: center;
