@@ -183,7 +183,8 @@
         advisor_list: state => state.advisors.advisors
       }),
       show_pred (){
-        return this.current_file === "EOP";
+        return (this.current_file === "EOP" ||
+          this.current_file == "Integrated Social Science (ISS)");
       },
       sorted_weeks () {
         var sorted = this.weeks;
