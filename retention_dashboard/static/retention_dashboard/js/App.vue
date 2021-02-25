@@ -78,10 +78,10 @@
   /* Top banner styles */
   .rd-app-banner {
     background-color: $uw-purple;
-    /*background-image: url('/static/retention_dashboard/img/uw-logo-white.png');
-    background-position: left 18px;
+    background-image: url('/static/retention_dashboard/img/uw-logo-white.png');
+    background-position: right 12% bottom;
     background-repeat: no-repeat;
-    background-size: 60px;*/
+    background-size: 60px;
     color: $white-text;
     min-height: 60px;
     padding: 0.5rem 0;
@@ -116,7 +116,7 @@
   }
 
   .rd-logo {
-    width:250px;
+    width:200px;
   }
 
   /* footer styles */
