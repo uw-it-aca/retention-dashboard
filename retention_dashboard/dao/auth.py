@@ -27,5 +27,5 @@ def get_type_authorizations(request):
     if is_international_authorized(request):
         types.append("International")
     if is_iss_authorized(request):
-        types.append("Integrated Social Science (ISS)")
+        types.append("ISS")
     return types

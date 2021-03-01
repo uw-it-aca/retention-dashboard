@@ -20,9 +20,9 @@
           </b-form-checkbox-group>
           <b-form-select
             id="advisor_filter"
-            v-model="eop_advisor_selected"
+            v-model="current_advisor_selected"
             class="rd-advisor-filter"
-            :options="eop_advisors"
+            :options="current_advisors"
             value-field="advisor_netid"
             text-field="advisor_name"
             size="sm"
@@ -64,6 +64,7 @@
           class="rd-student-filters"
           label="Student Type"
           label-class="rd-vis-hidden"
+          v-if="show_type"
         >
           <b-form-checkbox v-model="premajor_filter">
             Is Pre-Major
@@ -80,12 +81,12 @@
           <b-form-checkbox v-model="freshman_filter">
             Is Freshman
           </b-form-checkbox>
-          <b-form-group
-            class="rd-keyword-filter"
-            label="Keyword"
-          >
-            <b-form-input v-model="keyword_filter" size="sm" placeholder="Student name, #, NetID" />
-          </b-form-group>
+        </b-form-group>
+        <b-form-group
+          class="rd-keyword-filter"
+          label="Keyword"
+        >
+          <b-form-input v-model="keyword_filter" size="sm" placeholder="Student name, #, NetID" />
         </b-form-group>
       </b-col>
       <b-col order="5" />
@@ -160,8 +161,8 @@
         stem_filter: false,
         freshman_filter: false,
         keyword_filter: "",
-        eop_advisor_selected: 1,
-        eop_advisors: [],
+        current_advisor_selected: 1,
+        current_advisors: [],
         summer_filter: [],
         weeks: [],
         auth_list: [],
@@ -182,9 +183,12 @@
         is_summer: state => state.dataselect.is_summer,
         advisor_list: state => state.advisors.advisors
       }),
-      show_pred (){
+      show_pred () {
         return (this.current_file === "EOP" ||
-          this.current_file == "Integrated Social Science (ISS)");
+          this.current_file == "ISS");
+      },
+      show_type () {
+        return (this.current_file != "ISS");
       },
       sorted_weeks () {
         var sorted = this.weeks;
@@ -225,11 +229,15 @@
       keyword_filter: function () {
         this.debouncedKeywordFilters();
       },
-      eop_advisor_selected: function () {
-        this.$store.dispatch('filters/set_advisor_filter', this.eop_advisor_selected);
+      current_advisor_selected: function () {
+        this.$store.dispatch('filters/set_advisor_filter', this.current_advisor_selected);
       },
       advisor_list: function() {
-        this.eop_advisors = this.advisor_list["EOP"];
+        if(this.type == "EOP"){
+          this.current_advisors = this.advisor_list["EOP"];
+        } else if (this.type == "ISS") {
+          this.current_advisors = this.advisor_list["ISS"];
+        }
       },
       summer_filter: function () {
         this.$store.dispatch('filters/set_summer_filter', this.summer_filter);
@@ -243,6 +251,8 @@
       type: function(){
         this.selectPage(this.type);
         if(this.type === "EOP"){
+          this.get_advisors();
+        } else if (this.type === "ISS"){
           this.get_advisors();
         }
       },
@@ -268,7 +278,7 @@
         this.$store.dispatch('filters/set_keyword_filter', this.keyword_filter);
       },
       reset_filters() {
-        this.eop_advisor_selected = 1;
+        this.current_advisor_selected = 1;
       },
       selectPage(page){
         this.$store.dispatch('dataselect/set_file', page);
