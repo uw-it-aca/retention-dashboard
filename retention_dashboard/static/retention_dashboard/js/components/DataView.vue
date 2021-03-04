@@ -353,6 +353,9 @@
         var fields;
         if (this.current_file === "EOP"){
           fields = this.eop_fields;
+        } else if (this.current_file === "ISS"){
+          fields = this.eop_fields.filter(
+            item => !(item.key == "is_premajor"));
         } else {
           fields = this.standard_fields;
         }
@@ -364,6 +367,14 @@
             return this.download.summer_fields_eop;
           } else {
             return this.download.fields_eop;
+          }
+        } else if (this.current_file === "ISS"){
+          if(this.is_summer){
+            return this.download.summer_fields_eop.filter(
+              item => !(item.key == "is_premajor"));
+          } else {
+            return this.download.fields_eop.filter(
+              item => !(item.key == "is_premajor"));
           }
         } else {
           if(this.is_summer){

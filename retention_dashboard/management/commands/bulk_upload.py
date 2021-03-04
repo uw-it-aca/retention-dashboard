@@ -277,7 +277,7 @@ class Command(BaseCommand):
                              .format(dir_name, week))
         return week
 
-    def is_quarater_dir(self, dir_name):
+    def is_quarter_dir(self, dir_name):
         """
         Check if a directory represents a quarter based on the standard
         convention (<quarter code><two number year> e.g. au20).
@@ -365,7 +365,7 @@ class Command(BaseCommand):
         for root_path, qtr_dir_name in self.listdir_fullpath(path):
             params = {"quarter": None, "quarter_name": None, "year": None,
                       "weeks": []}
-            if self.is_quarater_dir(qtr_dir_name):
+            if self.is_quarter_dir(qtr_dir_name):
                 # Parse quarter and year values from first directory name
                 qtr_dir = os.path.join(root_path, qtr_dir_name)
                 qtr, year = self.split_alpha_numeric(qtr_dir_name)
