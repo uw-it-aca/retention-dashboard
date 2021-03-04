@@ -581,7 +581,7 @@
   /* Structure */
 
   .row.rd-listactions-container {
-    background-color: $uw-metallic;
+    background-color: $grey-light-bkgnd;
     line-height: 2;
     margin-bottom: 2rem;
     padding: 0.5rem 0;
