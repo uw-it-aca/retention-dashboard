@@ -1,18 +1,11 @@
-#!/bin/sh
-set -e
 trap 'exit 1' ERR
 
-# travis test script for django app
 #
-# PRECONDITION: inherited env vars from application's .travis.yml MUST include:
+# PRECONDITION: inherited env vars MUST include:
 #      DJANGO_APP: django application directory name
 
 # start virtualenv
 source bin/activate
-
-# install test tooling
-pip install pycodestyle coverage
-apt-get install -y nodejs npm
 
 function run_test {
     echo "##########################"

@@ -1,0 +1,8 @@
+[run]
+source = retention_dashboard
+parallel = True
+
+[paths]
+source =
+  retention_dashboard/
+  /app/retention_dashboard/
