@@ -11,7 +11,7 @@
         <h3 id="rd_login_header" class="sr-only">
           Your information
         </h3>
-        <span aria-labelledby="rd_login_header" class="hide-lg"><b-icon icon="person-circle" /></span><span id="netid"> {{ netid }}</span>
+        <span aria-labelledby="rd_login_header" class="hide-lg"><b-icon icon="person-circle" /></span><span id="netid"> {{ netid }}</span> /
         <a href="/saml/logout" tabindex="0" class="rd-logout-link">Sign Out</a>
       </b-col>
     </b-row>
@@ -79,7 +79,7 @@
   .rd-app-banner {
     background-color: $uw-purple;
     background-image: url('/static/retention_dashboard/img/uw-logo-white.png');
-    background-position: right 12% bottom;
+    background-position: right 1rem bottom;
     background-repeat: no-repeat;
     background-size: 60px;
     color: $white-text;
@@ -106,7 +106,6 @@
 
   .rd-login-info {
     text-align: right;
-    padding-top: 0.5rem;
   }
 
   /* branding styles */
@@ -158,7 +157,6 @@
   }
 
   .rd-logout-link {
-    display: block;
     font-size: 0.75rem;
   }
 
