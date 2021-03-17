@@ -1,13 +1,16 @@
-version: '3'
+version: '3.4'
 
 services:
   app:
     environment:
-      - AUTH=SAML_MOCK
+      ENV: localdev
+      PORT: 8000
+      AUTH: SAML_MOCK
     restart: always
     container_name: app
     build:
       context: .
+      target: app-container
     volumes:
       - ./retention_dashboard:/app/retention_dashboard
     ports:
