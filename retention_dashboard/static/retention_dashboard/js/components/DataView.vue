@@ -437,6 +437,23 @@
         }
         return params;
       },
+      filter_trigger () {
+        return (
+          this.assignment_filter,
+          this.grade_filter,
+          this.activity_filter,
+          this.prediction_filter,
+          this.premajor_filter,
+          this.stem_filter,
+          this.freshman_filter,
+          this.keyword_filter,
+          this.advisor_filter,
+          this.current_week,
+          this.current_file,
+          this.summer_filter,
+          this.signins_filter
+        );
+      },
       ...Vuex.mapState({
         current_week: state => state.dataselect.current_week,
         current_file: state => state.dataselect.current_file,
@@ -465,46 +482,9 @@
         });
         this.items = csv;
       },
-      assignment_filter: function () {
+      filter_trigger: function () {
         this.run_filters();
       },
-      grade_filter: function () {
-        this.run_filters();
-      },
-      activity_filter: function () {
-        this.run_filters();
-      },
-      prediction_filter: function () {
-        this.run_filters();
-      },
-      premajor_filter: function () {
-        this.run_filters();
-      },
-      stem_filter: function () {
-        this.run_filters();
-      },
-      freshman_filter: function () {
-        this.run_filters();
-      },
-      keyword_filter: function () {
-        this.run_filters();
-      },
-      advisor_filter: function () {
-        this.run_filters();
-      },
-      current_week: function () {
-        this.run_filters();
-      },
-      current_file: function () {
-        this.run_filters();
-      },
-      summer_filter: function () {
-        this.run_filters();
-      },
-      signins_filter: function () {
-        this.run_filters();
-      }
-
     },
     methods: {
       get_filtered_emails(){
@@ -565,14 +545,16 @@
             return qs.stringify(params, {arrayFormat: 'repeat'});
           },
           params: this.filter_params,
-        })
-          .then(function(response){
-            if(query_token === vue.request_id){
-              vue.isBusy = false;
-              vue.csv_data = response.data.rows;
-              vue.is_summer = response.data.is_summer;
-            }
-          });
+        }).then(function(response){
+          if(query_token === vue.request_id){
+            vue.isBusy = false;
+            vue.csv_data = response.data.rows;
+            vue.is_summer = response.data.is_summer;
+          }
+        }).catch(() => {
+          vue.isBusy = false;
+          vue.csv_data = [];
+        });
       },
       get_rounded(num_string){
         var number = Number(num_string);

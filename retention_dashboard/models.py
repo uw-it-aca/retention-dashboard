@@ -57,6 +57,14 @@ class DataPoint(models.Model):
                 return "", self.student_name
 
     @staticmethod
+    def get_data_type_by_text(type_str):
+        try:
+            return [t for t in list(DataPoint.TYPE_CHOICES)
+                    if t[1] == type_str][0][0]
+        except IndexError:
+            raise ValueError("Unkown type {}".format(type_str))
+
+    @staticmethod
     def get_data_by_type_week(type, week):
         type_int = [item for item in
                     DataPoint.TYPE_CHOICES
@@ -128,14 +136,16 @@ class DataPoint(models.Model):
         return data_queryset.filter(is_stem=is_stem)
 
     @staticmethod
-    def filter_by_advisor(data_queryset, advisor_netid):
-        """
-        Hard code this to EOP advisors for now, if we get other types add that
-        filtering here
-        """
-        advisor = Advisor.objects.get(advisor_netid=advisor_netid,
-                                      advisor_type=2)
-        return data_queryset.filter(advisor=advisor)
+    def filter_by_advisor(data_queryset, advisor_netid, advisor_type):
+        try:
+            if advisor_netid and advisor_type:
+                advisor_type_id = DataPoint.get_data_type_by_text(advisor_type)
+                advisor = Advisor.objects.get(advisor_netid=advisor_netid,
+                                              advisor_type=advisor_type_id)
+                return data_queryset.filter(advisor=advisor)
+        except Advisor.DoesNotExist:
+            # No advisor of the specified type exists
+            return None
 
     def get_summer_string(self):
         term_list = []
