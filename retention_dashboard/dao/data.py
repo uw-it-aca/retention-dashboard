@@ -12,7 +12,8 @@ def get_weeks_with_data():
     return week_objects
 
 
-def get_filtered_data(type, week,
+def get_filtered_data(type,
+                      week,
                       grade_filters=None,
                       activity_filters=None,
                       assignment_filters=None,
@@ -55,10 +56,13 @@ def get_filtered_data(type, week,
 
     if text_filter:
         dataset = DataPoint.filter_by_text(dataset, text_filter)
-    if advisor_filter != "all":
+
+    if (advisor_filter is not None and type is not None and
+            advisor_filter != "all"):
         if advisor_filter == "no_assigned_adviser":
             advisor_filter = ""  # query using empty string
         dataset = DataPoint.filter_by_advisor(dataset, advisor_filter, type)
+
     if summer_filters:
         dataset = DataPoint.filter_by_summer(dataset, summer_filters)
 

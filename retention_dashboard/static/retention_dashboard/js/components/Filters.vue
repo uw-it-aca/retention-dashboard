@@ -158,10 +158,8 @@
       return {
         weeks: [],
         auth_list: [],
-        advisors: [],
         current_advisors: [],
         type: '',
-        currentweek: '',
         summer_terms: [
           { value: 'a', text: 'A Term' },
           { value: 'b', text: 'B Term' },
@@ -172,10 +170,16 @@
     computed: {
       ...Vuex.mapState({
         current_file: state => state.dataselect.current_file,
-        current_week: state => state.dataselect.current_week,
         is_summer: state => state.dataselect.is_summer,
-        advisor_list: state => state.advisors.advisors
       }),
+      advisors: {
+        get () {
+          return this.$store.state.advisors.advisors;
+        },
+        set (value) {
+          this.$store.dispatch('advisors/set_advisors', value);
+        }
+      },
       prediction_filter: {
         get () {
           return this.$store.state.filters.filters.prediction_filter;
@@ -221,7 +225,7 @@
           return this.$store.state.filters.filters.summer_filter;
         },
         set (value) {
-          this.$store.dispatch('filters/set_summer_filterr', value);
+          this.$store.dispatch('filters/set_summer_filter', value);
         }
       },
       keyword_filter: {
@@ -232,6 +236,20 @@
           this.$store.dispatch('filters/set_keyword_filter', 
                                value);
         }, 1000)
+      },
+      currentweek: {
+        get () {
+          if (this.$store.state.dataselect.current_week != '') {
+            return this.$store.state.dataselect.current_week;
+          } else if (this.weeks.length >= 1) {
+            return this.weeks[this.weeks.length-1].value;
+          } else {
+            return this.$store.state.dataselect.current_week;
+          }
+        },
+        set (value) {
+          this.$store.dispatch('dataselect/set_week', value);
+        }
       },
       show_pred () {
         return (this.current_file === "EOP" ||
@@ -263,15 +281,12 @@
       }
     },
     watch: {
-      advisor_list: function() {
+      advisors: function() {
         if(this.type == "EOP"){
-          this.current_advisors = this.advisor_list["EOP"];
+          this.current_advisors = this.advisors["EOP"];
         } else if (this.type == "ISS") {
-          this.current_advisors = this.advisor_list["ISS"];
+          this.current_advisors = this.advisors["ISS"];
         }
-      },
-      summer_filter: function () {
-        this.$store.dispatch('filters/set_summer_filter', this.summer_filter);
       },
       currentweek: function(){
         this.selectWeek(this.currentweek);
@@ -288,15 +303,9 @@
           this.get_advisors();
         }
       },
-      weeks: function(){
-        this.currentweek = this.weeks[this.weeks.length-1].value;
-      },
       auth_list: function() {
         this.type = this.auth_list[0];
       },
-      advisors: function(){
-        this.setAdvisors(this.advisors);
-      }
     },
     mounted: function(){
       this.get_weeks();
@@ -314,9 +323,6 @@
         } else {
           this.$store.dispatch('dataselect/set_summer', false);
         }
-      },
-      setAdvisors(advisors){
-        this.$store.dispatch('advisors/set_advisors', advisors);
       },
       get_weeks(){
         var vue = this;
