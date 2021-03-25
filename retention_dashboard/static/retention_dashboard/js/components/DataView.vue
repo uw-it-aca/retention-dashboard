@@ -20,7 +20,9 @@
               <b-button variant="info" v-clipboard:copy="email_list_text">
                 copy
               </b-button>
-              <p class="small rd-copy-email-desc">Press 'copy' button to copy email addresses to clipboard</p>
+              <p class="small rd-copy-email-desc">
+                Press 'copy' button to copy email addresses to clipboard
+              </p>
             </div>
           </div>
         </b-modal>
