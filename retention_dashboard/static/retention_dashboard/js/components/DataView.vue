@@ -45,6 +45,7 @@
       :fields="fields"
       :per-page="perPage"
       :current-page="currentPage"
+      :sort-compare="customSorting"
       sort-icon-left
     >
       <template v-slot:head(priority_score)="data">
@@ -487,6 +488,15 @@
       },
     },
     methods: {
+      customSorting(a, b, key) {
+        if (key === 'student_name') {
+          let a_name = a.student_last_name + ", " + a.student_first_name;
+          let b_name = b.student_last_name + ", " + b.student_first_name;
+          return a_name < b_name ? -1 : a_name > b_name ? 1 : 0;
+        } else {
+          return a[key] < b[key] ? -1 : a[key] > b[key] ? 1 : 0;
+        }
+      },
       get_filtered_emails(){
         var emails = [];
         this.items.forEach(function(item){
