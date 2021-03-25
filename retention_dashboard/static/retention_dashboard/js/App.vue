@@ -115,7 +115,7 @@
   }
 
   .rd-logo {
-    width:200px;
+    width: 200px;
   }
 
   /* footer styles */
