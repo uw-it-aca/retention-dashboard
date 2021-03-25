@@ -11,7 +11,7 @@
         <h3 id="rd_login_header" class="sr-only">
           Your information
         </h3>
-        <span aria-labelledby="rd_login_header" class="hide-lg"><b-icon icon="person-circle" /></span><span id="netid"> {{ netid }}</span> /
+        <span aria-labelledby="rd_login_header" class="hide-lg"><b-icon icon="person-circle" /></span><span id="netid"> {{ netid }}</span>
         <a href="/saml/logout" tabindex="0" class="rd-logout-link">Sign Out</a>
       </b-col>
     </b-row>
