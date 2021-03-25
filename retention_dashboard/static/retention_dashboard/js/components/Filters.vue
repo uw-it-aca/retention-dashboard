@@ -364,7 +364,7 @@
     }
 
     .custom-control-label {
-      min-width: -webkit-fill-available;
+      width: 100%;
     }
 
   }
