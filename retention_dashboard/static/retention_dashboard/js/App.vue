@@ -5,7 +5,7 @@
         <h1 class="rd-app-title sr-only">
           <span>Retention Analytics Dashboard</span>
         </h1>
-        <a href="/" class="nav-link p-0 rd-action-link"><img src="/static/retention_dashboard/img/RAD-logo.png" alt="RAD Logo" class="rd-logo" /></a>
+        <a href="/" class="nav-link p-0 rd-action-link"><img src="/static/retention_dashboard/img/RAD-logo.png" alt="RAD Logo" class="rd-logo"></a>
       </b-col>
       <b-col class="rd-login-info col-2 col-md-4">
         <h3 id="rd_login_header" class="sr-only">
