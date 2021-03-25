@@ -9,7 +9,7 @@ const state = {
     freshman_filter: false,
     keyword_filter: "",
     prediction_filter: [],
-    advisor_filter: "",
+    advisor_filter: "all",
     summer_filter: []
   }
 
@@ -74,7 +74,7 @@ const actions = {
       'value':value
     });
   },
-    set_summer_filter ({ commit }, value) {
+  set_summer_filter ({ commit }, value) {
     commit('set_filters', {
       'type': 'summer_filter',
       'value':value
