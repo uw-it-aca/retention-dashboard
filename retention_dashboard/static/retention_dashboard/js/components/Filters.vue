@@ -315,10 +315,9 @@
       selectPage(page){
         this.$store.dispatch('dataselect/set_file', page);
       },
-      selectWeek(week){
-        var week_idx = week-1;
-        this.$store.dispatch('dataselect/set_week', week);
-        if(this.weeks[week_idx] !== undefined && this.weeks[week_idx].text.includes("Summer")){
+      selectWeek(week_value){
+        let week = this.weeks.filter(e => e.value == week_value)[0];
+        if(week.text.includes("Summer")){
           this.$store.dispatch('dataselect/set_summer', true);
         } else {
           this.$store.dispatch('dataselect/set_summer', false);
