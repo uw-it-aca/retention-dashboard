@@ -11,12 +11,19 @@
             download results
           </b-link>
         </p>
-        <b-modal id="email-modal" title="E-Mail Addresses" ok-only>
-          <div class="container">
-            <textarea id="email_area" v-model="email_list_text" readonly />
-            <button v-clipboard:copy="email_list_text">
-              copy
-            </button>
+        <b-modal id="email-modal" title="Copy E-Mail Addresses" ok-title="Done" ok-only>
+          <div class="container rd-copy-email">
+            <div>
+              <textarea id="email_area" v-model="email_list_text" rows="10" readonly />
+            </div>
+            <div class="rd-copy-email-btn">
+              <b-button variant="info" v-clipboard:copy="email_list_text">
+                copy
+              </b-button>
+              <p class="small rd-copy-email-desc">
+                Press 'copy' button to copy email addresses to clipboard
+              </p>
+            </div>
           </div>
         </b-modal>
       </b-col>
@@ -579,11 +586,10 @@
   /* Structure */
 
   .row.rd-listactions-container {
-    background-color: $grey-bkgnd;
-    border-bottom: solid 2px $grey-border;
+    background-color: $grey-light-bkgnd;
     line-height: 2;
     margin-bottom: 2rem;
-    padding: 1rem 0;
+    padding: 0.5rem 0;
 
     .col {
       text-align: center;
@@ -614,6 +620,18 @@
     color: $white-text;
     margin: 0 2px;
     padding: 3px 6px;
+  }
+
+  .rd-copy-email {
+    display: inline-flex;
+
+    .rd-copy-email-btn {
+      padding-left: 1rem;
+    }
+
+    .rd-copy-email-desc {
+      padding-top: 0.5rem;
+    }
   }
 
   .rd-table-container {
