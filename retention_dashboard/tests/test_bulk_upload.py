@@ -1,3 +1,6 @@
+# Copyright 2021 UW-IT, University of Washington
+# SPDX-License-Identifier: Apache-2.0
+
 import os
 import unittest
 from retention_dashboard.management.commands.bulk_upload import Command

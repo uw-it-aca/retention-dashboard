@@ -1,4 +1,4 @@
-FROM gcr.io/uwit-mci-axdd/django-container:1.3.0 as app-prewebpack-container 
+FROM gcr.io/uwit-mci-axdd/django-container:1.3.0 as app-prewebpack-container
 
 USER root
 
