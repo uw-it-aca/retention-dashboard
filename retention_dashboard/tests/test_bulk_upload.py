@@ -26,7 +26,7 @@ class TestBulkUpload(unittest.TestCase):
             mock.Mock(side_effect=mock_listdir_fullpath)
         os.listdir = mock.MagicMock(
             return_value=["eop-students.csv", "international-students.csv",
-                          "premajor-students.csv"])
+                          "premajor-students.csv", "iss-students.csv"])
         result = command.parse_directories_and_files(data_dir)
 
         # make paths relative for test reproducability
@@ -59,6 +59,11 @@ class TestBulkUpload(unittest.TestCase):
         self.assertEqual(
             week2file2["path"],
             "retention_dashboard/data/su20/2/international-students.csv")
+        week2file3 = week2files[3]
+        self.assertEqual(week2file3["type"], 4)
+        self.assertEqual(
+            week2file3["path"],
+            "retention_dashboard/data/su20/2/iss-students.csv")
 
         week3 = weeks[1]
         self.assertEqual(week3["number"], 3)
@@ -78,6 +83,11 @@ class TestBulkUpload(unittest.TestCase):
         self.assertEqual(
             week3file2["path"],
             "retention_dashboard/data/su20/week-3/international-students.csv")
+        week3file3 = week3files[3]
+        self.assertEqual(week3file3["type"], 4)
+        self.assertEqual(
+            week3file3["path"],
+            "retention_dashboard/data/su20/week-3/iss-students.csv")
 
 
 if __name__ == "__main__":

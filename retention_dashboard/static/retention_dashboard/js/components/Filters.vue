@@ -20,18 +20,18 @@
           </b-form-checkbox-group>
           <b-form-select
             id="advisor_filter"
-            v-model="eop_advisor_selected"
+            v-model="advisor_filter"
             class="rd-advisor-filter"
-            :options="eop_advisors"
+            :options="current_advisors"
             value-field="advisor_netid"
             text-field="advisor_name"
             size="sm"
           >
             <template v-slot:first>
-              <b-form-select-option :value="1" selected>
+              <b-form-select-option :value="'all'">
                 All advisors
               </b-form-select-option>
-              <b-form-select-option :value="'no_assigned_adviser'" selected>
+              <b-form-select-option :value="'no_assigned_adviser'">
                 No assigned adviser
               </b-form-select-option>
             </template>
@@ -61,6 +61,7 @@
       </b-col>
       <b-col class="col-6 col-md-2 rd-filter-border-end" order="4">
         <b-form-group
+          v-if="show_type"
           class="rd-student-filters"
           label="Student Type"
           label-class="rd-vis-hidden"
@@ -72,7 +73,7 @@
             Is STEM<span><a id="stem_info" href="#" class="rd-info-link" role="button" title="What is the 'Is STEM' filter?"><span class="sr-only"> What is the 'Is STEM' filter?</span><b-icon icon="info-circle-fill" variant="primary" /></a>
               <b-popover target="stem_info" triggers="hover focus">
                 <template v-slot:title>
-                  Is STEM 
+                  Is STEM
                 </template>
                 Includes students in pre-science, pre-engineering and related pre-majors.
               </b-popover></span>
@@ -80,12 +81,12 @@
           <b-form-checkbox v-model="freshman_filter">
             Is Freshman
           </b-form-checkbox>
-          <b-form-group
-            class="rd-keyword-filter"
-            label="Keyword"
-          >
-            <b-form-input v-model="keyword_filter" size="sm" placeholder="Student name, #, NetID" />
-          </b-form-group>
+        </b-form-group>
+        <b-form-group
+          class="rd-keyword-filter"
+          label="Keyword"
+        >
+          <b-form-input v-model="keyword_filter" size="sm" placeholder="Student name, #, NetID" />
         </b-form-group>
       </b-col>
       <b-col order="5" />
@@ -155,19 +156,10 @@
     props: {},
     data(){
       return {
-        prediction_filter: [],
-        premajor_filter: false,
-        stem_filter: false,
-        freshman_filter: false,
-        keyword_filter: "",
-        eop_advisor_selected: 1,
-        eop_advisors: [],
-        summer_filter: [],
         weeks: [],
         auth_list: [],
-        advisors: [],
+        current_advisors: [],
         type: '',
-        currentweek: '',
         summer_terms: [
           { value: 'a', text: 'A Term' },
           { value: 'b', text: 'B Term' },
@@ -178,12 +170,93 @@
     computed: {
       ...Vuex.mapState({
         current_file: state => state.dataselect.current_file,
-        current_week: state => state.dataselect.current_week,
         is_summer: state => state.dataselect.is_summer,
-        advisor_list: state => state.advisors.advisors
       }),
-      show_pred (){
-        return this.current_file === "EOP";
+      advisors: {
+        get () {
+          return this.$store.state.advisors.advisors;
+        },
+        set (value) {
+          this.$store.dispatch('advisors/set_advisors', value);
+        }
+      },
+      prediction_filter: {
+        get () {
+          return this.$store.state.filters.filters.prediction_filter;
+        },
+        set (value) {
+          this.$store.dispatch('filters/set_prediction_filter', value);
+        }
+      },
+      premajor_filter: {
+        get () {
+          return this.$store.state.filters.filters.premajor_filter;
+        },
+        set (value) {
+          this.$store.dispatch('filters/set_premajor_filter', value);
+        }
+      },
+      stem_filter: {
+        get () {
+          return this.$store.state.filters.filters.stem_filter;
+        },
+        set (value) {
+          this.$store.dispatch('filters/set_stem_filter', value);
+        }
+      },
+      freshman_filter: {
+        get () {
+          return this.$store.state.filters.filters.freshman_filter;
+        },
+        set (value) {
+          this.$store.dispatch('filters/set_freshman_filter', value);
+        }
+      },
+      advisor_filter: {
+        get () {
+          return this.$store.state.filters.filters.advisor_filter;
+        },
+        set (value) {
+          this.$store.dispatch('filters/set_advisor_filter', value);
+        }
+      },
+      summer_filter: {
+        get () {
+          return this.$store.state.filters.filters.summer_filter;
+        },
+        set (value) {
+          this.$store.dispatch('filters/set_summer_filter', value);
+        }
+      },
+      keyword_filter: {
+        get () {
+          return this.$store.state.filters.filters.keyword_filter;
+        },
+        set: _.debounce(function(value) {
+          this.$store.dispatch('filters/set_keyword_filter', 
+                               value);
+        }, 1000)
+      },
+      currentweek: {
+        get () {
+          if (this.$store.state.dataselect.current_week != '') {
+            return this.$store.state.dataselect.current_week;
+          } else if (this.weeks.length >= 1) {
+            return this.weeks[this.weeks.length-1].value;
+          } else {
+            return this.$store.state.dataselect.current_week;
+          }
+        },
+        set (value) {
+          this.$store.dispatch('dataselect/set_week', value);
+        }
+      },
+      show_pred () {
+        return (this.current_file === "EOP" ||
+          this.current_file == "ISS");
+      },
+      show_type () {
+        return (this.current_file != "ISS");
       },
       sorted_weeks () {
         var sorted = this.weeks;
@@ -206,83 +279,49 @@
         term_names.sort();
         return term_names.join(", ") + " Term";
       }
-
     },
     watch: {
-      prediction_filter: function () {
-        this.$store.dispatch('filters/set_prediction_filter', this.prediction_filter);
-      },
-      premajor_filter: function () {
-        this.$store.dispatch('filters/set_premajor_filter', this.premajor_filter);
-      },
-      stem_filter: function () {
-        this.$store.dispatch('filters/set_stem_filter', this.stem_filter);
-      },
-      freshman_filter: function () {
-        this.$store.dispatch('filters/set_freshman_filter', this.freshman_filter);
-      },
-      keyword_filter: function () {
-        this.debouncedKeywordFilters();
-      },
-      eop_advisor_selected: function () {
-        this.$store.dispatch('filters/set_advisor_filter', this.eop_advisor_selected);
-      },
-      advisor_list: function() {
-        this.eop_advisors = this.advisor_list["EOP"];
-      },
-      summer_filter: function () {
-        this.$store.dispatch('filters/set_summer_filter', this.summer_filter);
-      },
-      current_file: function() {
-        this.reset_filters();
+      advisors: function() {
+        if(this.type == "EOP"){
+          this.current_advisors = this.advisors["EOP"];
+        } else if (this.type == "ISS") {
+          this.current_advisors = this.advisors["ISS"];
+        }
       },
       currentweek: function(){
         this.selectWeek(this.currentweek);
       },
       type: function(){
+        this.advisor_filter = "all";
         this.selectPage(this.type);
         if(this.type === "EOP"){
           this.get_advisors();
+        } else if (this.type === "ISS"){
+          this.stem_filter = false;
+          this.freshman_filter = false;
+          this.premajor_filter = false;
+          this.get_advisors();
         }
-      },
-      weeks: function(){
-        this.currentweek = this.weeks[this.weeks.length-1].value;
       },
       auth_list: function() {
         this.type = this.auth_list[0];
       },
-      advisors: function(){
-        this.setAdvisors(this.advisors);
-      }
-    },
-    created: function () {
-      this.debouncedKeywordFilters = _.debounce(this.run_keyword_filter, 1000);
     },
     mounted: function(){
       this.get_weeks();
       this.get_types();
     },
     methods: {
-      run_keyword_filter() {
-        this.$store.dispatch('filters/set_keyword_filter', this.keyword_filter);
-      },
-      reset_filters() {
-        this.eop_advisor_selected = 1;
-      },
       selectPage(page){
         this.$store.dispatch('dataselect/set_file', page);
       },
-      selectWeek(week){
-        var week_idx = week-1;
-        this.$store.dispatch('dataselect/set_week', week);
-        if(this.weeks[week_idx] !== undefined && this.weeks[week_idx].text.includes("Summer")){
+      selectWeek(week_value){
+        let week = this.weeks.filter(e => e.value == week_value)[0];
+        if(week.text.includes("Summer")){
           this.$store.dispatch('dataselect/set_summer', true);
         } else {
           this.$store.dispatch('dataselect/set_summer', false);
         }
-      },
-      setAdvisors(advisors){
-        this.$store.dispatch('advisors/set_advisors', advisors);
       },
       get_weeks(){
         var vue = this;
@@ -350,6 +389,10 @@
 
     .form-group {
       min-width: 100px;
+    }
+
+    .custom-control-label {
+      width: 100%;
     }
 
   }

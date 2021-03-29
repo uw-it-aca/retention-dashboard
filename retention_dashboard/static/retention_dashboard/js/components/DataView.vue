@@ -11,12 +11,19 @@
             download results
           </b-link>
         </p>
-        <b-modal id="email-modal" title="E-Mail Addresses" ok-only>
-          <div class="container">
-            <textarea id="email_area" v-model="email_list_text" readonly />
-            <button v-clipboard:copy="email_list_text">
-              copy
-            </button>
+        <b-modal id="email-modal" title="Copy E-Mail Addresses" ok-title="Done" ok-only>
+          <div class="container rd-copy-email">
+            <div>
+              <textarea id="email_area" v-model="email_list_text" rows="10" readonly />
+            </div>
+            <div class="rd-copy-email-btn">
+              <b-button variant="info" v-clipboard:copy="email_list_text">
+                copy
+              </b-button>
+              <p class="small rd-copy-email-desc">
+                Press 'copy' button to copy email addresses to clipboard
+              </p>
+            </div>
           </div>
         </b-modal>
       </b-col>
@@ -45,6 +52,7 @@
       :fields="fields"
       :per-page="perPage"
       :current-page="currentPage"
+      :sort-compare="customSorting"
       sort-icon-left
     >
       <template v-slot:head(priority_score)="data">
@@ -353,6 +361,9 @@
         var fields;
         if (this.current_file === "EOP"){
           fields = this.eop_fields;
+        } else if (this.current_file === "ISS"){
+          fields = this.eop_fields.filter(
+            item => !(item.key == "is_premajor"));
         } else {
           fields = this.standard_fields;
         }
@@ -364,6 +375,14 @@
             return this.download.summer_fields_eop;
           } else {
             return this.download.fields_eop;
+          }
+        } else if (this.current_file === "ISS"){
+          if(this.is_summer){
+            return this.download.summer_fields_eop.filter(
+              item => !(item.key == "is_premajor"));
+          } else {
+            return this.download.fields_eop.filter(
+              item => !(item.key == "is_premajor"));
           }
         } else {
           if(this.is_summer){
@@ -426,6 +445,23 @@
         }
         return params;
       },
+      filter_trigger () {
+        return (
+          this.assignment_filter,
+          this.grade_filter,
+          this.activity_filter,
+          this.prediction_filter,
+          this.premajor_filter,
+          this.stem_filter,
+          this.freshman_filter,
+          this.keyword_filter,
+          this.advisor_filter,
+          this.current_week,
+          this.current_file,
+          this.summer_filter,
+          this.signins_filter
+        );
+      },
       ...Vuex.mapState({
         current_week: state => state.dataselect.current_week,
         current_file: state => state.dataselect.current_file,
@@ -454,48 +490,20 @@
         });
         this.items = csv;
       },
-      assignment_filter: function () {
+      filter_trigger: function () {
         this.run_filters();
       },
-      grade_filter: function () {
-        this.run_filters();
-      },
-      activity_filter: function () {
-        this.run_filters();
-      },
-      prediction_filter: function () {
-        this.run_filters();
-      },
-      premajor_filter: function () {
-        this.run_filters();
-      },
-      stem_filter: function () {
-        this.run_filters();
-      },
-      freshman_filter: function () {
-        this.run_filters();
-      },
-      keyword_filter: function () {
-        this.run_filters();
-      },
-      advisor_filter: function () {
-        this.run_filters();
-      },
-      current_week: function () {
-        this.run_filters();
-      },
-      current_file: function () {
-        this.run_filters();
-      },
-      summer_filter: function () {
-        this.run_filters();
-      },
-      signins_filter: function () {
-        this.run_filters();
-      }
-
     },
     methods: {
+      customSorting(a, b, key) {
+        if (key === 'student_name') {
+          let a_name = a.student_last_name + ", " + a.student_first_name;
+          let b_name = b.student_last_name + ", " + b.student_first_name;
+          return a_name < b_name ? -1 : a_name > b_name ? 1 : 0;
+        } else {
+          return a[key] < b[key] ? -1 : a[key] > b[key] ? 1 : 0;
+        }
+      },
       get_filtered_emails(){
         var emails = [];
         this.items.forEach(function(item){
@@ -554,14 +562,16 @@
             return qs.stringify(params, {arrayFormat: 'repeat'});
           },
           params: this.filter_params,
-        })
-          .then(function(response){
-            if(query_token === vue.request_id){
-              vue.isBusy = false;
-              vue.csv_data = response.data.rows;
-              vue.is_summer = response.data.is_summer;
-            }
-          });
+        }).then(function(response){
+          if(query_token === vue.request_id){
+            vue.isBusy = false;
+            vue.csv_data = response.data.rows;
+            vue.is_summer = response.data.is_summer;
+          }
+        }).catch(() => {
+          vue.isBusy = false;
+          vue.csv_data = [];
+        });
       },
       get_rounded(num_string){
         var number = Number(num_string);
@@ -576,11 +586,10 @@
   /* Structure */
 
   .row.rd-listactions-container {
-    background-color: $grey-bkgnd;
-    border-bottom: solid 2px $grey-border;
+    background-color: $grey-light-bkgnd;
     line-height: 2;
     margin-bottom: 2rem;
-    padding: 1rem 0;
+    padding: 0.5rem 0;
 
     .col {
       text-align: center;
@@ -611,6 +620,18 @@
     color: $white-text;
     margin: 0 2px;
     padding: 3px 6px;
+  }
+
+  .rd-copy-email {
+    display: inline-flex;
+
+    .rd-copy-email-btn {
+      padding-left: 1rem;
+    }
+
+    .rd-copy-email-desc {
+      padding-top: 0.5rem;
+    }
   }
 
   .rd-table-container {

@@ -2,16 +2,17 @@
   <b-container id="app" class="rd-content-container" fluid>
     <b-row class="rd-app-banner" role="banner">
       <b-col class="col-10 col-md-8">
-        <h1 class="rd-app-title">
+        <h1 class="rd-app-title sr-only">
           <span>Retention Analytics Dashboard</span>
         </h1>
+        <a href="/" class="nav-link p-0 rd-action-link"><img src="/static/retention_dashboard/img/RAD-logo.png" alt="RAD Logo" class="rd-logo"></a>
       </b-col>
       <b-col class="rd-login-info col-2 col-md-4">
         <h3 id="rd_login_header" class="sr-only">
           Your information
         </h3>
-        <span aria-labelledby="rd_login_header" class="hide-lg">Welcome, </span><span id="netid">{{ netid }}</span>
-        <a href="/saml/logout" tabindex="0" class="rd-logout-link">Sign out</a>
+        <span aria-labelledby="rd_login_header" class="hide-lg"><b-icon icon="person-circle" /></span><span id="netid"> {{ netid }}</span>
+        <a href="/saml/logout" tabindex="0" class="rd-logout-link">Sign Out</a>
       </b-col>
     </b-row>
     <b-row role="main">
@@ -23,7 +24,7 @@
         <div class="rd-footer-links">
           <a href="https://www.washington.edu/online/privacy/">Privacy</a> / <a href="https://www.washington.edu/online/terms/">Terms</a> / <a href="mailto:lyle3@uw.edu?subject=Support: Retention Analytics Dashboard">Support</a>
         </div>
-        <div>© 2020 University of Washington  |  Seattle, WA</div>
+        <div>© 2021 University of Washington  |  Seattle, WA</div>
       </footer>
     </b-row>
   </b-container>
@@ -76,16 +77,14 @@
 
   /* Top banner styles */
   .rd-app-banner {
-    align-items: center;
     background-color: $uw-purple;
     background-image: url('/static/retention_dashboard/img/uw-logo-white.png');
-    background-position: left 18px;
+    background-position: right 1rem bottom;
     background-repeat: no-repeat;
     background-size: 60px;
-    border-bottom: 3px solid $banner-border;
     color: $white-text;
-    font-size: 0.75rem;
     min-height: 60px;
+    padding: 0.5rem 0;
 
     a {
       color: $uw-metallic;
@@ -113,6 +112,10 @@
   .rd-page-header {
     font-size: 2rem;
     padding: 1.5rem 0;
+  }
+
+  .rd-logo {
+    width: 200px;
   }
 
   /* footer styles */
@@ -154,7 +157,7 @@
   }
 
   .rd-logout-link {
-    display: block;
+    font-size: 0.75rem;
   }
 
 </style>

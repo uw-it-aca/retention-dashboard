@@ -42,6 +42,7 @@ if os.getenv('ENV') == 'prod':
     PREMAJOR_USERS_GROUP = "u_acadev_retention-prod-premajor"
     EOP_USERS_GROUP = "u_acadev_retention-prod-eop"
     INTERNATIONAL_USERS_GROUP = "u_acadev_retention-prod-international"
+    ISS_USERS_GROUP = "u_acadev_retention-prod-iss"
 elif os.getenv('ENV') == 'eval':
     ALLOWED_USERS_GROUP = 'u_acadev_retention-test'
     # ADMIN_USERS_GROUP = 'u_acadev_retention-test-admin'
@@ -49,6 +50,7 @@ elif os.getenv('ENV') == 'eval':
     PREMAJOR_USERS_GROUP = ALLOWED_USERS_GROUP
     EOP_USERS_GROUP = ALLOWED_USERS_GROUP
     INTERNATIONAL_USERS_GROUP = ALLOWED_USERS_GROUP
+    ISS_USERS_GROUP = ALLOWED_USERS_GROUP
 elif os.getenv("ENV") == "localdev":
     DEBUG = True
     ALLOWED_USERS_GROUP = 'u_test_group'
@@ -56,6 +58,7 @@ elif os.getenv("ENV") == "localdev":
     PREMAJOR_USERS_GROUP = ALLOWED_USERS_GROUP
     EOP_USERS_GROUP = ALLOWED_USERS_GROUP
     INTERNATIONAL_USERS_GROUP = ALLOWED_USERS_GROUP
+    ISS_USERS_GROUP = ALLOWED_USERS_GROUP
     MOCK_SAML_ATTRIBUTES = {
         'uwnetid': ['javerage'],
         'affiliations': ['student', 'member', 'alum', 'staff', 'employee'],

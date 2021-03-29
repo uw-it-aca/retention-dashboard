@@ -24,7 +24,8 @@ class Week(models.Model):
 
 
 class DataPoint(models.Model):
-    TYPE_CHOICES = ((1, "Premajor"), (2, "EOP"), (3, "International"))
+    TYPE_CHOICES = ((1, "Premajor"), (2, "EOP"), (3, "International"),
+                    (4, "ISS"))
     type = models.PositiveSmallIntegerField(choices=TYPE_CHOICES)
     week = models.ForeignKey("Week", on_delete=models.PROTECT)
     student_name = models.TextField()
@@ -54,6 +55,14 @@ class DataPoint(models.Model):
                 return parts[1], parts[0]
             except IndexError:
                 return "", self.student_name
+
+    @staticmethod
+    def get_data_type_by_text(type_str):
+        try:
+            return [t for t in list(DataPoint.TYPE_CHOICES)
+                    if t[1] == type_str][0][0]
+        except IndexError:
+            raise ValueError("Unkown type {}".format(type_str))
 
     @staticmethod
     def get_data_by_type_week(type, week):
@@ -127,14 +136,13 @@ class DataPoint(models.Model):
         return data_queryset.filter(is_stem=is_stem)
 
     @staticmethod
-    def filter_by_advisor(data_queryset, advisor_netid):
-        """
-        Hard code this to EOP advisors for now, if we get other types add that
-        filtering here
-        """
-        advisor = Advisor.objects.get(advisor_netid=advisor_netid,
-                                      advisor_type=2)
-        return data_queryset.filter(advisor=advisor)
+    def filter_by_advisor(data_queryset, advisor_netid, advisor_type):
+        if advisor_netid and advisor_type:
+            advisor_type_id = DataPoint.get_data_type_by_text(advisor_type)
+            print(advisor_type, advisor_type_id)
+            advisor = Advisor.objects.get(advisor_netid=advisor_netid,
+                                          advisor_type=advisor_type_id)
+            return data_queryset.filter(advisor=advisor)
 
     def get_summer_string(self):
         term_list = []
@@ -203,6 +211,11 @@ class Advisor(models.Model):
             .order_by('advisor_name') \
             .filter(~Q(advisor_name="")) \
             .values('advisor_name', 'advisor_netid')
+        iss = Advisor.objects.filter(advisor_type=4) \
+            .order_by('advisor_name') \
+            .filter(~Q(advisor_name="")) \
+            .values('advisor_name', 'advisor_netid')
         return {"EOP": list(eop),
                 "Premajor": list(prem),
-                "International": list(inter)}
+                "International": list(inter),
+                "ISS": list(iss)}

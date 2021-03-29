@@ -12,6 +12,7 @@ ingress:
         - "/"
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt
+    nginx.ingress.kubernetes.io/client-body-buffer-size: "16K"
     nginx.ingress.kubernetes.io/proxy-body-size: "50m"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "500"
 lifecycle:
@@ -21,6 +22,8 @@ lifecycle:
 affinity:
    podsSpanNodes: true
 readiness:
+  enabled: true
+securityPolicy:
   enabled: true
 database:
   engine: postgres
@@ -76,7 +79,7 @@ certs:
   keyPath: /certs/test.retention.uw.edu-uwca.key
   secretName: test.retention.uw.edu-uwca-certs
 image:
-  repository: registry.hub.docker.com/acait/retention-dashboard
+  repository: gcr.io/uwit-mci-axdd/retention-dashboard
   tag: IMAGE_TAG
 environmentVariables:
   - name: ENV
