@@ -29,7 +29,7 @@
           >
             <template v-slot:first>
               <b-form-select-option :value="'all'">
-                All advisors
+                All advisers
               </b-form-select-option>
               <b-form-select-option :value="'no_assigned_adviser'">
                 No assigned adviser
