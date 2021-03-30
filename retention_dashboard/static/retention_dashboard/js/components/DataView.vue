@@ -231,7 +231,7 @@
           },
           {
             key: 'advisor_name',
-            label: 'Advisor',
+            label: 'Adviser',
             class: 'text-center',
             sortable: true
           }
