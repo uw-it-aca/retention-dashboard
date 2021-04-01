@@ -140,12 +140,10 @@ class DataPoint(models.Model):
 
     @staticmethod
     def filter_by_advisor(data_queryset, advisor_netid, advisor_type):
-        if advisor_netid and advisor_type:
-            advisor_type_id = DataPoint.get_data_type_by_text(advisor_type)
-            print(advisor_type, advisor_type_id)
-            advisor = Advisor.objects.get(advisor_netid=advisor_netid,
-                                          advisor_type=advisor_type_id)
-            return data_queryset.filter(advisor=advisor)
+        advisor_type_id = DataPoint.get_data_type_by_text(advisor_type)
+        advisor = Advisor.objects.get(advisor_netid=advisor_netid,
+                                      advisor_type=advisor_type_id)
+        return data_queryset.filter(advisor=advisor)
 
     def get_summer_string(self):
         term_list = []
