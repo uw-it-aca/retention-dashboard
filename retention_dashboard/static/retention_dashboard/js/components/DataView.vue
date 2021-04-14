@@ -46,7 +46,6 @@
       no-border-collapse
       responsive
       show-empty
-      sticky-header
       :busy="isBusy"
       :items="items"
       :fields="fields"
