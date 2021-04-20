@@ -280,7 +280,7 @@
         items: [],
         isBusy: false,
         csv_data: "",
-        perPage: 200,
+        perPage: 50,
         currentPage: 1,
         selected: {},
         low_min: -5,
