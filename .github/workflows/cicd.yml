@@ -143,7 +143,7 @@ jobs:
     needs: [context, build]
 
     outputs:
-      context: ${{ steps.deploy.outputs.context }}
+      context: ${{ steps.context.outputs.context }}
 
     runs-on: ubuntu-18.04
 
@@ -152,7 +152,6 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Deployment Pipeline
-        id: deploy
         if: >-
           contains(fromJSON('["main", "master", "develop", "qa"]'),
             needs.context.outputs.git_repo_branch)
@@ -162,6 +161,11 @@ jobs:
           commit_hash: ${{ needs.context.outputs.commit_hash }}
           git_repo_branch: ${{ needs.context.outputs.git_repo_branch }}
           gh_auth_token: ${{ secrets.GH_AUTH_TOKEN }}
+
+      - name: 'Surface context from executed build step'
+        id: context
+        shell: bash
+        run: echo "::set-output name=context::$(< ${CONTEXT_FILENAME})"
 
   housekeeping:
     if: github.event_name == 'push'
