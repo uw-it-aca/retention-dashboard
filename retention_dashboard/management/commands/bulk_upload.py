@@ -50,7 +50,7 @@ class Command(BaseCommand):
                                   "supplied then stdout is used"),
                             required=False)
         parser.add_argument("--delete_existing_data",
-                            help=("Delete all Advisor, Week, Datapoint, and "
+                            help=("Delete all Adviser, Week, Datapoint, and "
                                   "Upload entries before the bulk upload"),
                             action="store_true")
         group = parser.add_argument_group(
@@ -186,7 +186,7 @@ class Command(BaseCommand):
         DataPoint.objects.all().delete()
         self.logger.info("Deleted all DataPoint entries.")
         Advisor.objects.all().delete()
-        self.logger.info("Deleted all Advisor entries.")
+        self.logger.info("Deleted all Adviser entries.")
 
     def split_alpha_numeric(self, value):
         """

@@ -132,6 +132,13 @@ class BulkDataAdmin(RESTDispatch):
                 message=(form.errors))
 
 
+class GCSDataAdmin(RESTDispatch):
+
+     def post(self, request):
+         pass
+
+
+
 @method_decorator(group_required(settings.ADMIN_USERS_GROUP),
                   name='dispatch')
 class MockDataAdmin(RESTDispatch):
