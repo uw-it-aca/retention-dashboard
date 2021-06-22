@@ -1,6 +1,7 @@
 # Copyright 2021 UW-IT, University of Washington
 # SPDX-License-Identifier: Apache-2.0
 
+import unittest
 from django.test import TestCase
 from retention_dashboard.dao.data import get_filtered_data, get_weeks_with_data
 from retention_dashboard.tests import create_initial_data
@@ -89,3 +90,9 @@ class AdvisorTest(TestCase):
         self.assertEqual(len(advisors['Premajor']), 2)
         self.assertEqual(len(advisors['EOP']), 2)
         self.assertEqual(len(advisors['International']), 1)
+        self.assertEqual(len(advisors['ISS']), 1)
+        self.assertEqual(len(advisors['Tacoma']), 1)
+
+
+if __name__ == "__main__":
+    unittest.main()

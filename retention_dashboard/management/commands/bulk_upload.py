@@ -228,6 +228,8 @@ class Command(BaseCommand):
             file_type = 3
         elif (file_name == "ISS-STUDENTS.CSV"):
             file_type = 4
+        elif (file_name == "TACOMA-STUDENTS.CSV"):
+            file_type = 5
         else:
             raise ValueError("File type for {} is unknown."
                              .format(file_name))
@@ -357,6 +359,9 @@ class Command(BaseCommand):
                         }, {
                         "path":"data/su20/week-08/iss-students.csv",
                         "type":4
+                        }, {
+                        "path":"data/su20/week-08/tacoma-students.csv",
+                        "type":5
                         }]
                 }]
         }
@@ -423,8 +428,9 @@ class Command(BaseCommand):
                   message=("No files to process. Are you using the correct "
                            "directory structure. See the example on the "
                            "example in the docs."))
-        self.logger.info("Skipped {} unrecognized files."
-                         .format(skipped_files_count))
+        if skipped_files_count:
+            self.logger.info("Skipped {} unrecognized files."
+                             .format(skipped_files_count))
         return params_list
 
     def filter_dir_and_files(self, dir_and_files, year_filter,

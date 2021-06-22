@@ -17,7 +17,7 @@
               <textarea id="email_area" v-model="email_list_text" rows="10" readonly />
             </div>
             <div class="rd-copy-email-btn">
-              <b-button variant="info" v-clipboard:copy="email_list_text">
+              <b-button v-clipboard:copy="email_list_text" variant="info">
                 copy
               </b-button>
               <p class="small rd-copy-email-desc">
@@ -548,7 +548,8 @@
         var vue = this,
             query_token = Date.now();
         this.request_id = query_token;
-        if(this.current_file.length < 1 || this.current_week.length < 1){
+        if(this.current_file &&
+          this.current_file.length < 1 || this.current_week.length < 1){
           // don't fire ajax unless week and type are set
           return;
         }

@@ -231,6 +231,8 @@
       <br />
       ISS: <input type="radio" value="4" name="type">
       <br />
+      Tacoma: <input type="radio" value="5" name="type">
+      <br />
       <select id="selected_week">
         {% for week in weeks %}
           <option value="{{ week.id }}">{{ week.year }} - {{ week.get_quarter_display }} - Week {{ week.number }}</option>
