@@ -548,7 +548,8 @@
         var vue = this,
             query_token = Date.now();
         this.request_id = query_token;
-        if(this.current_file.length < 1 || this.current_week.length < 1){
+        if(this.current_file &&
+           this.current_file.length < 1 || this.current_week.length < 1){
           // don't fire ajax unless week and type are set
           return;
         }

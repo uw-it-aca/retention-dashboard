@@ -89,3 +89,5 @@ class AdvisorTest(TestCase):
         self.assertEqual(len(advisors['Premajor']), 2)
         self.assertEqual(len(advisors['EOP']), 2)
         self.assertEqual(len(advisors['International']), 1)
+        self.assertEqual(len(advisors['ISS']), 1)
+        self.assertEqual(len(advisors['Tacoma']), 1)

@@ -28,7 +28,7 @@ class Week(models.Model):
 
 class DataPoint(models.Model):
     TYPE_CHOICES = ((1, "Premajor"), (2, "EOP"), (3, "International"),
-                    (4, "ISS"))
+                    (4, "ISS"), (5, "Tacoma"))
     type = models.PositiveSmallIntegerField(choices=TYPE_CHOICES)
     week = models.ForeignKey("Week", on_delete=models.PROTECT)
     student_name = models.TextField()
@@ -198,25 +198,22 @@ class Advisor(models.Model):
     class Meta:
         unique_together = ('advisor_netid', 'advisor_type')
 
-    @staticmethod
-    def get_all_advisors():
-        eop = Advisor.objects.filter(advisor_type=2) \
+    @classmethod
+    def get_advisor_by_type(cls, advisor_type):
+        return Advisor.objects.filter(advisor_type=advisor_type) \
             .order_by('advisor_name') \
             .filter(~Q(advisor_name="")) \
             .values('advisor_name', 'advisor_netid')
-        prem = Advisor.objects.filter(advisor_type=1) \
-            .filter(~Q(advisor_name="")) \
-            .order_by('advisor_name') \
-            .values('advisor_name', 'advisor_netid')
-        inter = Advisor.objects.filter(advisor_type=3) \
-            .order_by('advisor_name') \
-            .filter(~Q(advisor_name="")) \
-            .values('advisor_name', 'advisor_netid')
-        iss = Advisor.objects.filter(advisor_type=4) \
-            .order_by('advisor_name') \
-            .filter(~Q(advisor_name="")) \
-            .values('advisor_name', 'advisor_netid')
-        return {"EOP": list(eop),
-                "Premajor": list(prem),
+
+    @classmethod
+    def get_all_advisors(cls):
+        prem = cls.get_advisor_by_type(1)
+        eop = cls.get_advisor_by_type(2)
+        inter = cls.get_advisor_by_type(3)
+        iss = cls.get_advisor_by_type(4)
+        tacoma = cls.get_advisor_by_type(5)
+        return {"Premajor": list(prem),
+                "EOP": list(eop),
                 "International": list(inter),
-                "ISS": list(iss)}
+                "ISS": list(iss),
+                "Tacoma": list(tacoma)}
