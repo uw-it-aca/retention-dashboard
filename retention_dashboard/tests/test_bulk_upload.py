@@ -5,7 +5,7 @@ import os
 import unittest
 from retention_dashboard.management.commands.bulk_upload import Command
 from retention_dashboard.utilities.logger import RetentionLogger
-from unittest import mock
+from unittest.mock import MagicMock
 
 
 class TestBulkUpload(unittest.TestCase):
@@ -26,8 +26,8 @@ class TestBulkUpload(unittest.TestCase):
         command = Command()
         command.logger = RetentionLogger()
         command.listdir_fullpath = \
-            mock.Mock(side_effect=mock_listdir_fullpath)
-        os.listdir = mock.MagicMock(
+            MagicMock(side_effect=mock_listdir_fullpath)
+        os.listdir = MagicMock(
             return_value=["eop-students.csv", "international-students.csv",
                           "premajor-students.csv", "iss-students.csv",
                           "tacoma-students.csv"])
