@@ -86,11 +86,7 @@
           location.reload()
         }).fail(function (response){
           toggleDisabled(false);
-          if (response.status === 400){
-            alert('Week and type combo already exists')
-          } else {
-            alert(response.responseJSON.error);
-          }
+          alert(response.responseJSON.error);
         });
       });
 
