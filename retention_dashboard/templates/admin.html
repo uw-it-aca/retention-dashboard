@@ -22,56 +22,16 @@
         $("#id_file").prop( "disabled", disabled)
         $("#id_submit_gcs_form").prop( "disabled", disabled)
         // delete buttons
-        $('.delete').prop( "disabled", disabled);
+        $('#delete_dataset').prop( "disabled", disabled);
       }
 
-      $("#week_form").submit(function (e) {
+      $("#mock_data").click(function (e) {
         e.preventDefault();
         var csrf = jQuery("[name=csrfmiddlewaretoken]").val();
-        $.ajax({
-          url: "/api/admin/week/",
-          method: "POST",
-          data: {
-            'year': $("#year").val(),
-            'quarter': $("#quarter").val(),
-            'week': $("#week").val()
-          },
-          headers: {
-            'X-CSRFToken': csrf
-          },
-          beforeSend: function (xhr) {
-            toggleDisabled(true);
-          }
-        }).done(function (response) {
-          toggleDisabled(false);
-          if(!response.created){
-            alert("Week already exists");
-          } else {
-            alert("Week created");
-            location.reload();
-          }
-        }).fail(function (response){
-          toggleDisabled(false);
-          alert("Error adding new week: " +
-                response.responseJSON.error);
-        });
-      });
-
-      $("#data_form").submit(function (e) {
-        e.preventDefault();
-        var csrf = jQuery("[name=csrfmiddlewaretoken]").val(),
-                data = new FormData();
-        data.append('type', $('input[name=type]:checked', '#data_form').val())
-        data.append('week', $("#selected_week").val())
-        data.append('file', $('#file').get(0).files[0])
 
         $.ajax({
-          url: "/api/admin/dataset/",
-          method: "POST",
-          data: data,
-          mimeType: 'multipart/form-data',
-          contentType: false,
-          processData: false,
+          url: "/api/admin/mock_data/",
+          method: "PUT",
           dataType: 'json',
           headers: {
             'X-CSRFToken': csrf
@@ -81,38 +41,13 @@
           }
         }).done(function (response) {
           toggleDisabled(false);
-          alert('Upload successful')
+          alert('mock data loaded');
           location.reload()
         }).fail(function (response){
           toggleDisabled(false);
-          alert(response.responseJSON.error);
+          alert('Issue loading mock data');
         });
       });
-
-      $(".delete").click(function (e) {
-        e.preventDefault();
-        var upload_id = $(e.target).val(),
-                csrf = jQuery("[name=csrfmiddlewaretoken]").val();
-        $.ajax({
-          url: "/api/admin/dataset/" + upload_id + "/",
-          method: "DELETE",
-          contentType: false,
-          processData: false,
-          dataType: 'json',
-          headers: {
-            'X-CSRFToken': csrf
-          },
-          beforeSend: function (xhr) {
-            toggleDisabled(true);
-          }
-        }).done(function (response) {
-          toggleDisabled(false);
-          alert('deleted')
-          location.reload()
-        }).fail(function (response){
-          toggleDisabled(false);
-        });
-      })
 
       $("#gcs_form").submit(function (e) {
         e.preventDefault();
@@ -148,13 +83,21 @@
         });
       });
 
-      $("#mock_data").click(function (e) {
+      $("#data_form").submit(function (e) {
         e.preventDefault();
-        var csrf = jQuery("[name=csrfmiddlewaretoken]").val();
+        var csrf = jQuery("[name=csrfmiddlewaretoken]").val(),
+                data = new FormData();
+        data.append('type', $('input[name=type]:checked', '#data_form').val())
+        data.append('week', $("#selected_week").val())
+        data.append('file', $('#file').get(0).files[0])
 
         $.ajax({
-          url: "/api/admin/mock_data/",
-          method: "PUT",
+          url: "/api/admin/dataset/",
+          method: "POST",
+          data: data,
+          mimeType: 'multipart/form-data',
+          contentType: false,
+          processData: false,
           dataType: 'json',
           headers: {
             'X-CSRFToken': csrf
@@ -164,11 +107,68 @@
           }
         }).done(function (response) {
           toggleDisabled(false);
-          alert('mock data loaded');
+          alert('Upload successful')
           location.reload()
         }).fail(function (response){
           toggleDisabled(false);
-          alert('Issue loading mock data');
+          alert(response.responseJSON.error);
+        });
+      });
+
+      $("#delete_dataset").click(function (e) {
+        e.preventDefault();
+        var upload_id = $(e.target).val(),
+                csrf = jQuery("[name=csrfmiddlewaretoken]").val();
+        $.ajax({
+          url: "/api/admin/dataset/" + upload_id + "/",
+          method: "DELETE",
+          contentType: false,
+          processData: false,
+          dataType: 'json',
+          headers: {
+            'X-CSRFToken': csrf
+          },
+          beforeSend: function (xhr) {
+            toggleDisabled(true);
+          }
+        }).done(function (response) {
+          toggleDisabled(false);
+          alert('Deleted')
+          location.reload()
+        }).fail(function (response){
+          toggleDisabled(false);
+        });
+      })
+
+      $("#week_form").submit(function (e) {
+        e.preventDefault();
+        var csrf = jQuery("[name=csrfmiddlewaretoken]").val();
+        $.ajax({
+          url: "/api/admin/week/",
+          method: "POST",
+          data: {
+            'year': $("#year").val(),
+            'quarter': $("#quarter").val(),
+            'week': $("#week").val()
+          },
+          headers: {
+            'X-CSRFToken': csrf
+          },
+          beforeSend: function (xhr) {
+            toggleDisabled(true);
+          }
+        }).done(function (response) {
+          toggleDisabled(false);
+          if(!response.created){
+            alert("Week already exists");
+          } else {
+            alert("Week created");
+            location.reload();
+          }
+        }).fail(function (response){
+          toggleDisabled(false);
+          alert("Error adding new week: " +
+                response.responseJSON.error);
         });
       });
 
@@ -182,76 +182,85 @@
     <h2>Mock Data Admin</h2>
     Click this button to load mock data (available on dev builds only).  Will take approx. 60 seconds to load 2 weeks of data, alert will be generated on success or failure <button id="mock_data">Load Mock Data</button>
   {% endif %}
-  <h2>Load a file from GCS</h2>
   <div>
-    <form id="gcs_form">
-      {{ gcsform.as_p }}
-      <input id="id_submit_gcs_form" type="submit" value="Add Dataset">
-    </form>
-  </div>
-  <h2>Manual Week Creation</h2>
-  <div>
-    <h3>Weeks</h3>
-    <table border="1">
-      <tr><th>Year</th><th>Quarter</th><th>Week</th></tr>
-      {% for week in weeks %}
-        <tr><td>{{ week.year }}</td><td>{{ week.get_quarter_display }}</td><td>{{ week.number }}</td></tr>
-      {% endfor %}
-    </table>
-  </div>
-  <div>
-    <h3>Add New Week</h3>
-    <p>Adding a new week will make it avalible for a dataset upload, new weeks will not appear in the UI until they have data attached</p>
-    <form id="week_form">
-      Week Number: <input id="week" minlength="1" maxlength="2">
-      Quarter:
-      <select id="quarter">
-        <option value="4">Autumn</option>
-        <option value="1">Winter</option>
-        <option value="2">Spring</option>
-        <option value="3">Summer</option>
-      </select>
-      Year: <input id="year" maxlength="4" minlength="4" max="2100">
-      <input id="add_week" type="submit" value="Add Week">
-    </form>
-  </div>
-  <div>
-    <h2>Manual Data Upload</h2>
-    <h3>Single file upload</h3>
-    <p>Only one file upload is allowed per type (eg Premajor) and week combination.  Add a new week above if it isn't in the dropdown.</p>
-    <form id="data_form">
-      <input id="file" type="file">
-      <br />
-      Premajor: <input type="radio" value="1" name="type">
-      <br />
-      EOP: <input type="radio" value="2" name="type">
-      <br />
-      International: <input type="radio" value="3" name="type">
-      <br />
-      ISS: <input type="radio" value="4" name="type">
-      <br />
-      Tacoma: <input type="radio" value="5" name="type">
-      <br />
-      <select id="selected_week">
-        {% for week in weeks %}
-          <option value="{{ week.id }}">{{ week.year }} - {{ week.get_quarter_display }} - Week {{ week.number }}</option>
-        {% endfor %}
-      </select>
-    <input id="add_dataset" type="submit" value="Add Dataset">
-    </form>
+    <h2>Upload Admin</h2>
+    <div>
+      <h3>GCS file upload</h3>
+      <form id="gcs_form">
+        {{ gcsform.as_p }}
+        <input id="id_submit_gcs_form" type="submit" value="Add Dataset">
+      </form>
+    </div>
+    <div>
+      <h3>Single file upload</h3>
+      <p>Only one file upload is allowed per type (eg Premajor) and week
+         combination. Add a new week above if it isn't in the dropdown.</p>
+      <form id="data_form">
+        <input id="file" type="file">
+        <br />
+        Premajor: <input type="radio" value="1" name="type">
+        <br />
+        EOP: <input type="radio" value="2" name="type">
+        <br />
+        International: <input type="radio" value="3" name="type">
+        <br />
+        ISS: <input type="radio" value="4" name="type">
+        <br />
+        Tacoma: <input type="radio" value="5" name="type">
+        <br />
+        <select id="selected_week">
+          {% for week in weeks %}
+            <option value="{{ week.id }}">
+              {{ week.year }} - {{ week.get_quarter_display }} - Week {{ week.number }}
+            </option>
+          {% endfor %}
+        </select>
+        <input id="add_dataset" type="submit" value="Add Dataset">
+      </form>
+    </div>
     <div>
       <h3>Existing Uploads</h3>
-      <p>Deleting a upload will delete all data associated with it, so this has user facing consequences.  Should only be needed if a file is erroneously uploaded</p>
+      <p>Deleting a upload will delete all data associated with it, so this
+         has user facing consequences.  Should only be needed if a file is
+         erroneously uploaded</p>
       <table>
         <tr><th>Date</th><th>User</th><th>Type</th><th>Week</th><th>Delete</th></tr>
         {% for upload in uploads %}
           <tr>
-              <td>{{upload.created_on}}</td>
-              <td>{{upload.uploaded_by}}</td>
-              <td>{{upload.get_type_display}}</td>
-              <td>{{ upload.week.year }} - {{ upload.week.get_quarter_display }} - Week {{ upload.week.number }}</td>
-              <td><button class="delete" value="{{ upload.id }}">x</button></td>
+            <td>{{upload.created_on}}</td>
+            <td>{{upload.uploaded_by}}</td>
+            <td>{{upload.get_type_display}}</td>
+            <td>{{ upload.week.year }} - {{ upload.week.get_quarter_display }} - Week {{ upload.week.number }}</td>
+            <td><button id="delete_dataset" class="delete" value="{{ upload.id }}">x</button></td>
           </tr>
+        {% endfor %}
+      </table>
+    </div>
+  </div>
+  <div>
+    <h2>Week Admin</h2>
+    <div>
+      <h3>Add New Week</h3>
+      <p>Adding a new week will make it avalible for a dataset upload, new weeks will not appear in the UI until they have data attached</p>
+      <form id="week_form">
+        Week Number: <input id="week" minlength="1" maxlength="2">
+        Quarter:
+        <select id="quarter">
+          <option value="4">Autumn</option>
+          <option value="1">Winter</option>
+          <option value="2">Spring</option>
+          <option value="3">Summer</option>
+        </select>
+        Year: <input id="year" maxlength="4" minlength="4" max="2100">
+        <input id="add_week" type="submit" value="Add Week">
+      </form>
+    </div>
+    <div>
+      <h3>Existing Weeks</h3>
+      <table border="1">
+        <tr><th>Year</th><th>Quarter</th><th>Week</th></tr>
+        {% for week in weeks %}
+          <tr><td>{{ week.year }}</td><td>{{ week.get_quarter_display }}</td><td>{{ week.number }}</td></tr>
         {% endfor %}
       </table>
     </div>
