@@ -30,6 +30,9 @@ database:
   secretName: test.retention.uw.edu-sql-secrets
   hostname: retention-db
   name: retention-test
+gcsCredentials:
+  mounted: true
+  secretName: test-analytics.apps.canvas.uw.edu-gcs-credentials
 externalService:
   enabled: true
   name: retention-db
@@ -70,6 +73,11 @@ externalSecrets:
       data:
         - name: uw-idp-cert
           property: cert
+    - name: test-analytics.apps.canvas.uw.edu-gcs-credentials
+      externalKey: axdd/kv/data/canvas/analytics/shared/gcs-credentials
+      data:
+        - name: credentials.json
+          property: credentials.json
 repo: retention-dashboard
 instance: test
 branch: develop
@@ -92,6 +100,8 @@ environmentVariables:
     value: "True"
   - name: SP_USE_2FA
     value: "True"
+  - name: GOOGLE_APPLICATION_CREDENTIALS
+    value: "/gcs/credentials.json"
 environmentVariablesSecrets:
   gaKey:
     name: GA_KEY

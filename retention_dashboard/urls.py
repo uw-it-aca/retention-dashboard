@@ -6,7 +6,8 @@ from retention_dashboard.views.pages import LandingView, AdminView
 from retention_dashboard.views.api.admin import (WeekAdmin,
                                                  DataAdmin,
                                                  BulkDataAdmin,
-                                                 MockDataAdmin)
+                                                 MockDataAdmin,
+                                                 GCSDataAdmin)
 from retention_dashboard.views.api.data import (DataView,
                                                 WeekView,
                                                 DataAuthView,
@@ -40,6 +41,9 @@ urlpatterns = [
     re_path(r'^api/admin/bulk_dataset/$',
             BulkDataAdmin.as_view(),
             name="bulk_dataset_admin_view"),
+    re_path(r'^api/admin/gcs_data/$',
+            GCSDataAdmin.as_view(),
+            name="moderate_data_admin_view"),
     re_path(r'^admin/?$', AdminView.as_view()),
     re_path(r'^', LandingView.as_view()),
 ]

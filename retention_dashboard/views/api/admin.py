@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import os
+import traceback
 import zipfile
 from django.conf import settings
 from django.utils.decorators import method_decorator
@@ -13,10 +14,12 @@ from uw_saml.decorators import group_required
 from retention_dashboard.models import Week, Upload
 from retention_dashboard.management.commands.bulk_upload import \
     InvalidFileException, InvalidUploadException
-from retention_dashboard.utilities.upload import process_upload
+from retention_dashboard.utilities.upload import process_upload, \
+    process_rad_upload
 from userservice.user import get_original_user
 from retention_dashboard.views.api import RESTDispatch
-from retention_dashboard.views.api.forms import BulkDataForm
+from retention_dashboard.views.api.forms import BulkDataForm, GCSForm
+from retention_dashboard.dao.admin import GCSDataDao
 
 
 @method_decorator(group_required(settings.ADMIN_USERS_GROUP),
@@ -49,7 +52,6 @@ class DataAdmin(RESTDispatch):
 
             # read uploaded file
             if uploaded_file is None:
-                print("No file specified")
                 return self.error_response(status=400,
                                            message="No file specified")
             file = uploaded_file.read()
@@ -132,11 +134,34 @@ class BulkDataAdmin(RESTDispatch):
                 message=(form.errors))
 
 
+@method_decorator(group_required(settings.ADMIN_USERS_GROUP),
+                  name='dispatch')
+@method_decorator(csrf_exempt, name='dispatch')
 class GCSDataAdmin(RESTDispatch):
 
      def post(self, request):
-         pass
-
+        form = GCSForm(request.POST, request.FILES)
+        if form.is_valid():
+            try:
+                rad_file_name = request.POST.get("file")
+                dao = GCSDataDao()
+                rad_document = dao.download_from_gcs_bucket(rad_file_name)
+                user = get_original_user(request)
+                process_rad_upload(rad_file_name, rad_document, user)
+            except ValueError as err:
+                return self.error_response(
+                    status=400,
+                    message=err)
+            except Exception:
+                tb = traceback.format_exc()
+                return self.error_response(
+                    status=500,
+                    message=tb)
+        else:
+            return self.error_response(
+                status=400,
+                message=form.errors)
+        return self.json_response({"created": True})
 
 
 @method_decorator(group_required(settings.ADMIN_USERS_GROUP),

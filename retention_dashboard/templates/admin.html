@@ -18,6 +18,9 @@
         $("#selected_week").prop( "disabled", disabled);
         $('#file').prop( "disabled", disabled);
         $('#add_dataset').prop( "disabled", disabled)
+        // gcs form
+        $("#id_file").prop( "disabled", disabled)
+        $("#id_submit_gcs_form").prop( "disabled", disabled)
         // bulk upload form
         $('#id_delete_existing_data').prop( "disabled", disabled);
         $('#id_upload').prop( "disabled", disabled);
@@ -115,6 +118,40 @@
         });
       })
 
+      $("#gcs_form").submit(function (e) {
+        e.preventDefault();
+        var csrf = jQuery("[name=csrfmiddlewaretoken]").val(),
+                data = new FormData();
+        data.append('file', $('#id_file').val());
+
+        $.ajax({
+          url: "/api/admin/moderate_data/",
+          method: "POST",
+          data: data,
+          mimeType: 'multipart/form-data',
+          contentType: false,
+          processData: false,
+          dataType: 'json',
+          headers: {
+            'X-CSRFToken': csrf
+          },
+          beforeSend: function (xhr) {  
+            toggleDisabled(true);
+          }
+        }).done(function (response) {
+          toggleDisabled(false);
+          alert('Data load successful.');
+          location.reload()
+        }).fail(function (response){
+          toggleDisabled(false);
+          if (response.status === 400){
+            alert(response.responseJSON.error);
+          } else if (response.status == 500) {
+            alert(response.responseJSON.error);
+          }
+        });
+      });
+
       $("#bulk_data_form").submit(function (e) {
         e.preventDefault();
         var csrf = jQuery("[name=csrfmiddlewaretoken]").val(),
@@ -139,7 +176,7 @@
           }
         }).done(function (response) {
           toggleDisabled(false);
-          alert('Bulk uloaded successful.');
+          alert('Bulk upload successful.');
           location.reload()
         }).fail(function (response){
           toggleDisabled(false);
@@ -185,7 +222,14 @@
     <h2>Mock Data Admin</h2>
     Click this button to load mock data (available on dev builds only).  Will take approx. 60 seconds to load 2 weeks of data, alert will be generated on success or failure <button id="mock_data">Load Mock Data</button>
   {% endif %}
-  <h2>Week Admin</h2>
+  <h2>Load a file from GCS</h2>
+  <div>
+    <form id="gcs_form">
+      {{ gcsform.as_p }}
+      <input id="id_submit_gcs_form" type="submit" value="Add Dataset">
+    </form>
+  </div>
+  <h2>Manual Week Creation</h2>
   <div>
     <h3>Weeks</h3>
     <table border="1">
@@ -194,7 +238,6 @@
         <tr><td>{{ week.year }}</td><td>{{ week.get_quarter_display }}</td><td>{{ week.number }}</td></tr>
       {% endfor %}
     </table>
-
   </div>
   <div>
     <h3>Add New Week</h3>
@@ -213,7 +256,7 @@
     </form>
   </div>
   <div>
-    <h2>Data Admin</h2>
+    <h2>Manual Data Upload</h2>
     <h3>Single file upload</h3>
     <p>Only one file upload is allowed per type (eg Premajor) and week combination.  Add a new week above if it isn't in the dropdown.</p>
     <form id="data_form">
