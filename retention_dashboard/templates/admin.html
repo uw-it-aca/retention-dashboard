@@ -21,10 +21,6 @@
         // gcs form
         $("#id_file").prop( "disabled", disabled)
         $("#id_submit_gcs_form").prop( "disabled", disabled)
-        // bulk upload form
-        $('#id_delete_existing_data').prop( "disabled", disabled);
-        $('#id_upload').prop( "disabled", disabled);
-        $('#id_submit_bulk_upload').prop( "disabled", disabled);
         // delete buttons
         $('.delete').prop( "disabled", disabled);
       }
@@ -152,42 +148,6 @@
         });
       });
 
-      $("#bulk_data_form").submit(function (e) {
-        e.preventDefault();
-        var csrf = jQuery("[name=csrfmiddlewaretoken]").val(),
-                data = new FormData();
-        data.append('delete_existing_data',
-            $('#id_delete_existing_data').is(":checked"));
-        data.append('upload', $('#id_upload').get(0).files[0]);
-
-        $.ajax({
-          url: "/api/admin/bulk_dataset/",
-          method: "POST",
-          data: data,
-          mimeType: 'multipart/form-data',
-          contentType: false,
-          processData: false,
-          dataType: 'json',
-          headers: {
-            'X-CSRFToken': csrf
-          },
-          beforeSend: function (xhr) {  
-            toggleDisabled(true);
-          }
-        }).done(function (response) {
-          toggleDisabled(false);
-          alert('Bulk upload successful.');
-          location.reload()
-        }).fail(function (response){
-          toggleDisabled(false);
-          if (response.status === 400){
-            alert(response.responseJSON.error);
-          } else if (response.status == 500) {
-            alert(response.responseJSON.error);
-          }
-        });
-      });
-
       $("#mock_data").click(function (e) {
         e.preventDefault();
         var csrf = jQuery("[name=csrfmiddlewaretoken]").val();
@@ -279,40 +239,6 @@
       </select>
     <input id="add_dataset" type="submit" value="Add Dataset">
     </form>
-    <div>
-      <h3>Bulk upload</h2>
-      <p>Upload a directory of files. The directory structure must follow a standard format. For example:</p>
-      <pre>
-  +-- data/<br/>
-      +-- spr20/<br/>
-      |    +-- 1/ or week-01/<br/>
-      |    |    |-- premajor-students.csv<br/>
-      |    |    |-- eop-students.csv<br/>
-      |    |    |-- international-students.csv<br/>
-      |    +-- 2/ or week-02/<br/>
-      |    |    |-- premajor-students.csv<br/>
-      |    |    |-- eop-students.csv<br/>
-      |    |    |-- international-students.csv<br/>
-      |    +-- 3/, 4/, ... etc<br/>
-      +-- su20/, au20/, wtr20/ ... etc<br/>
-      </pre>
-      <p>Important notes:
-        <ul>
-          <li>Requires a zip file of the directory structure.</li>
-          <li>The "Delete existing data" checkbox option removes all Adviser, Week, Datapoint, and Upload entries before the bulk upload.</li>
-          <li>Week, Adviser, DataPoint and Upload objects are automatically created by the bulk upload.</li>
-          <li>The quarter, year, and week values are automatically extracted from the directory names.</li>
-          <li>Quarter directory names must be "spr" (Spring), "su" (Summer), "au" (Autumn), or "wtr" (Winter), followed by a two digit year.</li>
-          <li>Week directory names must be plain numbers or include the "week-" prefix.</li>
-          <li>File names must be either "premajor-students.csv", "eop-students.csv", or "international-students.csv".</li>
-          <li>Files that fail the unique combined week and file-type database contraint will be skipped.</li>
-        </ul>
-      </p>
-      <form id="bulk_data_form">
-        {{ bulkdataform.as_p }}
-        <input id="id_submit_bulk_upload" type="submit" value="Add Dataset">
-      </form>
-    </div>
     <div>
       <h3>Existing Uploads</h3>
       <p>Deleting a upload will delete all data associated with it, so this has user facing consequences.  Should only be needed if a file is erroneously uploaded</p>
