@@ -8,7 +8,8 @@ from retention_dashboard.tests import create_initial_data
 from retention_dashboard.models import Week, Advisor
 
 
-class WeekTest(TestCase):
+class TestWeek(TestCase):
+
     def setUp(self):
         create_initial_data()
 
@@ -22,7 +23,8 @@ class WeekTest(TestCase):
         self.assertFalse(3 in week_nums)
 
 
-class DataTest(TestCase):
+class TestData(TestCase):
+
     week = None
 
     def setUp(self):
@@ -91,7 +93,8 @@ class DataTest(TestCase):
         self.assertEqual(len(data), 3)
 
 
-class AdvisorTest(TestCase):
+class TestAdvisor(TestCase):
+
     def setUp(self):
         create_initial_data()
 

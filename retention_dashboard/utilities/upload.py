@@ -23,7 +23,7 @@ def get_upload_types(row):
         upload_types.append(3)
     elif bool(int(row.get("isso", 0))) is True:
         upload_types.append(4)
-    elif bool(int(row.get("tacoma_student", 0))) is True:
+    elif int(row.get("campus_code", 0)) == 2:
         upload_types.append(5)
     else:
         raise ValueError(f"Unknown upload type for row: {row}")
