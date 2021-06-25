@@ -43,7 +43,7 @@ database:
   name: retention-prod
 gcsCredentials:
   mounted: true
-  secretName: test-analytics.apps.canvas.uw.edu-gcs-credentials
+  secretName: retention.uw.edu-gcs-credentials
 cronjob:
   enabled: false
   jobs:
@@ -91,8 +91,8 @@ externalSecrets:
       data:
         - name: uw-idp-cert
           property: cert
-    - name: test-analytics.apps.canvas.uw.edu-gcs-credentials
-      externalKey: axdd/kv/data/canvas/analytics/shared/gcs-credentials
+    - name: retention.uw.edu-gcs-credentials
+      externalKey: axdd/kv/data/retention/shared/gcs-credentials
       data:
         - name: credentials.json
           property: credentials.json
