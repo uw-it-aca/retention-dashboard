@@ -87,7 +87,7 @@ class LocalDataAdmin(RESTDispatch):
 @method_decorator(csrf_exempt, name='dispatch')
 class GCSDataAdmin(RESTDispatch):
 
-     def post(self, request):
+    def post(self, request):
         form = GCSForm(request.POST, request.FILES)
         if form.is_valid():
             try:

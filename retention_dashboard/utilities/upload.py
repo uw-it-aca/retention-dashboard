@@ -4,12 +4,10 @@
 import csv
 import logging
 
-from django.db.models.expressions import Value
 from retention_dashboard.models import DataPoint, Advisor, Upload, Week
 from retention_dashboard.dao.admin import GCSDataDao
 from io import StringIO
 from django.db import transaction
-from django.db.utils import IntegrityError
 
 
 def get_upload_types(row):
@@ -73,8 +71,8 @@ def process_rad_upload(rad_file_name, rad_document, user, week=None):
                     advisor_name = advisor_name.strip()
                     advisor, _ = Advisor.objects.\
                         get_or_create(advisor_netid=advisor_netid,
-                                    advisor_type=upload.type,
-                                    defaults={'advisor_name': advisor_name})
+                                      advisor_type=upload.type,
+                                      defaults={'advisor_name': advisor_name})
                     advisor_dict[advisor_netid] = advisor
                 else:
                     advisor = advisor_dict[advisor_netid]
@@ -107,9 +105,10 @@ def process_rad_upload(rad_file_name, rad_document, user, week=None):
             dp.has_a_term = has_a
             dp.has_b_term = has_b
             dp.has_full_term = has_full
-            if not (dp.activity_score and dp.assignment_score and dp.grade_score):
+            if not (dp.activity_score and dp.assignment_score and
+                    dp.grade_score):
                 logging.info(f"Skipping student {dp.student_name} "
-                            f"({dp.student_number}. Either a )")
+                             f"({dp.student_number}. Either a )")
                 continue
             data_points.append(dp)
     DataPoint.objects.bulk_create(data_points)

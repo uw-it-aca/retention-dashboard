@@ -39,7 +39,7 @@ class DataTest(TestCase):
 
     def test_range_filter(self):
         dao = FilterDataDao()
-        data = dao.get_filtered_data("Premajor", self.week, 
+        data = dao.get_filtered_data("Premajor", self.week,
                                      grade_filters=["low"])
         self.assertEqual(len(data), 2)
 
@@ -52,11 +52,11 @@ class DataTest(TestCase):
         self.assertEqual(len(data), 5)
 
         data = dao.get_filtered_data("Premajor",
-                                 self.week,
-                                 grade_filters=["low"],
-                                 activity_filters=["low"],
-                                 assignment_filters=["low"],
-                                 priority_filters=["low"])
+                                     self.week,
+                                     grade_filters=["low"],
+                                     activity_filters=["low"],
+                                     assignment_filters=["low"],
+                                     priority_filters=["low"])
         self.assertEqual(len(data), 2)
 
     def test_premajor_filter(self):

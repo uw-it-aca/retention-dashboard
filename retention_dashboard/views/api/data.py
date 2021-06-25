@@ -76,20 +76,21 @@ class FilteredDataView(RESTDispatch):
         if type not in auth_list:
             err_msg = "Not authorized for type " + type
             return self.error_response(403, content={"msg": err_msg})
-        
+
         dao = FilterDataDao()
-        data_points = dao.get_filtered_data(type, week,
-                                            text_filter=text_filter,
-                                            grade_filters=grade_filters,
-                                            assignment_filters=assignment_filters,
-                                            priority_filters=priority_filters,
-                                            activity_filters=activity_filters,
-                                            signins_filters=signins_filters,
-                                            premajor_filter=premajor_filter,
-                                            advisor_filter=advisor_filter,
-                                            summer_filters=summer_filters,
-                                            stem_filter=stem_filter,
-                                            freshman_filter=freshman_filter)
+        data_points = dao.get_filtered_data(
+                                        type, week,
+                                        text_filter=text_filter,
+                                        grade_filters=grade_filters,
+                                        assignment_filters=assignment_filters,
+                                        priority_filters=priority_filters,
+                                        activity_filters=activity_filters,
+                                        signins_filters=signins_filters,
+                                        premajor_filter=premajor_filter,
+                                        advisor_filter=advisor_filter,
+                                        summer_filters=summer_filters,
+                                        stem_filter=stem_filter,
+                                        freshman_filter=freshman_filter)
 
         response_data = []
         try:
