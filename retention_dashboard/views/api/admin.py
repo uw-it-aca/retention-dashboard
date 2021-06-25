@@ -1,21 +1,17 @@
 # Copyright 2021 UW-IT, University of Washington
 # SPDX-License-Identifier: Apache-2.0
 
-import os
 import traceback
-import zipfile
 from django.conf import settings
 from django.utils.decorators import method_decorator
-from django.db.utils import IntegrityError
 from django.views.decorators.csrf import csrf_exempt
 from django.core.management import call_command
 from uw_saml.decorators import group_required
 from retention_dashboard.models import Week, Upload
-from retention_dashboard.utilities.upload import process_upload, \
-    process_rad_upload
+from retention_dashboard.utilities.upload import process_rad_upload
 from userservice.user import get_original_user
 from retention_dashboard.views.api import RESTDispatch
-from retention_dashboard.views.api.forms import GCSForm
+from retention_dashboard.views.api.forms import GCSForm, LocalDataForm
 from retention_dashboard.dao.admin import GCSDataDao
 
 
@@ -39,39 +35,42 @@ class WeekAdmin(RESTDispatch):
 
 @method_decorator(group_required(settings.ADMIN_USERS_GROUP),
                   name='dispatch')
-class DataAdmin(RESTDispatch):
+class LocalDataAdmin(RESTDispatch):
     def post(self, request):
-        try:
-            # get post data
-            week_id = request.POST.get('week')
-            type = request.POST.get('type')
-            uploaded_file = request.FILES.get('file')
-
-            # read uploaded file
-            if uploaded_file is None:
-                return self.error_response(status=400,
-                                           message="No file specified")
-            file = uploaded_file.read()
-
-            # decode file document
-            document = None
+        form = LocalDataForm(request.POST, request.FILES)
+        if form.is_valid():
             try:
-                document = file.decode('utf-8')
-            except UnicodeDecodeError:
-                document = file.decode('utf-16')
-            if document is None:
-                return self.error_response(status=400,
-                                           message="Invalid document")
+                week_id = request.POST.get("local_upload_week")
+                rad_file = request.FILES.get("local_upload_file")
+                # read uploaded file
+                rad_data = rad_file.read()
+                if rad_data is None:
+                    raise ValueError("Empty document")
 
-            # process upload
-            week = Week.objects.get(id=week_id)
-            user = get_original_user(request)
-            process_upload(document, type, week, user)
-        except Exception as ex:
-            return self.error_response(status=500, message=ex)
-        except IntegrityError as ex:
-            return self.error_response(400, message=ex)
+                # decode file document
+                rad_document = None
+                try:
+                    rad_document = rad_data.decode('utf-8')
+                except UnicodeDecodeError:
+                    rad_document = rad_data.decode('utf-16')
 
+                user = get_original_user(request)
+                week = Week.objects.get(id=week_id)
+                process_rad_upload(rad_file.name, rad_document, user,
+                                   week=week)
+            except ValueError as err:
+                return self.error_response(
+                    status=400,
+                    message=err)
+            except Exception:
+                tb = traceback.format_exc()
+                return self.error_response(
+                    status=500,
+                    message=tb)
+        else:
+            return self.error_response(
+                status=400,
+                message=form.errors)
         return self.json_response({"created": True})
 
     def delete(self, request, upload_id):
@@ -92,7 +91,7 @@ class GCSDataAdmin(RESTDispatch):
         form = GCSForm(request.POST, request.FILES)
         if form.is_valid():
             try:
-                rad_file_name = request.POST.get("file")
+                rad_file_name = request.POST.get("gcs_file")
                 dao = GCSDataDao()
                 rad_document = dao.download_from_gcs_bucket(rad_file_name)
                 user = get_original_user(request)

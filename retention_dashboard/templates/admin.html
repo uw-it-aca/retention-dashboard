@@ -13,16 +13,15 @@
         $("#quarter").prop( "disabled", disabled);
         $("#week").prop( "disabled", disabled);
         $("#add_week").prop( "disabled", disabled);
-        // upload form
-        $('input[name=type]:checked', '#data_form').prop( "disabled", disabled);
-        $("#selected_week").prop( "disabled", disabled);
-        $('#file').prop( "disabled", disabled);
-        $('#add_dataset').prop( "disabled", disabled)
-        // gcs form
-        $("#id_file").prop( "disabled", disabled)
-        $("#id_submit_gcs_form").prop( "disabled", disabled)
+        // local data form
+        $("#id_local_upload_week").prop( "disabled", disabled);
+        $('#id_local_upload_file').prop( "disabled", disabled);
+        $('#id_submit_local_data_form').prop( "disabled", disabled)
+        // gcs upload form
+        $("#id_gcs_file").prop( "disabled", disabled)
+        $("#id_submit_gcs_data_form").prop( "disabled", disabled)
         // delete buttons
-        $('#delete_dataset').prop( "disabled", disabled);
+        $('.delete').prop( "disabled", disabled);
       }
 
       $("#mock_data").click(function (e) {
@@ -49,7 +48,7 @@
         });
       });
 
-      $("#gcs_form").submit(function (e) {
+      $("#gcs_data_form").submit(function (e) {
         e.preventDefault();
         var csrf = jQuery("[name=csrfmiddlewaretoken]").val(),
                 data = new FormData();
@@ -83,14 +82,14 @@
         });
       });
 
-      $("#data_form").submit(function (e) {
+      $("#local_data_form").submit(function (e) {
         e.preventDefault();
-        var csrf = jQuery("[name=csrfmiddlewaretoken]").val(),
-                data = new FormData();
-        data.append('type', $('input[name=type]:checked', '#data_form').val())
-        data.append('week', $("#selected_week").val())
-        data.append('file', $('#file').get(0).files[0])
-
+        var csrf = jQuery("[name=csrfmiddlewaretoken]").val()
+        var data = new FormData();
+        data.append('local_upload_week',  
+                    $("#id_local_upload_week").val());
+        data.append('local_upload_file',
+                    $('#id_local_upload_file').get(0).files[0]);
         $.ajax({
           url: "/api/admin/dataset/",
           method: "POST",
@@ -115,7 +114,7 @@
         });
       });
 
-      $("#delete_dataset").click(function (e) {
+      $(".delete").click(function (e) {
         e.preventDefault();
         var upload_id = $(e.target).val(),
                 csrf = jQuery("[name=csrfmiddlewaretoken]").val();
@@ -180,49 +179,38 @@
 <div>
   {% if debug %}
     <h2>Mock Data Admin</h2>
-    Click this button to load mock data (available on dev builds only).  Will take approx. 60 seconds to load 2 weeks of data, alert will be generated on success or failure <button id="mock_data">Load Mock Data</button>
+    Click this button to load mock data (available on dev builds only).
+    Will take approx. 60 seconds to load 2 weeks of data, alert will be
+    generated on success or failure.
+    <br/><br/>
+    <button id="mock_data">Load Mock Data</button>
   {% endif %}
   <div>
     <h2>Upload Admin</h2>
     <div>
       <h3>GCS file upload</h3>
-      <form id="gcs_form">
+      <form id="gcs_data_form">
         {{ gcsform.as_p }}
-        <input id="id_submit_gcs_form" type="submit" value="Add Dataset">
+        <input id="id_submit_gcs_data_form" type="submit" value="Add Dataset">
       </form>
     </div>
     <div>
       <h3>Single file upload</h3>
-      <p>Only one file upload is allowed per type (eg Premajor) and week
-         combination. Add a new week above if it isn't in the dropdown.</p>
-      <form id="data_form">
-        <input id="file" type="file">
-        <br />
-        Premajor: <input type="radio" value="1" name="type">
-        <br />
-        EOP: <input type="radio" value="2" name="type">
-        <br />
-        International: <input type="radio" value="3" name="type">
-        <br />
-        ISS: <input type="radio" value="4" name="type">
-        <br />
-        Tacoma: <input type="radio" value="5" name="type">
-        <br />
-        <select id="selected_week">
-          {% for week in weeks %}
-            <option value="{{ week.id }}">
-              {{ week.year }} - {{ week.get_quarter_display }} - Week {{ week.number }}
-            </option>
-          {% endfor %}
-        </select>
-        <input id="add_dataset" type="submit" value="Add Dataset">
+      <p>
+        Only one upload is allowed per type and week combination. Add a new
+        week in the Week Admin below if it isn't in the dropdown. Depending
+        on the file size, it could take several minutes.
+      </p>
+      <form id="local_data_form">
+        {{ localdataform.as_p }}
+        <input id="id_submit_local_data_form" type="submit" value="Add Dataset">
       </form>
     </div>
     <div>
       <h3>Existing Uploads</h3>
       <p>Deleting a upload will delete all data associated with it, so this
-         has user facing consequences.  Should only be needed if a file is
-         erroneously uploaded</p>
+         has user facing consequences. Should only be needed if a file is
+         erroneously uploaded or reloaded do to a data change.</p>
       <table>
         <tr><th>Date</th><th>User</th><th>Type</th><th>Week</th><th>Delete</th></tr>
         {% for upload in uploads %}
@@ -231,7 +219,7 @@
             <td>{{upload.uploaded_by}}</td>
             <td>{{upload.get_type_display}}</td>
             <td>{{ upload.week.year }} - {{ upload.week.get_quarter_display }} - Week {{ upload.week.number }}</td>
-            <td><button id="delete_dataset" class="delete" value="{{ upload.id }}">x</button></td>
+            <td><button class="delete" value="{{ upload.id }}">x</button></td>
           </tr>
         {% endfor %}
       </table>
@@ -241,7 +229,10 @@
     <h2>Week Admin</h2>
     <div>
       <h3>Add New Week</h3>
-      <p>Adding a new week will make it avalible for a dataset upload, new weeks will not appear in the UI until they have data attached</p>
+      <p>
+        Adding a new week will make it avalible for a dataset upload, new
+        weeks will not appear in the UI until they have data attached.
+      </p>
       <form id="week_form">
         Week Number: <input id="week" minlength="1" maxlength="2">
         Quarter:

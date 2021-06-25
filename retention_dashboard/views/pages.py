@@ -8,7 +8,7 @@ from uw_saml.decorators import group_required
 from django.conf import settings
 from retention_dashboard.models import Week, Upload
 from django.utils.decorators import method_decorator
-from retention_dashboard.views.api.forms import GCSForm
+from retention_dashboard.views.api.forms import GCSForm, LocalDataForm
 
 
 class PageView(TemplateView):
@@ -42,5 +42,6 @@ class AdminView(PageView):
         context['uploads'] = Upload.objects.all().order_by(
                 'week__year', 'week__quarter', 'week__number', 'type')
         context['debug'] = settings.DEBUG
+        context['localdataform'] = LocalDataForm()
         context['gcsform'] = GCSForm()
         return context
