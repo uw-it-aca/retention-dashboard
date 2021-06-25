@@ -7,12 +7,11 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.core.management import call_command
 from uw_saml.decorators import group_required
-from retention_dashboard.models import Week, Upload
-from retention_dashboard.utilities.upload import process_rad_upload
 from userservice.user import get_original_user
+from retention_dashboard.models import Week, Upload
 from retention_dashboard.views.api import RESTDispatch
 from retention_dashboard.views.api.forms import GCSForm, LocalDataForm
-from retention_dashboard.dao.admin import GCSDataDao
+from retention_dashboard.dao.admin import GCSDataDao, UploadDataDao
 
 
 @method_decorator(group_required(settings.ADMIN_USERS_GROUP),
@@ -56,8 +55,8 @@ class LocalDataAdmin(RESTDispatch):
 
                 user = get_original_user(request)
                 week = Week.objects.get(id=week_id)
-                process_rad_upload(rad_file.name, rad_document, user,
-                                   week=week)
+                UploadDataDao().process_rad_upload(
+                                rad_file.name, rad_document, user, week=week)
             except ValueError as err:
                 return self.error_response(
                     status=400,
@@ -92,10 +91,11 @@ class GCSDataAdmin(RESTDispatch):
         if form.is_valid():
             try:
                 rad_file_name = request.POST.get("gcs_file")
-                dao = GCSDataDao()
-                rad_document = dao.download_from_gcs_bucket(rad_file_name)
+                gcs_dao = GCSDataDao()
+                rad_document = gcs_dao.download_from_gcs_bucket(rad_file_name)
                 user = get_original_user(request)
-                process_rad_upload(rad_file_name, rad_document, user)
+                UploadDataDao().process_rad_upload(
+                                            rad_file_name, rad_document, user)
             except ValueError as err:
                 return self.error_response(
                     status=400,
