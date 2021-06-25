@@ -10,9 +10,6 @@ from google.cloud.exceptions import NotFound
 
 class GCSDataDao():
 
-    def __init__(self):
-        pass
-
     def get_gcs_client(self):
         return storage.Client()
 
@@ -52,8 +49,8 @@ class GCSDataDao():
             file = {"year": year, "quarter_num": quarter_num,
                     "week_num": week_num, "gcs_file": gcs_file}
             files.append(file)
-        sorted(files,
-               key=lambda i: (i['year'], i["quarter_num"], i["week_num"]),
+        files.sort(
+               key=lambda i: f"{i['year']}{i['quarter_num']}{i['week_num']}",
                reverse=True)
         return files[0]["gcs_file"]
 
@@ -90,9 +87,11 @@ class GCSDataDao():
         "rad_data/2021-spring-week-10-rad-data.csv" -> "2021-spring", 10
         """
         try:
-            parts = rad_file_name.split("/")[1].split("-")
-        except KeyError:
+            if rad_file_name.startswith("rad_data/"):
+                rad_file_name = rad_file_name.split("/")[1]
+            parts = rad_file_name.split("-")
+            term = f"{parts[0]}-{parts[1]}"
+            week = int(parts[3])
+        except IndexError:
             raise ValueError(f"Unable to parse rad file name: {rad_file_name}")
-        term = f"{parts[0]}-{parts[1]}"
-        week = int(parts[3])
         return term, week
