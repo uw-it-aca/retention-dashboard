@@ -8,10 +8,11 @@ from retention_dashboard.tests import create_initial_data
 from retention_dashboard.models import Week, Advisor
 
 
-class TestWeek(TestCase):
+class TestFilterDataDao(TestCase):
 
     def setUp(self):
         create_initial_data()
+        self.week = Week.objects.get(id=1)
 
     def test_get_weeks(self):
         dao = FilterDataDao()
@@ -21,15 +22,6 @@ class TestWeek(TestCase):
         for week in weeks:
             week_nums.append(week.number)
         self.assertFalse(3 in week_nums)
-
-
-class TestData(TestCase):
-
-    week = None
-
-    def setUp(self):
-        create_initial_data()
-        self.week = Week.objects.get(id=1)
 
     def test_basic_data(self):
         dao = FilterDataDao()
@@ -91,12 +83,6 @@ class TestData(TestCase):
         data = dao.get_filtered_data("Premajor", self.week,
                                      signins_filters=["avg"])
         self.assertEqual(len(data), 3)
-
-
-class TestAdvisor(TestCase):
-
-    def setUp(self):
-        create_initial_data()
 
     def test_get_advisors(self):
         advisors = Advisor.get_all_advisors()

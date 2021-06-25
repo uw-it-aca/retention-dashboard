@@ -27,7 +27,11 @@ class Week(models.Model):
 
     @classmethod
     def sis_term_to_quarter_number(cls, sis_term_id):
-        term = sis_term_id.split("-")[1].lower()
+        term = None
+        try:
+            term = sis_term_id.split("-")[1].lower()
+        except IndexError:
+            pass
         if term == "winter":
             return 1
         elif term == "spring":
