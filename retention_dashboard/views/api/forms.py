@@ -24,4 +24,7 @@ class LocalDataForm(forms.Form):
 class GCSForm(forms.Form):
     dao = GCSDataDao()
     gcs_rad_files = dao.get_files_list()
-    gcs_file = forms.ChoiceField(choices=gcs_rad_files)
+    file_choices = []
+    for file_name in gcs_rad_files:
+        file_choices.append((file_name, file_name))
+    gcs_file = forms.ChoiceField(choices=file_choices)

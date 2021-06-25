@@ -33,6 +33,13 @@ database:
 gcsCredentials:
   mounted: true
   secretName: test-analytics.apps.canvas.uw.edu-gcs-credentials
+cronjob:
+  enabled: true
+  jobs:
+    - name: auto-load-rad
+      schedule: "45 19 * * 0" # At 12:45pm PDT on Sunday
+      command: ["/scripts/management_command.sh"]
+      args: ["upload_gcs_file"]
 externalService:
   enabled: true
   name: retention-db

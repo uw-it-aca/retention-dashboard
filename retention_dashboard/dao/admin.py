@@ -1,4 +1,8 @@
+# Copyright 2021 UW-IT, University of Washington
+# SPDX-License-Identifier: Apache-2.0
+
 import logging
+from retention_dashboard.models import Week
 from django.conf import settings
 from google.cloud import storage
 from google.cloud.exceptions import NotFound
@@ -31,8 +35,27 @@ class GCSDataDao():
         files = []
         for blob in gcs_client.list_blobs(bucket, prefix=path):
             if blob.name.endswith("csv"):
-                files.append((blob.name, blob.name))
+                files.append(blob.name)
         return files
+
+    def get_latest_gcs_file(self):
+        """
+        Return latest RAD file in GCS bucket
+        """
+        gcs_files = self.get_files_list()
+        files = []
+        for gcs_file in gcs_files:
+            sis_term_id, week_num = \
+                self.get_term_and_week_from_filename(gcs_file)
+            year = sis_term_id.split("-")[0]
+            quarter_num = Week.sis_term_to_quarter_number(sis_term_id)
+            file = {"year": year, "quarter_num": quarter_num,
+                    "week_num": week_num, "gcs_file": gcs_file}
+            files.append(file)
+        sorted(files,
+               key=lambda i: (i['year'], i["quarter_num"], i["week_num"]),
+               reverse=True)
+        return files[0]["gcs_file"]
 
     def download_from_gcs_bucket(self, url_key):
         """
@@ -57,3 +80,19 @@ class GCSDataDao():
         except NotFound as ex:
             logging.error(f"gcp {url_key}: {ex}")
             raise
+
+    def get_term_and_week_from_filename(self, rad_file_name):
+        """
+        Extracts term and week from RAD data file name
+
+        For example:
+
+        "rad_data/2021-spring-week-10-rad-data.csv" -> "2021-spring", 10
+        """
+        try:
+            parts = rad_file_name.split("/")[1].split("-")
+        except KeyError:
+            raise ValueError(f"Unable to parse rad file name: {rad_file_name}")
+        term = f"{parts[0]}-{parts[1]}"
+        week = int(parts[3])
+        return term, week

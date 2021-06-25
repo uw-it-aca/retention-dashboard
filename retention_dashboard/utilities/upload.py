@@ -6,6 +6,7 @@ import logging
 
 from django.db.models.expressions import Value
 from retention_dashboard.models import DataPoint, Advisor, Upload, Week
+from retention_dashboard.dao.admin import GCSDataDao
 from io import StringIO
 from django.db import transaction
 from django.db.utils import IntegrityError
@@ -31,29 +32,14 @@ def get_upload_types(row):
     return upload_types
 
 
-def get_term_and_week_from_filename(rad_file_name):
-    """
-    Extracts term and week from RAD data file name
-
-    For example:
-
-    "rad_data/2021-spring-week-10-rad-data.csv" -> "2021-spring", 10
-    """
-    try:
-        parts = rad_file_name.split("/")[1].split("-")
-    except KeyError:
-        raise ValueError(f"Unable to parse rad file name: {rad_file_name}")
-    term = f"{parts[0]}-{parts[1]}"
-    week = int(parts[3])
-    return term, week
-
-
 @transaction.atomic
 def process_rad_upload(rad_file_name, rad_document, user, week=None):
 
     if not week:
         # gcs upload
-        sis_term_id, week_num = get_term_and_week_from_filename(rad_file_name)
+        dao = GCSDataDao()
+        sis_term_id, week_num = \
+            dao.get_term_and_week_from_filename(rad_file_name)
         year = int(sis_term_id.split("-")[0])
         quarter = Week.sis_term_to_quarter_number(sis_term_id)
         week, _ = Week.objects.get_or_create(
