@@ -190,11 +190,6 @@ class UploadDataDao():
                 dp.has_a_term = has_a
                 dp.has_b_term = has_b
                 dp.has_full_term = has_full
-                if not (dp.activity_score and dp.assignment_score and
-                        dp.grade_score):
-                    logging.info(f"Skipping student {dp.student_name} "
-                                 f"({dp.student_number})")
-                    continue
                 if dp_by_upload.get(upload_type):
                     dp_by_upload[upload_type].append(dp)
                 else:
