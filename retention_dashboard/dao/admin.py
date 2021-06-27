@@ -143,7 +143,6 @@ class UploadDataDao():
         advisor_dict = {}
         dp_by_upload = {}
         for _, row in enumerate(reader):
-            dp = DataPoint()
             try:
                 upload_types = self.get_upload_types(row)
             except ValueError as err:
@@ -155,16 +154,22 @@ class UploadDataDao():
                 advisor = None
                 if advisor_netid is not None and advisor_name is not None:
                     if advisor_netid not in advisor_dict:
-                        advisor_name = advisor_name.strip()
-                        advisor, _ = Advisor.objects.get_or_create(
-                                    advisor_netid=advisor_netid,
-                                    advisor_type=upload_type,
-                                    advisor_name=advisor_name)
+                        try:
+                            advisor = Advisor.objects.get(
+                                                advisor_netid=advisor_netid,
+                                                advisor_type=upload_type)
+                        except Advisor.DoesNotExist:
+                            advisor_name = advisor_name.strip()
+                            advisor = Advisor.objects.create(
+                                                advisor_netid=advisor_netid,
+                                                advisor_type=upload_type,
+                                                advisor_name=advisor_name)
                         advisor_dict[advisor_netid] = advisor
                     else:
                         advisor = advisor_dict[advisor_netid]
                 has_a, has_b, has_full = \
                     self.get_summer_terms_from_string(row.get('summer'))
+                dp = DataPoint()
                 dp.student_name = row.get("student_name_lowc")
                 dp.student_number = row.get("student_no")
                 dp.netid = row.get("uw_netid")
@@ -188,7 +193,7 @@ class UploadDataDao():
                 if not (dp.activity_score and dp.assignment_score and
                         dp.grade_score):
                     logging.info(f"Skipping student {dp.student_name} "
-                                 f"({dp.student_number}. Either a )")
+                                 f"({dp.student_number})")
                     continue
                 if dp_by_upload.get(upload_type):
                     dp_by_upload[upload_type].append(dp)
@@ -213,18 +218,18 @@ class UploadDataDao():
 
         dp_by_upload = self.parse_rad_document(rad_document)
 
-        with transaction.atomic():
-            for upload_type, dps in dp_by_upload.items():
-                try:
-                    (Upload.objects.filter(week=week)
-                                   .filter(type=upload_type)
-                                   .get())
-                    logging.warning(f"Upload already exists for "
-                                    f"term={week.quarter}, "
-                                    f"week={week.number}, "
-                                    f"type={upload_type}")
-                    continue
-                except Upload.DoesNotExist:
+        for upload_type, dps in dp_by_upload.items():
+            try:
+                (Upload.objects.filter(week=week)
+                               .filter(type=upload_type)
+                               .get())
+                logging.warning(f"Upload already exists for "
+                                f"term={week.quarter}, "
+                                f"week={week.number}, "
+                                f"type={upload_type}")
+                continue
+            except Upload.DoesNotExist:
+                with transaction.atomic():
                     upload = Upload.objects.create(file=rad_document,
                                                    type=upload_type,
                                                    week=week,
@@ -237,7 +242,7 @@ class UploadDataDao():
                         if upload:
                             dp.upload = upload
                         dp.upload = upload
-                        dp.save()
-                    logging.info(f"Upload {len(dps)} datapoints for "
-                                 f"term={week.quarter}, week={week.number}, "
-                                 f"type={upload_type}")
+                    DataPoint.objects.bulk_create(dps)
+                logging.info(f"Upload {len(dps)} datapoints for "
+                             f"term={week.quarter}, week={week.number}, "
+                             f"type={upload_type}")
