@@ -30,6 +30,16 @@ database:
   secretName: test.retention.uw.edu-sql-secrets
   hostname: retention-db
   name: retention-test
+gcsCredentials:
+  mounted: true
+  secretName: test.retention.uw.edu-gcs-credentials
+cronjob:
+  enabled: true
+  jobs:
+    - name: auto-load-rad
+      schedule: "45 6 * * 0" # At 11:45pm PDT on Saturday
+      command: ["/scripts/management_command.sh"]
+      args: ["upload_gcs_file"]
 externalService:
   enabled: true
   name: retention-db
@@ -70,6 +80,11 @@ externalSecrets:
       data:
         - name: uw-idp-cert
           property: cert
+    - name: test.retention.uw.edu-gcs-credentials
+      externalKey: axdd/kv/data/retention/shared/gcs-credentials
+      data:
+        - name: credentials.json
+          property: credentials.json
 repo: retention-dashboard
 instance: test
 branch: develop
@@ -92,6 +107,8 @@ environmentVariables:
     value: "True"
   - name: SP_USE_2FA
     value: "True"
+  - name: GOOGLE_APPLICATION_CREDENTIALS
+    value: "/gcs/credentials.json"
 environmentVariablesSecrets:
   gaKey:
     name: GA_KEY

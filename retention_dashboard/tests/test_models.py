@@ -3,7 +3,7 @@
 
 import unittest
 from django.test import TestCase
-from retention_dashboard.models import DataPoint
+from retention_dashboard.models import DataPoint, Week
 
 
 class TestDataPoint(TestCase):
@@ -15,6 +15,21 @@ class TestDataPoint(TestCase):
         self.assertEqual(DataPoint.get_data_type_by_text("ISS"), 4)
         with self.assertRaises(ValueError):
             DataPoint.get_data_type_by_text("UNKNOWN TYPE")
+
+
+class TestWeek(TestCase):
+
+    def test_sis_term_to_quarter_number(self):
+        quarter_num = Week.sis_term_to_quarter_number("2021-winter")
+        self.assertEqual(quarter_num, 1)
+        quarter_num = Week.sis_term_to_quarter_number("2020-spring")
+        self.assertEqual(quarter_num, 2)
+        quarter_num = Week.sis_term_to_quarter_number("2013-summer")
+        self.assertEqual(quarter_num, 3)
+        quarter_num = Week.sis_term_to_quarter_number("2021-autumn")
+        self.assertEqual(quarter_num, 4)
+        with self.assertRaises(ValueError):
+            Week.sis_term_to_quarter_number("2021autumn")
 
 
 if __name__ == "__main__":
