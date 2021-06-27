@@ -36,6 +36,8 @@ class GCSDataDao():
         for blob in gcs_client.list_blobs(bucket, prefix=path):
             if blob.name.endswith("csv"):
                 files.append(blob.name)
+        logging.debug(f"Found the following GCS bucket files: "
+                      f"{','.join(files)}")
         return files
 
     def get_latest_gcs_file(self):
@@ -122,15 +124,15 @@ class UploadDataDao():
         upload_types = []
         if bool(int(row.get("premajor", 0))) is True:
             upload_types.append(1)
-        elif bool(int(row.get("eop_student", 0))) is True:
+        if bool(int(row.get("eop", 0))) is True:
             upload_types.append(2)
-        elif bool(int(row.get("international_student", 0))) is True:
+        if bool(int(row.get("international", 0))) is True:
             upload_types.append(3)
-        elif bool(int(row.get("isso", 0))) is True:
+        if bool(int(row.get("isso", 0))) is True:
             upload_types.append(4)
-        elif int(row.get("campus_code", 0)) == 2:
+        if int(row.get("campus_code", 0)) == 2:
             upload_types.append(5)
-        else:
+        if not upload_types:
             raise ValueError(f"Unknown upload type for row: {row}")
         return upload_types
 
