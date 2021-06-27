@@ -1,7 +1,9 @@
 # Copyright 2021 UW-IT, University of Washington
 # SPDX-License-Identifier: Apache-2.0
 
+import logging
 from django import forms
+from google.auth.exceptions import DefaultCredentialsError
 from retention_dashboard.dao.admin import GCSDataDao
 from retention_dashboard.models import Week
 
@@ -29,9 +31,13 @@ class GCSForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        dao = GCSDataDao()
-        gcs_rad_files = dao.get_files_list()
-        file_choices = []
-        for file_name in gcs_rad_files:
-            file_choices.append((file_name, file_name))
-        self.fields['gcs_file'].choices = file_choices
+        try:
+            dao = GCSDataDao()
+            gcs_rad_files = dao.get_files_list()
+            file_choices = []
+            for file_name in gcs_rad_files:
+                file_choices.append((file_name, file_name))
+            self.fields['gcs_file'].choices = file_choices
+        except DefaultCredentialsError as err:
+            logging.error(err)
+            logging.error("Unable to load RAD GCS file choices")

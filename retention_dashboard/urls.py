@@ -30,7 +30,7 @@ urlpatterns = [
             name="mocK_admin_view"),
     re_path(r'^api/admin/gcs_data/$',
             GCSDataAdmin.as_view(),
-            name="moderate_data_admin_view"),
+            name="gcs_data_admin_view"),
     re_path(r'^api/admin/dataset/(?P<upload_id>[0-9]+)/',
             LocalDataAdmin.as_view(),
             name="dataset_admin_delete_view"),

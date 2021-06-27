@@ -52,10 +52,10 @@
         e.preventDefault();
         var csrf = jQuery("[name=csrfmiddlewaretoken]").val(),
                 data = new FormData();
-        data.append('file', $('#id_file').val());
+        data.append('gcs_file', $('#id_gcs_file').val());
 
         $.ajax({
-          url: "/api/admin/moderate_data/",
+          url: "/api/admin/gcs_data/",
           method: "POST",
           data: data,
           mimeType: 'multipart/form-data',

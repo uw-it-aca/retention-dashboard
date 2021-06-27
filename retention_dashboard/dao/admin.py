@@ -134,27 +134,12 @@ class UploadDataDao():
             raise ValueError(f"Unknown upload type for row: {row}")
         return upload_types
 
-    @transaction.atomic
-    def process_rad_upload(self, rad_file_name, rad_document, user, week=None):
-
-        if not week:
-            # gcs upload
-            dao = GCSDataDao()
-            sis_term_id, week_num = \
-                dao.get_term_and_week_from_filename(rad_file_name)
-            year = int(sis_term_id.split("-")[0])
-            quarter = Week.sis_term_to_quarter_number(sis_term_id)
-            week, _ = Week.objects.get_or_create(
-                number=week_num,
-                quarter=quarter,
-                year=year
-            )
-
-        data_points = []
+    def parse_rad_document(self, rad_document):
         reader = csv.DictReader(StringIO(rad_document),
                                 delimiter=',')
 
         advisor_dict = {}
+        dp_by_upload = {}
         for _, row in enumerate(reader):
             dp = DataPoint()
             try:
@@ -163,33 +148,21 @@ class UploadDataDao():
                 logging.error(err)
                 continue
             for upload_type in upload_types:
-                upload, _ = Upload.objects.get_or_create(file=rad_document,
-                                                         type=upload_type,
-                                                         week=week,
-                                                         uploaded_by=user)
                 advisor_netid = row.get("staff_id")
                 advisor_name = row.get("adviser_name")
                 advisor = None
                 if advisor_netid is not None and advisor_name is not None:
                     if advisor_netid not in advisor_dict:
                         advisor_name = advisor_name.strip()
-                        advisor, _ = Advisor.objects.\
-                            get_or_create(
-                                advisor_netid=advisor_netid,
-                                advisor_type=upload.type,
-                                defaults={'advisor_name': advisor_name})
+                        advisor, _ = Advisor.objects.get_or_create(
+                                    advisor_netid=advisor_netid,
+                                    advisor_type=upload_type,
+                                    advisor_name=advisor_name)
                         advisor_dict[advisor_netid] = advisor
                     else:
                         advisor = advisor_dict[advisor_netid]
                 has_a, has_b, has_full = \
                     self.get_summer_terms_from_string(row.get('summer'))
-
-                if upload.type:
-                    dp.type = upload.type
-                if upload.week:
-                    dp.week = upload.week
-                if upload:
-                    dp.upload = upload
                 dp.student_name = row.get("student_name_lowc")
                 dp.student_number = row.get("student_no")
                 dp.netid = row.get("uw_netid")
@@ -215,5 +188,54 @@ class UploadDataDao():
                     logging.info(f"Skipping student {dp.student_name} "
                                  f"({dp.student_number}. Either a )")
                     continue
-                data_points.append(dp)
-        DataPoint.objects.bulk_create(data_points)
+                if dp_by_upload.get(upload_type):
+                    dp_by_upload[upload_type].append(dp)
+                else:
+                    dp_by_upload[upload_type] = [dp]
+        return dp_by_upload
+
+    def process_rad_upload(self, rad_file_name, rad_document, user, week=None):
+
+        if not week:
+            # gcs upload
+            dao = GCSDataDao()
+            sis_term_id, week_num = \
+                dao.get_term_and_week_from_filename(rad_file_name)
+            year = int(sis_term_id.split("-")[0])
+            quarter = Week.sis_term_to_quarter_number(sis_term_id)
+            week, _ = Week.objects.get_or_create(
+                number=week_num,
+                quarter=quarter,
+                year=year
+            )
+
+        dp_by_upload = self.parse_rad_document(rad_document)
+
+        with transaction.atomic():
+            for upload_type, dps in dp_by_upload.items():
+                try:
+                    (Upload.objects.filter(week=week)
+                                   .filter(type=upload_type)
+                                   .get())
+                    logging.warning(f"Upload already exists for "
+                                    f"term={week.quarter}, "
+                                    f"week={week.number}, "
+                                    f"type={upload_type}")
+                    continue
+                except Upload.DoesNotExist:
+                    upload = Upload.objects.create(file=rad_document,
+                                                   type=upload_type,
+                                                   week=week,
+                                                   uploaded_by=user)
+                    for dp in dps:
+                        if upload.type:
+                            dp.type = upload.type
+                        if upload.week:
+                            dp.week = upload.week
+                        if upload:
+                            dp.upload = upload
+                        dp.upload = upload
+                        dp.save()
+                    logging.info(f"Upload {len(dps)} datapoints for "
+                                 f"term={week.quarter}, week={week.number}, "
+                                 f"type={upload_type}")
