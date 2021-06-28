@@ -479,6 +479,7 @@
         csv.forEach(function(item){
           item["student_number"] = Number(item["student_number"]);
 
+          item['signin_score'] = vue.get_rounded(item['signin_score']);
           item['activity_score'] = vue.get_rounded(item['activity_score']);
           item['assignment_score'] = vue.get_rounded(item['assignment_score']);
           item['grade_score'] = vue.get_rounded(item['grade_score']);
