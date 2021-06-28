@@ -115,23 +115,19 @@
       </template>
 
       <template v-slot:cell(grade_score)="row">
-        <span v-if="row.item.grade_score === -99">No data</span>
-        <span v-else>{{ row.item.grade_score }}</span>
+        <span>{{ row.item.grade_score }}</span>
       </template>
 
       <template v-slot:cell(activity_score)="row">
-        <span v-if="row.item.activity_score === -99">No data</span>
-        <span v-else>{{ row.item.activity_score }}</span>
+        <span>{{ row.item.activity_score }}</span>
       </template>
 
       <template v-slot:cell(assignment_score)="row">
-        <span v-if="row.item.assignment_score === -99">No data</span>
-        <span v-else>{{ row.item.assignment_score }}</span>
+        <span>{{ row.item.assignment_score }}</span>
       </template>
 
       <template v-slot:cell(signin_score)="row">
-        <span v-if="row.item.signin_score === -99">No data</span>
-        <span v-else>{{ row.item.signin_score }}</span>
+        <span>{{ row.item.signin_score }}</span>
       </template>
 
       <template v-slot:cell(is_premajor)="row">
@@ -140,7 +136,7 @@
       </template>
 
       <template v-slot:cell(priority_score)="row">
-        <span v-if="row.item.priority_score === -99" />
+        <span v-if="row.item.priority_score === -99 || row.item.priority_score === null" />
         <span v-else class="rd-pred-score">
           <span v-if="row.item.priority_score >= -5 && row.item.priority_score <= -3"><span class="rd-pred-label rd-pred-label-top">Top</span> {{ row.item.priority_score }}</span>
           <span v-else-if="row.item.priority_score > -3 && row.item.priority_score < 3"><span class="rd-pred-label rd-pred-label-medium">Medium</span> {{ row.item.priority_score }}</span>
@@ -483,6 +479,7 @@
         csv.forEach(function(item){
           item["student_number"] = Number(item["student_number"]);
 
+          item['signin_score'] = vue.get_rounded(item['signin_score']);
           item['activity_score'] = vue.get_rounded(item['activity_score']);
           item['assignment_score'] = vue.get_rounded(item['assignment_score']);
           item['grade_score'] = vue.get_rounded(item['grade_score']);
@@ -525,7 +522,7 @@
 
           var row_string = "";
           fields.forEach(function(field){
-            if (item[field] === -99) {
+            if (item[field] === null || item[field] === -99 ) {
               row_string += "NA,";
             } else if (field === "summer_term_string") {
               var term_string = item[field].replace(/ /g,'');
@@ -574,6 +571,9 @@
         });
       },
       get_rounded(num_string){
+        if (num_string === null || num_string == "-99") {
+          return "No data";
+        }
         var number = Number(num_string);
         return Number(number.toFixed(1));
       }
