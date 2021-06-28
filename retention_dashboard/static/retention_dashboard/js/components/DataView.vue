@@ -115,19 +115,23 @@
       </template>
 
       <template v-slot:cell(grade_score)="row">
-        <span>{{ row.item.grade_score }}</span>
+        <span v-if="row.item.grade_score === -99">No data</span>
+        <span v-else>{{ row.item.grade_score }}</span>
       </template>
 
       <template v-slot:cell(activity_score)="row">
-        <span>{{ row.item.activity_score }}</span>
+        <span v-if="row.item.activity_score === -99">No data</span>
+        <span v-else>{{ row.item.activity_score }}</span>
       </template>
 
       <template v-slot:cell(assignment_score)="row">
-        <span>{{ row.item.assignment_score }}</span>
+        <span v-if="row.item.assignment_score === -99">No data</span>
+        <span v-else>{{ row.item.assignment_score }}</span>
       </template>
 
       <template v-slot:cell(signin_score)="row">
-        <span>{{ row.item.signin_score }}</span>
+        <span v-if="row.item.signin_score === -99">No data</span>
+        <span v-else>{{ row.item.signin_score }}</span>
       </template>
 
       <template v-slot:cell(is_premajor)="row">
@@ -571,8 +575,8 @@
         });
       },
       get_rounded(num_string){
-        if (num_string === null || num_string == "-99") {
-          return "No data";
+        if (num_string === null) {
+          return -99;
         }
         var number = Number(num_string);
         return Number(number.toFixed(1));
