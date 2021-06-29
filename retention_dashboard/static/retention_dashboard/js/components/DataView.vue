@@ -191,7 +191,6 @@
           {
             key: 'student_number',
             label: "Student Number",
-            class: 'text-center'
           },
           {
             key: 'priority_score',
@@ -201,37 +200,31 @@
           {
             key: 'signin_score',
             label: 'Sign-Ins',
-            class: 'text-center',
             sortable: true
           },
           {
             key: 'activity_score',
             label: 'Activity',
-            class: 'text-center',
             sortable: true
           },
           {
             key: 'assignment_score',
             label: 'Assignments',
-            class: 'text-center',
             sortable: true
           },
           {
             key: 'grade_score',
             label: 'Grades',
-            class: 'text-center',
             sortable: true
           },
           {
             key: 'is_premajor',
             label: 'Pre-Major',
-            class: 'text-center',
             sortable: true
           },
           {
             key: 'advisor_name',
             label: 'Adviser',
-            class: 'text-center',
             sortable: true
           }
         ],
@@ -244,36 +237,30 @@
           {
             key: 'student_number',
             label: "Student Number",
-            class: 'text-center'
           },
           {
             key: 'signin_score',
             label: 'Sign-Ins',
-            class: 'text-center',
             sortable: true
           },
           {
             key: 'activity_score',
             label: 'Activity',
-            class: 'text-center',
             sortable: true
           },
           {
             key: 'assignment_score',
             label: 'Assignments',
-            class: 'text-center',
             sortable: true
           },
           {
             key: 'grade_score',
             label: 'Grades',
-            class: 'text-center',
             sortable: true
           },
           {
             key: 'is_premajor',
             label: 'Pre-Major',
-            class: 'text-center',
             sortable: true
           }
         ],
