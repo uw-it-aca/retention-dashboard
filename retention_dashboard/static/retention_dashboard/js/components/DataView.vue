@@ -17,7 +17,7 @@
               <textarea id="email_area" v-model="email_list_text" rows="10" readonly />
             </div>
             <div class="rd-copy-email-btn">
-              <b-button variant="info" v-clipboard:copy="email_list_text">
+              <b-button v-clipboard:copy="email_list_text" variant="info">
                 copy
               </b-button>
               <p class="small rd-copy-email-desc">
@@ -191,7 +191,6 @@
           {
             key: 'student_number',
             label: "Student Number",
-            class: 'text-center'
           },
           {
             key: 'priority_score',
@@ -201,37 +200,31 @@
           {
             key: 'signin_score',
             label: 'Sign-Ins',
-            class: 'text-center',
             sortable: true
           },
           {
             key: 'activity_score',
             label: 'Activity',
-            class: 'text-center',
             sortable: true
           },
           {
             key: 'assignment_score',
             label: 'Assignments',
-            class: 'text-center',
             sortable: true
           },
           {
             key: 'grade_score',
             label: 'Grades',
-            class: 'text-center',
             sortable: true
           },
           {
             key: 'is_premajor',
             label: 'Pre-Major',
-            class: 'text-center',
             sortable: true
           },
           {
             key: 'advisor_name',
             label: 'Adviser',
-            class: 'text-center',
             sortable: true
           }
         ],
@@ -244,36 +237,30 @@
           {
             key: 'student_number',
             label: "Student Number",
-            class: 'text-center'
           },
           {
             key: 'signin_score',
             label: 'Sign-Ins',
-            class: 'text-center',
             sortable: true
           },
           {
             key: 'activity_score',
             label: 'Activity',
-            class: 'text-center',
             sortable: true
           },
           {
             key: 'assignment_score',
             label: 'Assignments',
-            class: 'text-center',
             sortable: true
           },
           {
             key: 'grade_score',
             label: 'Grades',
-            class: 'text-center',
             sortable: true
           },
           {
             key: 'is_premajor',
             label: 'Pre-Major',
-            class: 'text-center',
             sortable: true
           }
         ],
@@ -548,7 +535,8 @@
         var vue = this,
             query_token = Date.now();
         this.request_id = query_token;
-        if(this.current_file.length < 1 || this.current_week.length < 1){
+        if(this.current_file &&
+          this.current_file.length < 1 || this.current_week.length < 1){
           // don't fire ajax unless week and type are set
           return;
         }

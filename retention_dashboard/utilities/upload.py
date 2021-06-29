@@ -1,12 +1,23 @@
 # Copyright 2021 UW-IT, University of Washington
 # SPDX-License-Identifier: Apache-2.0
 
-from retention_dashboard.models import DataPoint, Advisor
 import csv
+from retention_dashboard.models import DataPoint, Advisor, Upload
 from io import StringIO
+from django.db import transaction
+from django.db.utils import IntegrityError
 
 
-def process_upload(upload):
+@transaction.atomic
+def process_upload(document, type, week, user):
+    upload, created = Upload.objects.get_or_create(file=document,
+                                                   type=type,
+                                                   week=week,
+                                                   uploaded_by=user)
+    if not created:
+        raise IntegrityError("An upload already exists for the specified "
+                             "week and type.")
+
     data_points = []
     reader = csv.DictReader(StringIO(upload.file),
                             delimiter=',')

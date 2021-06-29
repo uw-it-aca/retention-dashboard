@@ -42,35 +42,37 @@ class WeekAdmin(RESTDispatch):
 class DataAdmin(RESTDispatch):
     def post(self, request):
         try:
+            # get post data
             week_id = request.POST.get('week')
             type = request.POST.get('type')
-
             uploaded_file = request.FILES.get('file')
+
+            # read uploaded file
+            if uploaded_file is None:
+                print("No file specified")
+                return self.error_response(status=400,
+                                           message="No file specified")
             file = uploaded_file.read()
+
+            # decode file document
             document = None
             try:
                 document = file.decode('utf-8')
             except UnicodeDecodeError:
                 document = file.decode('utf-16')
+            if document is None:
+                return self.error_response(status=400,
+                                           message="Invalid document")
+
+            # process upload
+            week = Week.objects.get(id=week_id)
+            user = get_original_user(request)
+            process_upload(document, type, week, user)
         except Exception as ex:
             return self.error_response(status=500, message=ex)
-
-        if document is None:
-            return self.error_response(status=400,
-                                       message="Invalid document")
-
-        week = Week.objects.get(id=week_id)
-        user = get_original_user(request)
-        try:
-            upload = Upload.objects.create(file=document,
-                                           type=type,
-                                           week=week,
-                                           uploaded_by=user)
-            process_upload(upload)
         except IntegrityError as ex:
             return self.error_response(400, message=ex)
-        except Exception as ex:
-            return self.error_response(status=500, message=ex)
+
         return self.json_response({"created": True})
 
     def delete(self, request, upload_id):

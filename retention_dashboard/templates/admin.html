@@ -86,11 +86,7 @@
           location.reload()
         }).fail(function (response){
           toggleDisabled(false);
-          if (response.status === 400){
-            alert('Week and type combo already exists')
-          } else {
-            alert(response.responseJSON.error);
-          }
+          alert(response.responseJSON.error);
         });
       });
 
@@ -230,6 +226,8 @@
       International: <input type="radio" value="3" name="type">
       <br />
       ISS: <input type="radio" value="4" name="type">
+      <br />
+      Tacoma: <input type="radio" value="5" name="type">
       <br />
       <select id="selected_week">
         {% for week in weeks %}

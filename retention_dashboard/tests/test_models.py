@@ -1,6 +1,7 @@
 # Copyright 2021 UW-IT, University of Washington
 # SPDX-License-Identifier: Apache-2.0
 
+import unittest
 from django.test import TestCase
 from retention_dashboard.models import DataPoint
 
@@ -14,3 +15,7 @@ class TestDataPoint(TestCase):
         self.assertEqual(DataPoint.get_data_type_by_text("ISS"), 4)
         with self.assertRaises(ValueError):
             DataPoint.get_data_type_by_text("UNKNOWN TYPE")
+
+
+if __name__ == "__main__":
+    unittest.main()
