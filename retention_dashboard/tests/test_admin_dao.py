@@ -100,6 +100,18 @@ class TestUploadDataDao(TestCase):
              ('grades', '0E-20'), ('pred', '4.699061188134724'),
              ('adviser_name', 'Osure Brown'), ('staff_id', 'osureb'),
              ('sign_in', '-0.3887894787550641'), ('stem', '1'),
+             ('incoming_freshman', '0'), ('premajor', '1'),
+             ('eop', '0'), ('international', '0'), ('isso', '0'),
+             ('campus_code', '0'), ('summer', 'A-B')])
+        self.assertEqual(dao.get_upload_types(row), [1])
+        row = OrderedDict(
+            [('uw_netid', 'fairsp'), ('student_no', '1864017'),
+             ('student_name_lowc', 'fairservice,peyton scott'),
+             ('activity', '-4.00000000000000000000'),
+             ('assignments', '-2.50000000000000000000'),
+             ('grades', '0E-20'), ('pred', '4.699061188134724'),
+             ('adviser_name', 'Osure Brown'), ('staff_id', 'osureb'),
+             ('sign_in', '-0.3887894787550641'), ('stem', '1'),
              ('incoming_freshman', '0'), ('premajor', '0'),
              ('eop', '1'), ('international', '0'), ('isso', '0'),
              ('campus_code', '0'), ('summer', 'A-B')])
@@ -115,7 +127,7 @@ class TestUploadDataDao(TestCase):
              ('incoming_freshman', '0'), ('premajor', '1'),
              ('eop', '1'), ('international', '0'), ('isso', '0'),
              ('campus_code', '0'), ('summer', 'A-B')])
-        self.assertEqual(dao.get_upload_types(row), [1, 2])
+        self.assertEqual(dao.get_upload_types(row), [2])
         row = OrderedDict(
             [('uw_netid', 'fairsp'), ('student_no', '1864017'),
              ('student_name_lowc', 'fairservice,peyton scott'),
@@ -127,7 +139,7 @@ class TestUploadDataDao(TestCase):
              ('incoming_freshman', '0'), ('premajor', '1'),
              ('eop', '0'), ('international', '1'), ('isso', '0'),
              ('campus_code', '2'), ('summer', 'A-B')])
-        self.assertEqual(dao.get_upload_types(row), [1, 3, 5])
+        self.assertEqual(dao.get_upload_types(row), [3, 5])
         row = OrderedDict(
             [('uw_netid', 'fairsp'), ('student_no', '1864017'),
              ('student_name_lowc', 'fairservice,peyton scott'),
@@ -139,7 +151,7 @@ class TestUploadDataDao(TestCase):
              ('incoming_freshman', '0'), ('premajor', '1'),
              ('eop', '0'), ('international', '1'), ('isso', '1'),
              ('campus_code', '2'), ('summer', 'A-B')])
-        self.assertEqual(dao.get_upload_types(row), [1, 3, 4, 5])
+        self.assertEqual(dao.get_upload_types(row), [3, 4, 5])
 
 
 if __name__ == "__main__":

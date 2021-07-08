@@ -122,8 +122,6 @@ class UploadDataDao():
         Return upload type to associate a row with
         """
         upload_types = []
-        if bool(int(row.get("premajor", 0))) is True:
-            upload_types.append(1)
         if bool(int(row.get("eop", 0))) is True:
             upload_types.append(2)
         if bool(int(row.get("international", 0))) is True:
@@ -132,6 +130,10 @@ class UploadDataDao():
             upload_types.append(4)
         if int(row.get("campus_code", 0)) == 2:
             upload_types.append(5)
+        # premajor only if not any other classification
+        if len(upload_types) == 0 and \
+                bool(int(row.get("premajor", 0))) is True:
+            upload_types.append(1)
         if not upload_types:
             raise ValueError(f"Unknown upload type for row: {row}")
         return upload_types
