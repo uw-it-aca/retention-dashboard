@@ -48,7 +48,7 @@ cronjob:
   enabled: false
   jobs:
     - name: auto-load-rad
-      schedule: "45 6 * * 0" # At 11:45pm PDT on Saturday
+      schedule: "0 11 * * 0" # At 4:00am PDT on Sunday
       command: ["/scripts/management_command.sh"]
       args: ["upload_gcs_file"]
 externalService:
