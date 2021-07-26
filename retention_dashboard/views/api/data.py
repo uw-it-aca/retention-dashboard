@@ -6,7 +6,7 @@ from django.conf import settings
 from django.utils.decorators import method_decorator
 from uw_saml.decorators import group_required
 from retention_dashboard.views.api import RESTDispatch
-from retention_dashboard.dao.data import get_weeks_with_data, get_filtered_data
+from retention_dashboard.dao.data import FilterDataDao
 from retention_dashboard.dao.auth import get_type_authorizations
 from retention_dashboard.models import Advisor, Week
 
@@ -27,7 +27,8 @@ class DataView(RESTDispatch):
                   name='dispatch')
 class WeekView(RESTDispatch):
     def get(self, request):
-        weeks = get_weeks_with_data()
+        dao = FilterDataDao()
+        weeks = dao.get_weeks_with_data()
         json_data = []
         for week in weeks:
             json_data.append(week.json_data())
@@ -76,7 +77,9 @@ class FilteredDataView(RESTDispatch):
             err_msg = "Not authorized for type " + type
             return self.error_response(403, content={"msg": err_msg})
 
-        data_points = get_filtered_data(type, week,
+        dao = FilterDataDao()
+        data_points = dao.get_filtered_data(
+                                        type, week,
                                         text_filter=text_filter,
                                         grade_filters=grade_filters,
                                         assignment_filters=assignment_filters,

@@ -1,22 +1,17 @@
 # Copyright 2021 UW-IT, University of Washington
 # SPDX-License-Identifier: Apache-2.0
 
-import os
-import zipfile
+import traceback
 from django.conf import settings
 from django.utils.decorators import method_decorator
-from django.db.utils import IntegrityError
-from django.core.files.uploadhandler import TemporaryFileUploadHandler
 from django.views.decorators.csrf import csrf_exempt
 from django.core.management import call_command
 from uw_saml.decorators import group_required
-from retention_dashboard.models import Week, Upload
-from retention_dashboard.management.commands.bulk_upload import \
-    InvalidFileException, InvalidUploadException
-from retention_dashboard.utilities.upload import process_upload
 from userservice.user import get_original_user
+from retention_dashboard.models import Week, Upload
 from retention_dashboard.views.api import RESTDispatch
-from retention_dashboard.views.api.forms import BulkDataForm
+from retention_dashboard.views.api.forms import GCSForm, LocalDataForm
+from retention_dashboard.dao.admin import GCSDataDao, UploadDataDao
 
 
 @method_decorator(group_required(settings.ADMIN_USERS_GROUP),
@@ -39,40 +34,42 @@ class WeekAdmin(RESTDispatch):
 
 @method_decorator(group_required(settings.ADMIN_USERS_GROUP),
                   name='dispatch')
-class DataAdmin(RESTDispatch):
+class LocalDataAdmin(RESTDispatch):
     def post(self, request):
-        try:
-            # get post data
-            week_id = request.POST.get('week')
-            type = request.POST.get('type')
-            uploaded_file = request.FILES.get('file')
-
-            # read uploaded file
-            if uploaded_file is None:
-                print("No file specified")
-                return self.error_response(status=400,
-                                           message="No file specified")
-            file = uploaded_file.read()
-
-            # decode file document
-            document = None
+        form = LocalDataForm(request.POST, request.FILES)
+        if form.is_valid():
             try:
-                document = file.decode('utf-8')
-            except UnicodeDecodeError:
-                document = file.decode('utf-16')
-            if document is None:
-                return self.error_response(status=400,
-                                           message="Invalid document")
+                week_id = request.POST.get("local_upload_week")
+                rad_file = request.FILES.get("local_upload_file")
+                # read uploaded file
+                rad_data = rad_file.read()
+                if rad_data is None:
+                    raise ValueError("Empty document")
 
-            # process upload
-            week = Week.objects.get(id=week_id)
-            user = get_original_user(request)
-            process_upload(document, type, week, user)
-        except Exception as ex:
-            return self.error_response(status=500, message=ex)
-        except IntegrityError as ex:
-            return self.error_response(400, message=ex)
+                # decode file document
+                rad_document = None
+                try:
+                    rad_document = rad_data.decode('utf-8')
+                except UnicodeDecodeError:
+                    rad_document = rad_data.decode('utf-16')
 
+                user = get_original_user(request)
+                week = Week.objects.get(id=week_id)
+                UploadDataDao().process_rad_upload(
+                                rad_file.name, rad_document, user, week=week)
+            except ValueError as err:
+                return self.error_response(
+                    status=400,
+                    message=err)
+            except Exception:
+                tb = traceback.format_exc()
+                return self.error_response(
+                    status=500,
+                    message=tb)
+        else:
+            return self.error_response(
+                status=400,
+                message=form.errors)
         return self.json_response({"created": True})
 
     def delete(self, request, upload_id):
@@ -87,49 +84,32 @@ class DataAdmin(RESTDispatch):
 @method_decorator(group_required(settings.ADMIN_USERS_GROUP),
                   name='dispatch')
 @method_decorator(csrf_exempt, name='dispatch')
-class BulkDataAdmin(RESTDispatch):
-
-    def setup(self, request, *args, **kwargs):
-        request.upload_handlers = [TemporaryFileUploadHandler(request)]
-        super(BulkDataAdmin, self).setup(request, *args, **kwargs)
+class GCSDataAdmin(RESTDispatch):
 
     def post(self, request):
-        form = BulkDataForm(request.POST, request.FILES)
+        form = GCSForm(request.POST, request.FILES)
         if form.is_valid():
-            delete_existing_data = request.POST.get("delete_existing_data")
-            uploaded_file = request.FILES.get("upload")
-            uploaded_file_path = uploaded_file.file.name
-            if zipfile.is_zipfile(uploaded_file) is False:
+            try:
+                rad_file_name = request.POST.get("gcs_file")
+                gcs_dao = GCSDataDao()
+                rad_document = gcs_dao.download_from_gcs_bucket(rad_file_name)
+                user = get_original_user(request)
+                UploadDataDao().process_rad_upload(
+                                            rad_file_name, rad_document, user)
+            except ValueError as err:
                 return self.error_response(
-                    status=400, message="Document isn't a zip file.")
-            else:
-                try:
-                    with zipfile.ZipFile(uploaded_file_path, 'r') as zip_file:
-                        tmp_path = os.path.dirname(uploaded_file_path)
-                        zip_file.extractall(tmp_path)
-                        extracted = zip_file.namelist()
-                        extracted_data_dir, _ = \
-                            os.path.split(os.path.join(tmp_path, extracted[0]))
-                        command_args = \
-                            ["--path={}".format(extracted_data_dir),
-                             "--user={}".format(request.user.username)]
-                        if delete_existing_data == "true":
-                            command_args.append("--delete_existing_data")
-
-                        call_command("bulk_upload",
-                                     *command_args)
-
-                except InvalidFileException as ex:
-                    return self.error_response(status=400, message=ex)
-                except InvalidUploadException as ex:
-                    return self.error_response(status=400, message=ex)
-                except Exception as ex:
-                    return self.error_response(status=500, message=ex)
-                return self.json_response({"created": True})
+                    status=400,
+                    message=err)
+            except Exception:
+                tb = traceback.format_exc()
+                return self.error_response(
+                    status=500,
+                    message=tb)
         else:
             return self.error_response(
                 status=400,
-                message=(form.errors))
+                message=form.errors)
+        return self.json_response({"created": True})
 
 
 @method_decorator(group_required(settings.ADMIN_USERS_GROUP),

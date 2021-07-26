@@ -25,6 +25,25 @@ class Week(models.Model):
                 "number": self.number,
                 "text": display_string}
 
+    @classmethod
+    def sis_term_to_quarter_number(cls, sis_term_id):
+        term = None
+        try:
+            term = sis_term_id.split("-")[1].lower()
+        except IndexError:
+            pass
+        if term == "winter":
+            return 1
+        elif term == "spring":
+            return 2
+        elif term == "summer":
+            return 3
+        elif term == "autumn":
+            return 4
+        else:
+            raise ValueError(f"Unable to determine quarter number for "
+                             f"sis_term_id={sis_term_id}")
+
 
 class DataPoint(models.Model):
     TYPE_CHOICES = ((1, "Premajor"), (2, "EOP"), (3, "International"),
@@ -37,10 +56,10 @@ class DataPoint(models.Model):
     premajor = models.BooleanField()
     is_stem = models.BooleanField(default=False)
     is_freshman = models.BooleanField(default=False)
-    priority_score = models.FloatField()
-    activity_score = models.FloatField()
-    assignment_score = models.FloatField()
-    grade_score = models.FloatField()
+    priority_score = models.FloatField(null=True)
+    activity_score = models.FloatField(null=True)
+    assignment_score = models.FloatField(null=True)
+    grade_score = models.FloatField(null=True)
     signin_score = models.FloatField(default=0.0)
     upload = models.ForeignKey("Upload", on_delete=models.CASCADE)
     advisor = models.ForeignKey("Advisor", on_delete=models.PROTECT, null=True)
