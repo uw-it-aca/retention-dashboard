@@ -135,7 +135,7 @@ class UploadDataDao():
         if bool(int(row.get("international", 0))) is True:
             upload_types.append(UploadTypes.international)
         if bool(int(row.get("isso", 0))) is True:
-            upload_types.append(UploadTypes.isso)
+            upload_types.append(UploadTypes.iss)
         if int(row.get("campus_code", 0)) == 2:
             upload_types.append(UploadTypes.tacoma)
         # premajor only if not any other classification
