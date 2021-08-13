@@ -4,7 +4,8 @@
 import csv
 import logging
 from io import StringIO
-from retention_dashboard.models import Week, DataPoint, Advisor, Upload
+from retention_dashboard.models import Week, DataPoint, Advisor, Upload, \
+    UploadTypes
 from django.conf import settings
 from django.db import transaction
 from google.cloud import storage
@@ -122,18 +123,25 @@ class UploadDataDao():
         Return upload type to associate a row with
         """
         upload_types = []
+        # if an adviser type is specified, use that as the upload type
+        if row.get("adviser_type") == "eop":
+            return [UploadTypes.eop]
+        elif row.get("adviser_type") == "iss":
+            return [UploadTypes.iss]
+        # if no adviser type is specified, derive the upload types from the
+        # eop, international, isso, and campus_code columns
         if bool(int(row.get("eop", 0))) is True:
-            upload_types.append(2)
+            upload_types.append(UploadTypes.eop)
         if bool(int(row.get("international", 0))) is True:
-            upload_types.append(3)
+            upload_types.append(UploadTypes.international)
         if bool(int(row.get("isso", 0))) is True:
-            upload_types.append(4)
+            upload_types.append(UploadTypes.isso)
         if int(row.get("campus_code", 0)) == 2:
-            upload_types.append(5)
+            upload_types.append(UploadTypes.tacoma)
         # premajor only if not any other classification
         if len(upload_types) == 0 and \
                 bool(int(row.get("premajor", 0))) is True:
-            upload_types.append(1)
+            upload_types.append(UploadTypes.premajor)
         if not upload_types:
             raise ValueError(f"Unknown upload type for row: {row}")
         return upload_types

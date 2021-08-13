@@ -45,9 +45,20 @@ class Week(models.Model):
                              f"sis_term_id={sis_term_id}")
 
 
+class UploadTypes():
+    premajor = 1
+    eop = 2
+    international = 3
+    iss = 4
+    tacoma = 5
+
+
 class DataPoint(models.Model):
-    TYPE_CHOICES = ((1, "Premajor"), (2, "EOP"), (3, "International"),
-                    (4, "ISS"), (5, "Tacoma"))
+    TYPE_CHOICES = ((UploadTypes.premajor, "Premajor"),
+                    (UploadTypes.eop, "EOP"),
+                    (UploadTypes.international, "International"),
+                    (UploadTypes.iss, "ISS"),
+                    (UploadTypes.tacoma, "Tacoma"))
     type = models.PositiveSmallIntegerField(choices=TYPE_CHOICES)
     week = models.ForeignKey("Week", on_delete=models.PROTECT)
     student_name = models.TextField()
