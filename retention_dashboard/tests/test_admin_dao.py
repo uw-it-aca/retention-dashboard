@@ -98,9 +98,9 @@ class TestUploadDataDao(TestCase):
              ('activity', '-4.00000000000000000000'),
              ('assignments', '-2.50000000000000000000'),
              ('grades', '0E-20'), ('pred', '4.699061188134724'),
-             ('adviser_name', 'Osure Brown'), ('staff_id', 'osureb'),
-             ('sign_in', '-0.3887894787550641'), ('stem', '1'),
-             ('incoming_freshman', '0'), ('premajor', '1'),
+             ('adviser_name', 'Osure Brown'), ('adviser_type', ''),
+             ('staff_id', 'osureb'), ('sign_in', '-0.3887894787550641'),
+             ('stem', '1'), ('incoming_freshman', '0'), ('premajor', '1'),
              ('eop', '0'), ('international', '0'), ('isso', '0'),
              ('campus_code', '0'), ('summer', 'A-B')])
         self.assertEqual(dao.get_upload_types(row), [1])
@@ -110,9 +110,9 @@ class TestUploadDataDao(TestCase):
              ('activity', '-4.00000000000000000000'),
              ('assignments', '-2.50000000000000000000'),
              ('grades', '0E-20'), ('pred', '4.699061188134724'),
-             ('adviser_name', 'Osure Brown'), ('staff_id', 'osureb'),
-             ('sign_in', '-0.3887894787550641'), ('stem', '1'),
-             ('incoming_freshman', '0'), ('premajor', '0'),
+             ('adviser_name', 'Osure Brown'), ('adviser_type', ''),
+             ('staff_id', 'osureb'), ('sign_in', '-0.3887894787550641'),
+             ('stem', '1'), ('incoming_freshman', '0'), ('premajor', '0'),
              ('eop', '1'), ('international', '0'), ('isso', '0'),
              ('campus_code', '0'), ('summer', 'A-B')])
         self.assertEqual(dao.get_upload_types(row), [2])
@@ -122,9 +122,9 @@ class TestUploadDataDao(TestCase):
              ('activity', '-4.00000000000000000000'),
              ('assignments', '-2.50000000000000000000'),
              ('grades', '0E-20'), ('pred', '4.699061188134724'),
-             ('adviser_name', 'Osure Brown'), ('staff_id', 'osureb'),
-             ('sign_in', '-0.3887894787550641'), ('stem', '1'),
-             ('incoming_freshman', '0'), ('premajor', '1'),
+             ('adviser_name', 'Osure Brown'), ('adviser_type', ''),
+             ('staff_id', 'osureb'), ('sign_in', '-0.3887894787550641'),
+             ('stem', '1'), ('incoming_freshman', '0'), ('premajor', '1'),
              ('eop', '1'), ('international', '0'), ('isso', '0'),
              ('campus_code', '0'), ('summer', 'A-B')])
         self.assertEqual(dao.get_upload_types(row), [2])
@@ -134,9 +134,9 @@ class TestUploadDataDao(TestCase):
              ('activity', '-4.00000000000000000000'),
              ('assignments', '-2.50000000000000000000'),
              ('grades', '0E-20'), ('pred', '4.699061188134724'),
-             ('adviser_name', 'Osure Brown'), ('staff_id', 'osureb'),
-             ('sign_in', '-0.3887894787550641'), ('stem', '1'),
-             ('incoming_freshman', '0'), ('premajor', '1'),
+             ('adviser_name', 'Osure Brown'), ('adviser_type', ''),
+             ('staff_id', 'osureb'), ('sign_in', '-0.3887894787550641'),
+             ('stem', '1'), ('incoming_freshman', '0'), ('premajor', '1'),
              ('eop', '0'), ('international', '1'), ('isso', '0'),
              ('campus_code', '2'), ('summer', 'A-B')])
         self.assertEqual(dao.get_upload_types(row), [3, 5])
@@ -146,9 +146,47 @@ class TestUploadDataDao(TestCase):
              ('activity', '-4.00000000000000000000'),
              ('assignments', '-2.50000000000000000000'),
              ('grades', '0E-20'), ('pred', '4.699061188134724'),
-             ('adviser_name', 'Osure Brown'), ('staff_id', 'osureb'),
-             ('sign_in', '-0.3887894787550641'), ('stem', '1'),
-             ('incoming_freshman', '0'), ('premajor', '1'),
+             ('adviser_name', 'Osure Brown'), ('adviser_type', ''),
+             ('staff_id', 'osureb'), ('sign_in', '-0.3887894787550641'),
+             ('stem', '1'), ('incoming_freshman', '0'), ('premajor', '1'),
+             ('eop', '0'), ('international', '1'), ('isso', '1'),
+             ('campus_code', '2'), ('summer', 'A-B')])
+        self.assertEqual(dao.get_upload_types(row), [3, 4, 5])
+        # test for when adviser_type is set
+        row = OrderedDict(
+            [('uw_netid', 'fairsp'), ('student_no', '1864017'),
+             ('student_name_lowc', 'fairservice,peyton scott'),
+             ('activity', '-4.00000000000000000000'),
+             ('assignments', '-2.50000000000000000000'),
+             ('grades', '0E-20'), ('pred', '4.699061188134724'),
+             ('adviser_name', 'Osure Brown'), ('adviser_type', 'eop'),
+             ('staff_id', 'osureb'), ('sign_in', '-0.3887894787550641'),
+             ('stem', '1'), ('incoming_freshman', '0'), ('premajor', '1'),
+             ('eop', '0'), ('international', '1'), ('isso', '1'),
+             ('campus_code', '2'), ('summer', 'A-B')])
+        self.assertEqual(dao.get_upload_types(row), [2])
+        row = OrderedDict(
+            [('uw_netid', 'fairsp'), ('student_no', '1864017'),
+             ('student_name_lowc', 'fairservice,peyton scott'),
+             ('activity', '-4.00000000000000000000'),
+             ('assignments', '-2.50000000000000000000'),
+             ('grades', '0E-20'), ('pred', '4.699061188134724'),
+             ('adviser_name', 'Osure Brown'), ('adviser_type', 'iss'),
+             ('staff_id', 'osureb'), ('sign_in', '-0.3887894787550641'),
+             ('stem', '1'), ('incoming_freshman', '0'), ('premajor', '1'),
+             ('eop', '0'), ('international', '1'), ('isso', '1'),
+             ('campus_code', '2'), ('summer', 'A-B')])
+        self.assertEqual(dao.get_upload_types(row), [4])
+        # case where adviser type was unknown
+        row = OrderedDict(
+            [('uw_netid', 'fairsp'), ('student_no', '1864017'),
+             ('student_name_lowc', 'fairservice,peyton scott'),
+             ('activity', '-4.00000000000000000000'),
+             ('assignments', '-2.50000000000000000000'),
+             ('grades', '0E-20'), ('pred', '4.699061188134724'),
+             ('adviser_name', 'Osure Brown'), ('adviser_type', 'foobar'),
+             ('staff_id', 'osureb'), ('sign_in', '-0.3887894787550641'),
+             ('stem', '1'), ('incoming_freshman', '0'), ('premajor', '1'),
              ('eop', '0'), ('international', '1'), ('isso', '1'),
              ('campus_code', '2'), ('summer', 'A-B')])
         self.assertEqual(dao.get_upload_types(row), [3, 4, 5])
