@@ -163,7 +163,9 @@ class UploadDataDao():
                 advisor_name = row.get("adviser_name")
                 advisor = None
                 if advisor_netid is not None and advisor_name is not None:
-                    if advisor_netid not in advisor_dict:
+                    advisor_key = "{}_{}".format(advisor_netid,
+                                                 upload_type)
+                    if advisor_key not in advisor_dict:
                         try:
                             advisor = Advisor.objects.get(
                                                 advisor_netid=advisor_netid,
@@ -174,9 +176,9 @@ class UploadDataDao():
                                                 advisor_netid=advisor_netid,
                                                 advisor_type=upload_type,
                                                 advisor_name=advisor_name)
-                        advisor_dict[advisor_netid] = advisor
+                        advisor_dict[advisor_key] = advisor
                     else:
-                        advisor = advisor_dict[advisor_netid]
+                        advisor = advisor_dict[advisor_key]
                 has_a, has_b, has_full = \
                     self.get_summer_terms_from_string(row.get('summer'))
                 dp = DataPoint()
