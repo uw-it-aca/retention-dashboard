@@ -12,7 +12,7 @@
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
 
-        gtag('config', '{{ ga_key }}');
+        gtag('config', '{{ ga_key }}', { 'anonymize_ip': true });
     </script>
     {% endif %}
 
