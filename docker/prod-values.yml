@@ -21,13 +21,6 @@ autoscaling:
   minReplicas: 2
   maxReplicas: 4
 targetAverageUtilization: 100
-resources:
-  limits:
-    cpu: 1.0
-    memory: 768Mi
-  requests:
-    cpu: 100m
-    memory: 700Mi
 lifecycle:
   enabled: true
   preStop:
