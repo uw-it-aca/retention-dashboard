@@ -39,7 +39,7 @@ export const EventBus = new Vue();
 var router = new VueRouter({
   mode: "history",
   routes: [
-    { path: '/', component: DataView },
+    { path: '/', name: 'home', component: DataView },
   ]
 });
 

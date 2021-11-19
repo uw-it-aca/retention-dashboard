@@ -19,6 +19,24 @@
             </b-form-checkbox>
           </b-form-checkbox-group>
           <b-form-select
+            id="sports_filter"
+            v-model="sports_filter"
+            class="rd-sports-filter"
+            :options="current_sports"
+            value-field="sport_code"
+            text-field="sport_desc"
+            size="sm"
+          >
+            <template v-slot:first>
+              <b-form-select-option :value="'all'">
+                All sports
+              </b-form-select-option>
+              <b-form-select-option :value="'no_sport'">
+                No sport
+              </b-form-select-option>
+            </template>
+          </b-form-select>
+          <b-form-select
             id="advisor_filter"
             v-model="advisor_filter"
             class="rd-advisor-filter"
@@ -159,6 +177,7 @@
         weeks: [],
         auth_list: [],
         current_advisors: [],
+        current_sports: [],
         type: '',
         summer_terms: [
           { value: 'a', text: 'A Term' },
@@ -178,6 +197,14 @@
         },
         set (value) {
           this.$store.dispatch('advisors/set_advisors', value);
+        }
+      },
+      sports: {
+        get () {
+          return this.$store.state.sports.sports;
+        },
+        set (value) {
+          this.$store.dispatch('sports/set_sports', value);
         }
       },
       prediction_filter: {
@@ -282,11 +309,12 @@
     },
     watch: {
       advisors: function() {
-        if(this.type == "EOP"){
-          this.current_advisors = this.advisors["EOP"];
-        } else if (this.type == "ISS") {
-          this.current_advisors = this.advisors["ISS"];
+        if(["ISS", "EOP"].includes(this.type)){
+          this.current_advisors = this.advisors[this.type];
         }
+      },
+      sports: function() {
+        this.current_sports = this.sports[this.type];
       },
       currentweek: function(){
         this.selectWeek(this.currentweek);
@@ -342,6 +370,13 @@
         axios.get('/api/v1/advisors/')
           .then(function(response){
             vue.advisors = response.data;
+          });
+      },
+      get_sports(){
+        var vue = this;
+        axios.get('/api/v1/sports/')
+          .then(function(response){
+            vue.sports = response.data;
           });
       }
     }

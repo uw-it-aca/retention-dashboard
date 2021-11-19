@@ -5,7 +5,7 @@ import csv
 import logging
 from io import StringIO
 from retention_dashboard.models import Week, DataPoint, Advisor, Upload, \
-    UploadTypes
+    UploadTypes, Sport
 from django.conf import settings
 from django.db import transaction
 from google.cloud import storage
@@ -198,6 +198,10 @@ class UploadDataDao():
                     dp.priority_score = row.get("pred")
                 if row.get("sign_in"):
                     dp.signin_score = row.get("sign_in")
+                for code in row.get("sport_code"):
+                    sport_code, _ = Sport.objects.get_or_create(
+                        sport_code=code)
+                    dp.sports.add(sport_code)
                 dp.advisor = advisor
                 dp.has_a_term = has_a
                 dp.has_b_term = has_b

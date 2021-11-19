@@ -53,6 +53,86 @@ class UploadTypes():
     tacoma = 5
 
 
+class Sport(models.Model):
+    sport_code = models.IntegerField()
+
+    @property
+    def sport_desc(self):
+        descs = {
+            1: "BASEBALL-MEN",
+            2: "SOFTBALL-WOMEN",
+            3: "BASKETBALL-MEN",
+            4: "BASKETBALL-WMN",
+            5: "CREW-MENV",
+            6: "CREW-WOMENV",
+            7: "FOOTBALL-MEN",
+            8: "FTBL-WOMEN",
+            9: "GOLF-MEN",
+            10: "GOLF-WOMEN",
+            11: "GYMN-MEN",
+            12: "GYMN-WOMEN",
+            13: "SOCR-MEN",
+            14: "SOCR-WOMEN",
+            15: "SWIM-MEN",
+            16: "SWIM-WOMEN",
+            17: "TENS-MEN",
+            18: "TENS-WOMEN",
+            19: "TRACK-MEN",
+            20: "TRACK-WOMEN",
+            22: "VLYB-WOMEN",
+            23: "CROSS COUNTRY-M",
+            24: "CROSS COUNTRY-W",
+            25: "TRACK-INDOOR M",
+            26: "TRACK-INDOOR W",
+            27: "CREWN-MEN",
+            28: "CREWN-WOMEN",
+            29: "NONPARTICIPANTS",
+            35: "NO ATH STATUS",
+            40: "PERM INJURY FBL",
+            41: "WIDE RECEIV FBL",
+            42: "OFFENSE LNE FBL",
+            43: "TEND KICKER FBL",
+            44: "QUARTERBACK FBL",
+            45: "RUNING BACK FBL",
+            46: "DEFENS LINE FBL",
+            47: "LINEBACKERS FBL",
+            48: "DEFENS BACK FBL",
+            49: "CORNER BACK FBL",
+            51: "INACTIVE BASEBL",
+            52: "INACTIVE SOFTBL",
+            53: "INACTIVE BASKET",
+            54: "INACTIVE BASKET",
+            55: "INACTIVE CREWV",
+            56: "INACTIVE CREWV",
+            57: "INACTIVE FTBALL",
+            59: "INACTIVE GOLF",
+            60: "INACTIVE GOLF",
+            62: "INACTIVE GYMN",
+            63: "INACTIVE SOC",
+            64: "INACT SOCCER W",
+            65: "INACTIVE SWIM",
+            66: "INACTIVE SWIM",
+            67: "INACTIVE TENNIS",
+            68: "INACTIVE TENNIS",
+            69: "INACTIVE TRACK",
+            70: "INACTIVE TRACK",
+            72: "INACTIVE VOLBL",
+            73: "INACTIVE CCNTRY",
+            74: "INACTIVE CCNTRY",
+            75: "INACT TR IND M",
+            76: "INACT TR IND W",
+            77: "INACTIVE CREMN",
+            78: "INACTIVE CREWN",
+            96: "REC W A AID",
+            97: "REC NO A AID",
+            98: "N REC W ATH AID",
+            99: "N REC NO A AID",
+            30: "SAND VOLLEYBL-W",
+            80: "INACT SAND VLB n"
+        }
+        return descs[self.sport_code]
+
+
 class DataPoint(models.Model):
     TYPE_CHOICES = ((UploadTypes.premajor, "Premajor"),
                     (UploadTypes.eop, "EOP"),
@@ -74,6 +154,7 @@ class DataPoint(models.Model):
     signin_score = models.FloatField(default=0.0)
     upload = models.ForeignKey("Upload", on_delete=models.CASCADE)
     advisor = models.ForeignKey("Advisor", on_delete=models.PROTECT, null=True)
+    sports = models.ManyToManyField("Sport", null=True)
     has_a_term = models.BooleanField(default=False)
     has_b_term = models.BooleanField(default=False)
     has_full_term = models.BooleanField(default=False)
@@ -99,12 +180,18 @@ class DataPoint(models.Model):
 
     @staticmethod
     def get_data_by_type_week(type, week):
-        type_int = [item for item in
-                    DataPoint.TYPE_CHOICES
-                    if type in item][0][0]
-        data = DataPoint.objects.filter(type=type_int,
-                                        week=week).prefetch_related('advisor')
-        return data
+        types = [item for item in DataPoint.TYPE_CHOICES
+                 if type in item]
+        if types:
+            type_int = [item for item in
+                        DataPoint.TYPE_CHOICES
+                        if type in item][0][0]
+            data = DataPoint.objects.filter(
+                type=type_int,
+                week=week).prefetch_related('advisor')
+            return data
+        else:
+            return []
 
     @staticmethod
     def filter_by_ranges(data_queryset, ranges, field):
@@ -167,6 +254,10 @@ class DataPoint(models.Model):
     @staticmethod
     def filter_by_stem(data_queryset, is_stem):
         return data_queryset.filter(is_stem=is_stem)
+
+    @staticmethod
+    def filter_by_sports(data_queryset, sport_codes):
+        return data_queryset.filter(sports__in=sport_codes)
 
     @staticmethod
     def filter_by_advisor(data_queryset, advisor_netid, advisor_type):
