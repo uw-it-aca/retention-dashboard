@@ -11,7 +11,7 @@ const state = {
     prediction_filter: [],
     advisor_filter: "all",
     summer_filter: [],
-    sports_filterx: []
+    sports_filter: []
   }
 
 };

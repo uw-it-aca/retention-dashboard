@@ -62,7 +62,7 @@ class FilterDataDao():
                                                   advisor_filter,
                                                   type)
 
-        if sports_filter is not None and sports_filter != ["all"]:
+        if sports_filter and sports_filter != ["all"]:
             dataset = DataPoint.filter_by_sports(dataset, sports_filter)
 
         if summer_filters:

@@ -8,7 +8,7 @@ from uw_saml.decorators import group_required
 from retention_dashboard.views.api import RESTDispatch
 from retention_dashboard.dao.data import FilterDataDao
 from retention_dashboard.dao.auth import get_type_authorizations
-from retention_dashboard.models import Advisor, Week
+from retention_dashboard.models import Advisor, Week, Sport
 
 
 @method_decorator(group_required(settings.ALLOWED_USERS_GROUP),
@@ -111,3 +111,11 @@ class AdvisorListView(RESTDispatch):
     def get(self, request):
         advisors = Advisor.get_all_advisors()
         return self.json_response(content=advisors)
+
+@method_decorator(group_required(settings.ALLOWED_USERS_GROUP),
+                  name='dispatch')
+class SportListView(RESTDispatch):
+    def get(self, request):
+        sports = Sport.get_all_sports()
+        return self.json_response(content=sports)
+

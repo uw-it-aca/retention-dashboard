@@ -329,6 +329,11 @@
           this.freshman_filter = false;
           this.premajor_filter = false;
           this.get_advisors();
+        } else if (this.type === "Athletic") {
+          this.stem_filter = true;
+          this.freshman_filter = true;
+          this.premajor_filter = true;
+          this.get_sports();
         }
       },
       auth_list: function() {

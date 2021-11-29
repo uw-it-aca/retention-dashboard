@@ -51,6 +51,7 @@ class UploadTypes():
     international = 3
     iss = 4
     tacoma = 5
+    athletic = 6
 
 
 class Sport(models.Model):
@@ -132,13 +133,18 @@ class Sport(models.Model):
         }
         return descs[self.sport_code]
 
+    @classmethod
+    def get_all_sports(cls):
+        return Sport.objects.values_list('sport_code')
+
 
 class DataPoint(models.Model):
     TYPE_CHOICES = ((UploadTypes.premajor, "Premajor"),
                     (UploadTypes.eop, "EOP"),
                     (UploadTypes.international, "International"),
                     (UploadTypes.iss, "ISS"),
-                    (UploadTypes.tacoma, "Tacoma"))
+                    (UploadTypes.tacoma, "Tacoma"),
+                    (UploadTypes.athletic, "Athletic"))
     type = models.PositiveSmallIntegerField(choices=TYPE_CHOICES)
     week = models.ForeignKey("Week", on_delete=models.PROTECT)
     student_name = models.TextField()
@@ -333,8 +339,10 @@ class Advisor(models.Model):
         inter = cls.get_advisor_by_type(3)
         iss = cls.get_advisor_by_type(4)
         tacoma = cls.get_advisor_by_type(5)
+        athletic = cls.get_advisor_by_type(6)
         return {"Premajor": list(prem),
                 "EOP": list(eop),
                 "International": list(inter),
                 "ISS": list(iss),
-                "Tacoma": list(tacoma)}
+                "Tacoma": list(tacoma),
+                "Athletic": list(athletic)}
