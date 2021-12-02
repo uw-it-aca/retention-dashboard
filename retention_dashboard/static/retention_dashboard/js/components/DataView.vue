@@ -429,23 +429,27 @@
         if(this.signins_filter.length > 0){
           params['signins_filters'] = this.signins_filter;
         }
+        if(this.sport_filter){
+          params['sport_filter'] = this.sport_filter;
+        }
         return params;
       },
       filter_trigger () {
-        return (
-          this.assignment_filter,
-          this.grade_filter,
-          this.activity_filter,
-          this.prediction_filter,
-          this.premajor_filter,
-          this.stem_filter,
-          this.freshman_filter,
-          this.keyword_filter,
-          this.advisor_filter,
-          this.current_week,
-          this.current_file,
-          this.summer_filter,
-          this.signins_filter
+        return ("" +
+          this.assignment_filter +
+          this.grade_filter +
+          this.activity_filter +
+          this.prediction_filter +
+          this.premajor_filter +
+          this.stem_filter +
+          this.freshman_filter +
+          this.keyword_filter +
+          this.advisor_filter +
+          this.current_week +
+          this.current_file +
+          this.summer_filter +
+          this.signins_filter +
+          this.sport_filter
         );
       },
       ...Vuex.mapState({
@@ -462,6 +466,7 @@
         advisor_filter: state => state.filters.filters.advisor_filter,
         summer_filter: state => state.filters.filters.summer_filter,
         signins_filter: state => state.filters.filters.signins_filter,
+        sport_filter: state => state.filters.filters.sport_filter
       })
     },
     watch: {

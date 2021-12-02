@@ -59,7 +59,7 @@ class FilteredDataView(RESTDispatch):
         premajor_filter = request.GET.get("premajor_filter", None)
         stem_filter = request.GET.get("stem_filter", None)
         freshman_filter = request.GET.get("freshman_filter", None)
-        sports_filter = request.GET.get("sports_filter", None)
+        sport_filter = request.GET.get("sport_filter", None)
         if premajor_filter == "true":
             premajor_filter = True
         if stem_filter == "true":
@@ -92,7 +92,7 @@ class FilteredDataView(RESTDispatch):
                                         summer_filters=summer_filters,
                                         stem_filter=stem_filter,
                                         freshman_filter=freshman_filter,
-                                        sports_filter=sports_filter)
+                                        sport_filter=sport_filter)
 
         response_data = []
         try:

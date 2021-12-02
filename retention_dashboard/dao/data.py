@@ -22,7 +22,7 @@ class FilterDataDao():
                           text_filter=None, advisor_filter=None,
                           summer_filters=None, stem_filter=None,
                           freshman_filter=None,  signins_filters=None,
-                          sports_filter=None):
+                          sport_filter=None):
         dataset = DataPoint.get_data_by_type_week(type, week)
         if grade_filters:
             dataset = DataPoint.filter_by_ranges(dataset,
@@ -62,8 +62,8 @@ class FilterDataDao():
                                                   advisor_filter,
                                                   type)
 
-        if sports_filter and sports_filter != ["all"]:
-            dataset = DataPoint.filter_by_sports(dataset, sports_filter)
+        if sport_filter and sport_filter != "all":
+            dataset = DataPoint.filter_by_sports(dataset, sport_filter)
 
         if summer_filters:
             dataset = DataPoint.filter_by_summer(dataset, summer_filters)

@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 from django.db import models
-from django.db.models import Q
+from django.db.models import Q, F
 
 
 class Week(models.Model):
@@ -134,8 +134,35 @@ class Sport(models.Model):
         return descs[self.sport_code]
 
     @classmethod
+    def get_sport_by_type(cls, datapoint_type):
+        dps = DataPoint.objects.filter(type=datapoint_type) \
+            .annotate(sport_code=F('sports__sport_code')) \
+            .order_by('sport_code') \
+            .filter(~Q(sports=None))
+        sports = []
+        for dp in dps:
+            for sport in dp.sports.all():
+                if (sport.sport_code not in
+                        [sport["sport_code"] for sport in sports]):
+                    sports.append(
+                        {'sport_code': sport.sport_code,
+                         'sport_desc': sport.sport_desc})
+        return sorted(sports, key=lambda x: x["sport_desc"])
+
+    @classmethod
     def get_all_sports(cls):
-        return Sport.objects.values_list('sport_code')
+        prem = cls.get_sport_by_type(1)
+        eop = cls.get_sport_by_type(2)
+        inter = cls.get_sport_by_type(3)
+        iss = cls.get_sport_by_type(4)
+        tacoma = cls.get_sport_by_type(5)
+        athletic = cls.get_sport_by_type(6)
+        return {"Premajor": list(prem),
+                "EOP": list(eop),
+                "International": list(inter),
+                "ISS": list(iss),
+                "Tacoma": list(tacoma),
+                "Athletic": list(athletic)}   
 
 
 class DataPoint(models.Model):
@@ -262,8 +289,11 @@ class DataPoint(models.Model):
         return data_queryset.filter(is_stem=is_stem)
 
     @staticmethod
-    def filter_by_sports(data_queryset, sport_codes):
-        return data_queryset.filter(sports__in=sport_codes)
+    def filter_by_sports(data_queryset, sport_filter):
+        if sport_filter == "no_sport":
+            return data_queryset.filter(sports=None)
+        else:
+            return data_queryset.filter(sports__sport_code__in=sport_filter)
 
     @staticmethod
     def filter_by_advisor(data_queryset, advisor_netid, advisor_type):

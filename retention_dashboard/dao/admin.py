@@ -151,7 +151,7 @@ class UploadDataDao():
                                 delimiter=',')
 
         advisor_dict = {}
-        dp_by_upload = {}
+        record_by_upload = {}
         for _, row in enumerate(reader):
             try:
                 upload_types = self.get_upload_types(row)
@@ -198,19 +198,16 @@ class UploadDataDao():
                     dp.priority_score = row.get("pred")
                 if row.get("sign_in"):
                     dp.signin_score = row.get("sign_in")
-                for code in row.get("sport_code"):
-                    sport_code, _ = Sport.objects.get_or_create(
-                        sport_code=code)
-                    dp.sports.add(sport_code)
                 dp.advisor = advisor
                 dp.has_a_term = has_a
                 dp.has_b_term = has_b
                 dp.has_full_term = has_full
-                if dp_by_upload.get(upload_type):
-                    dp_by_upload[upload_type].append(dp)
+                record = {'datapoint': dp, 'row': row}
+                if record_by_upload.get(upload_type):
+                    record_by_upload[upload_type].append(record)
                 else:
-                    dp_by_upload[upload_type] = [dp]
-        return dp_by_upload
+                    record_by_upload[upload_type] = [record]
+        return record_by_upload
 
     def process_rad_upload(self, rad_file_name, rad_document, user, week=None):
 
@@ -227,9 +224,9 @@ class UploadDataDao():
                 year=year
             )
 
-        dp_by_upload = self.parse_rad_document(rad_document)
+        record_by_upload = self.parse_rad_document(rad_document)
 
-        for upload_type, dps in dp_by_upload.items():
+        for upload_type, records in record_by_upload.items():
             try:
                 (Upload.objects.filter(week=week)
                                .filter(type=upload_type)
@@ -245,7 +242,8 @@ class UploadDataDao():
                                                    type=upload_type,
                                                    week=week,
                                                    uploaded_by=user)
-                    for dp in dps:
+                    for record in records:
+                        dp = record['datapoint']
                         if upload.type:
                             dp.type = upload.type
                         if upload.week:
@@ -253,7 +251,17 @@ class UploadDataDao():
                         if upload:
                             dp.upload = upload
                         dp.upload = upload
-                    DataPoint.objects.bulk_create(dps)
-                logging.info(f"Upload {len(dps)} datapoints for "
+                        dp.save()
+                        # update sport affiliations after ids have been created
+                        row = record["row"]
+                        sport_code_str = row.get("sport_code")
+                        sport_codes = (sport_code_str.split(",")
+                                    if sport_code_str else [])
+                        for code in sport_codes:
+                            sport_code, _ = Sport.objects.get_or_create(
+                                sport_code=code)
+                            dp.sports.add(sport_code)
+                        dp.save()
+                logging.info(f"Upload {len(records)} datapoints for "
                              f"term={week.quarter}, week={week.number}, "
                              f"type={upload_type}")

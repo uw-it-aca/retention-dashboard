@@ -19,24 +19,6 @@
             </b-form-checkbox>
           </b-form-checkbox-group>
           <b-form-select
-            id="sports_filter"
-            v-model="sports_filter"
-            class="rd-sports-filter"
-            :options="current_sports"
-            value-field="sport_code"
-            text-field="sport_desc"
-            size="sm"
-          >
-            <template v-slot:first>
-              <b-form-select-option :value="'all'">
-                All sports
-              </b-form-select-option>
-              <b-form-select-option :value="'no_sport'">
-                No sport
-              </b-form-select-option>
-            </template>
-          </b-form-select>
-          <b-form-select
             id="advisor_filter"
             v-model="advisor_filter"
             class="rd-advisor-filter"
@@ -105,6 +87,28 @@
           label="Keyword"
         >
           <b-form-input v-model="keyword_filter" size="sm" placeholder="Student name, #, NetID" />
+        </b-form-group>
+        <b-form-group
+          label="Sport"
+        >
+          <b-form-select
+            id="sport_filter"
+            v-model="sport_filter"
+            class="rd-sports-filter"
+            :options="current_sports"
+            value-field="sport_code"
+            text-field="sport_desc"
+            size="sm"
+          >
+            <template v-slot:first>
+              <b-form-select-option :value="'all'">
+                All sports
+              </b-form-select-option>
+              <b-form-select-option :value="'no_sport'">
+                No sport
+              </b-form-select-option>
+            </template>
+          </b-form-select>
         </b-form-group>
       </b-col>
       <b-col order="5" />
@@ -255,6 +259,14 @@
           this.$store.dispatch('filters/set_summer_filter', value);
         }
       },
+      sport_filter: {
+        get () {
+          return this.$store.state.filters.filters.sport_filter;
+        },
+        set (value) {
+          this.$store.dispatch('filters/set_sport_filter', value);
+        }
+      },
       keyword_filter: {
         get () {
           return this.$store.state.filters.filters.keyword_filter;
@@ -321,6 +333,8 @@
       },
       type: function(){
         this.advisor_filter = "all";
+        this.sport_filter = "all"
+        this.get_sports(this.type);
         this.selectPage(this.type);
         if(this.type === "EOP"){
           this.get_advisors();
@@ -329,11 +343,6 @@
           this.freshman_filter = false;
           this.premajor_filter = false;
           this.get_advisors();
-        } else if (this.type === "Athletic") {
-          this.stem_filter = true;
-          this.freshman_filter = true;
-          this.premajor_filter = true;
-          this.get_sports();
         }
       },
       auth_list: function() {
