@@ -138,10 +138,15 @@ class UploadDataDao():
             upload_types.append(UploadTypes.iss)
         if int(row.get("campus_code", 0)) == 2:
             upload_types.append(UploadTypes.tacoma)
-        # premajor only if not any other classification
+
+        # premajor only if not any other classification, excluding athletics
         if len(upload_types) == 0 and \
                 bool(int(row.get("premajor", 0))) is True:
             upload_types.append(UploadTypes.premajor)
+
+        if row.get("sport_code", None):
+            upload_types.append(UploadTypes.athletic)
+
         if not upload_types:
             raise ValueError(f"Unknown upload type for row: {row}")
         return upload_types

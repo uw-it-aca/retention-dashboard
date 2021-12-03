@@ -1,8 +1,7 @@
 <template>
   <span>
     <b-row class="rd-filters-container justify-content-center">
-      <b-col order="1" />
-      <b-col v-if="show_pred" class="col-6 col-md-2 rd-filter-border" order="3" order-md="2">
+      <b-col v-if="show_pred" class="col rd-filter-border">
         <b-form-group
           label="Priority"
           aria-controls="data_table"
@@ -38,28 +37,19 @@
           </b-form-select>
         </b-form-group>
       </b-col>
-      <b-col class="col-12 col-md-auto" order="2" order-md="3">
-        <b-row>
-          <b-col class="col rd-filter-border">
-            <range-filter filter-name="Sign-Ins" filter-store="filters/set_signins_filter" />
-          </b-col>
-          <b-col class="col rd-filter-border">
-            <range-filter filter-name="Activity" filter-store="filters/set_activity_filter" />
-          </b-col>
-          <b-col class="col rd-filter-border">
-            <range-filter filter-name="Assignments" filter-store="filters/set_assignment_filter" />
-          </b-col>
-          <b-col class="col">
-            <range-filter filter-name="Grades" filter-store="filters/set_grade_filter" />
-          </b-col>
-        </b-row>
-        <b-row>
-          <div class="rd-form-note">
-            <span class="rd-form-key"><strong>Low</strong> -5 to -3</span><span class="rd-form-key"><strong class="rd-label">Average</strong> -2.9 to +2.9</span><span><strong>High</strong> +3 to +5</span>
-          </div>
-        </b-row>
+      <b-col class="col rd-filter-border">
+        <range-filter filter-name="Sign-Ins" filter-store="filters/set_signins_filter" />
       </b-col>
-      <b-col class="col-6 col-md-2 rd-filter-border-end" order="4">
+      <b-col class="col rd-filter-border">
+        <range-filter filter-name="Activity" filter-store="filters/set_activity_filter" />
+      </b-col>
+      <b-col class="col rd-filter-border">
+        <range-filter filter-name="Assignments" filter-store="filters/set_assignment_filter" />
+      </b-col>
+      <b-col class="col rd-filter-border">
+        <range-filter filter-name="Grades" filter-store="filters/set_grade_filter" />
+      </b-col>
+      <b-col class="col">
         <b-form-group
           v-if="show_type"
           class="rd-student-filters"
@@ -82,12 +72,8 @@
             Is Freshman
           </b-form-checkbox>
         </b-form-group>
-        <b-form-group
-          class="rd-keyword-filter"
-          label="Keyword"
-        >
-          <b-form-input v-model="keyword_filter" size="sm" placeholder="Student name, #, NetID" />
-        </b-form-group>
+      </b-col>
+      <b-col class="col rd-filter-border-end">
         <b-form-group
           label="Sport"
         >
@@ -102,16 +88,26 @@
           >
             <template v-slot:first>
               <b-form-select-option :value="'all'">
-                All sports
+                ALL STUDENTS
               </b-form-select-option>
               <b-form-select-option :value="'no_sport'">
-                No sport
+                NO SPORT AFFLIATION
               </b-form-select-option>
             </template>
           </b-form-select>
         </b-form-group>
+        <b-form-group
+          class="rd-keyword-filter"
+          label="Keyword"
+        >
+          <b-form-input v-model="keyword_filter" size="sm" placeholder="Name, #, NetID" />
+        </b-form-group>
       </b-col>
-      <b-col order="5" />
+    </b-row>
+    <b-row>
+      <div class="rd-form-note">
+        <span class="rd-form-key"><strong>Low</strong> -5 to -3</span><span class="rd-form-key"><strong class="rd-label">Average</strong> -2.9 to +2.9</span><span><strong>High</strong> +3 to +5</span>
+      </div>
     </b-row>
     <div class="rd-table-container">
       <span class="rd-file-select">
@@ -404,7 +400,7 @@
   /* filter styles */
 
   .rd-filters-container {
-    margin: auto;
+    margin: 0 10rem 0 10rem;
     padding: 0 0 1rem;
 
     .rd-filter-border {

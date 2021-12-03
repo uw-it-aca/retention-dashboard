@@ -138,7 +138,7 @@ class Sport(models.Model):
         dps = DataPoint.objects.filter(type=datapoint_type) \
             .annotate(sport_code=F('sports__sport_code')) \
             .order_by('sport_code') \
-            .filter(~Q(sports=None))
+            .filter(~Q(sport_code=None))
         sports = []
         for dp in dps:
             for sport in dp.sports.all():
@@ -289,11 +289,11 @@ class DataPoint(models.Model):
         return data_queryset.filter(is_stem=is_stem)
 
     @staticmethod
-    def filter_by_sports(data_queryset, sport_filter):
-        if sport_filter == "no_sport":
+    def filter_by_sports(data_queryset, sport_code_filter):
+        if sport_code_filter == "no_sport":
             return data_queryset.filter(sports=None)
         else:
-            return data_queryset.filter(sports__sport_code__in=sport_filter)
+            return data_queryset.filter(sports__sport_code=sport_code_filter)
 
     @staticmethod
     def filter_by_advisor(data_queryset, advisor_netid, advisor_type):
