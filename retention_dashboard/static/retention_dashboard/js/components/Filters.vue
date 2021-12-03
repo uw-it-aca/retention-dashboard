@@ -49,7 +49,7 @@
       <b-col class="col">
         <range-filter filter-name="Grades" filter-store="filters/set_grade_filter" />
       </b-col>
-      <b-col class="col" v-if="show_type">
+      <b-col v-if="show_type" class="col">
         <b-form-group
           class="rd-student-filters"
           label="Student Type"
@@ -74,8 +74,8 @@
       </b-col>
       <b-col class="col">
         <b-form-group
-          label="Sport"
           v-if="current_sports && current_sports.length"
+          label="Sport"
         >
           <b-form-select
             id="sport_filter"
@@ -328,7 +328,7 @@
       },
       type: function(){
         this.advisor_filter = "all";
-        this.sport_filter = "all"
+        this.sport_filter = "all";
         this.selectPage(this.type);
         if(this.type === "EOP"){
           this.get_advisors();
