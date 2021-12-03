@@ -402,7 +402,7 @@
   /* filter styles */
 
   .rd-filters-container {
-    margin: 0 10rem 0 10rem;
+    margin: 0 10rem;
     padding: 0 0 1rem;
 
     fieldset .rd-keyword-filter {
@@ -434,17 +434,17 @@
 
   }
 
-  .rd-filters-container > [class*='col']:before {
+  .rd-filters-container > [class*='col']::before {
     background: $grey-border;
     bottom: 0;
-    content: " ";
+    content: ' ';
     left: 0;
     position: absolute;
-    width: 1px;
     top: 0;
+    width: 1px;
   }
 
-  .rd-filters-container > [class*='col']:first-child:before {
+  .rd-filters-container > [class*='col']:first-child::before {
     display: none;
   }
 
