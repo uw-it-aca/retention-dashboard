@@ -1,7 +1,7 @@
 <template>
   <span>
     <b-row class="rd-filters-container justify-content-center">
-      <b-col v-if="show_pred" class="col rd-filter-border">
+      <b-col v-if="show_pred" class="col">
         <b-form-group
           label="Priority"
           aria-controls="data_table"
@@ -37,21 +37,20 @@
           </b-form-select>
         </b-form-group>
       </b-col>
-      <b-col class="col rd-filter-border">
+      <b-col class="col">
         <range-filter filter-name="Sign-Ins" filter-store="filters/set_signins_filter" />
       </b-col>
-      <b-col class="col rd-filter-border">
+      <b-col class="col">
         <range-filter filter-name="Activity" filter-store="filters/set_activity_filter" />
       </b-col>
-      <b-col class="col rd-filter-border">
+      <b-col class="col">
         <range-filter filter-name="Assignments" filter-store="filters/set_assignment_filter" />
       </b-col>
-      <b-col class="col rd-filter-border">
+      <b-col class="col">
         <range-filter filter-name="Grades" filter-store="filters/set_grade_filter" />
       </b-col>
-      <b-col class="col">
+      <b-col class="col" v-if="show_type">
         <b-form-group
-          v-if="show_type"
           class="rd-student-filters"
           label="Student Type"
           label-class="rd-vis-hidden"
@@ -73,12 +72,14 @@
           </b-form-checkbox>
         </b-form-group>
       </b-col>
-      <b-col class="col rd-filter-border-end">
+      <b-col class="col">
         <b-form-group
           label="Sport"
+          v-show="current_sports"
         >
           <b-form-select
             id="sport_filter"
+            v-if="current_sports"
             v-model="sport_filter"
             class="rd-sports-filter"
             :options="current_sports"
@@ -177,7 +178,6 @@
         weeks: [],
         auth_list: [],
         current_advisors: [],
-        current_sports: [],
         type: '',
         summer_terms: [
           { value: 'a', text: 'A Term' },
@@ -205,6 +205,11 @@
         },
         set (value) {
           this.$store.dispatch('sports/set_sports', value);
+        }
+      },
+      current_sports: {
+        get () {
+          return this.sports[this.type];
         }
       },
       prediction_filter: {
@@ -321,16 +326,13 @@
           this.current_advisors = this.advisors[this.type];
         }
       },
-      sports: function() {
-        this.current_sports = this.sports[this.type];
-      },
       currentweek: function(){
         this.selectWeek(this.currentweek);
+        this.get_sports();
       },
       type: function(){
         this.advisor_filter = "all";
         this.sport_filter = "all"
-        this.get_sports(this.type);
         this.selectPage(this.type);
         if(this.type === "EOP"){
           this.get_advisors();
@@ -363,7 +365,7 @@
       },
       get_weeks(){
         var vue = this;
-        axios.get('/api/v1/weeks/')
+        return axios.get('/api/v1/weeks/')
           .then(function(response){
             vue.weeks = response.data;
           });
@@ -383,11 +385,15 @@
           });
       },
       get_sports(){
+        let week_num = this.weeks.filter(e => e.value == this.currentweek)[0];
         var vue = this;
-        axios.get('/api/v1/sports/')
-          .then(function(response){
-            vue.sports = response.data;
-          });
+        axios.get('/api/v1/sports/', {
+          params: {
+            week: week_num
+          }
+        }).then(function(response){
+          vue.sports = response.data;
+        });
       }
     }
   };
@@ -402,16 +408,6 @@
   .rd-filters-container {
     margin: 0 10rem 0 10rem;
     padding: 0 0 1rem;
-
-    .rd-filter-border {
-      border: 1px $grey-border solid;
-      border-style: none solid none none;
-    }
-
-    .rd-filter-border-end {
-      border: 1px $grey-border solid;
-      border-style: none none none solid;
-    }
 
     fieldset .rd-keyword-filter {
       margin-right: 0;
@@ -442,6 +438,20 @@
 
   }
 
+  .rd-filters-container > [class*='col']:before {
+    background: $grey-border;
+    bottom: 0;
+    content: " ";
+    left: 0;
+    position: absolute;
+    width: 1px;
+    top: 0;
+  }
+
+  .rd-filters-container > [class*='col']:first-child:before {
+    display: none;
+  }
+
   .rd-filters-container fieldset legend {
     font-weight: bold;
   }
@@ -470,11 +480,6 @@
     /* small screen filter styles */
 
     .rd-filters-container {
-      .rd-filter-border,
-      .rd-filter-border-end {
-        border-style: none;
-      }
-
       fieldset {
         margin: 0;
         padding: 0;

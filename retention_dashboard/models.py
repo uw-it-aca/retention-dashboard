@@ -26,12 +26,8 @@ class Week(models.Model):
                 "text": display_string}
 
     @classmethod
-    def sis_term_to_quarter_number(cls, sis_term_id):
-        term = None
-        try:
-            term = sis_term_id.split("-")[1].lower()
-        except IndexError:
-            pass
+    def term_to_quarter_number(cls, term):
+        term = term.lower()
         if term == "winter":
             return 1
         elif term == "spring":
@@ -41,6 +37,19 @@ class Week(models.Model):
         elif term == "autumn":
             return 4
         else:
+            raise ValueError(f"Unable to determine quarter number for "
+                             f"term={term}")
+
+    @classmethod
+    def sis_term_to_quarter_number(cls, sis_term_id):
+        term = None
+        try:
+            term = sis_term_id.split("-")[1].lower()
+        except IndexError:
+            pass
+        try:
+            Week.term_to_quarter_number(term)
+        except ValueError:
             raise ValueError(f"Unable to determine quarter number for "
                              f"sis_term_id={sis_term_id}")
 
@@ -134,8 +143,9 @@ class Sport(models.Model):
         return descs[self.sport_code]
 
     @classmethod
-    def get_sport_by_type(cls, datapoint_type):
+    def get_sport_by_type(cls, datapoint_type, week):
         dps = DataPoint.objects.filter(type=datapoint_type) \
+            .filter(week=week) \
             .annotate(sport_code=F('sports__sport_code')) \
             .order_by('sport_code') \
             .filter(~Q(sport_code=None))
@@ -150,13 +160,17 @@ class Sport(models.Model):
         return sorted(sports, key=lambda x: x["sport_desc"])
 
     @classmethod
-    def get_all_sports(cls):
-        prem = cls.get_sport_by_type(1)
-        eop = cls.get_sport_by_type(2)
-        inter = cls.get_sport_by_type(3)
-        iss = cls.get_sport_by_type(4)
-        tacoma = cls.get_sport_by_type(5)
-        athletic = cls.get_sport_by_type(6)
+    def get_all_sports(cls, week_number, quarter, year):
+        week = Week.objects.filter(
+            number=week_number,
+            quarter=Week.term_to_quarter_number(quarter),
+            year=year).get()
+        prem = cls.get_sport_by_type(1, week)
+        eop = cls.get_sport_by_type(2, week)
+        inter = cls.get_sport_by_type(3, week)
+        iss = cls.get_sport_by_type(4, week)
+        tacoma = cls.get_sport_by_type(5, week)
+        athletic = cls.get_sport_by_type(6, week)
         return {"Premajor": list(prem),
                 "EOP": list(eop),
                 "International": list(inter),

@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import os
+import json
 from django.conf import settings
 from django.utils.decorators import method_decorator
 from uw_saml.decorators import group_required
@@ -117,5 +118,9 @@ class AdvisorListView(RESTDispatch):
                   name='dispatch')
 class SportListView(RESTDispatch):
     def get(self, request):
-        sports = Sport.get_all_sports()
+        week_dict = json.loads(request.GET.get("week"))
+        week_number = week_dict["number"]
+        quarter = week_dict["quarter"]
+        year = week_dict["year"]
+        sports = Sport.get_all_sports(week_number, quarter, year)
         return self.json_response(content=sports)
