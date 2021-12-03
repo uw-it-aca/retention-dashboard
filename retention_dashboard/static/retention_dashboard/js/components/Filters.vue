@@ -75,11 +75,10 @@
       <b-col class="col">
         <b-form-group
           label="Sport"
-          v-show="current_sports"
+          v-if="current_sports && current_sports.length"
         >
           <b-form-select
             id="sport_filter"
-            v-if="current_sports"
             v-model="sport_filter"
             class="rd-sports-filter"
             :options="current_sports"
@@ -90,9 +89,6 @@
             <template v-slot:first>
               <b-form-select-option :value="'all'">
                 ALL STUDENTS
-              </b-form-select-option>
-              <b-form-select-option :value="'no_sport'">
-                NO SPORT AFFLIATION
               </b-form-select-option>
             </template>
           </b-form-select>
@@ -207,11 +203,6 @@
           this.$store.dispatch('sports/set_sports', value);
         }
       },
-      current_sports: {
-        get () {
-          return this.sports[this.type];
-        }
-      },
       prediction_filter: {
         get () {
           return this.$store.state.filters.filters.prediction_filter;
@@ -318,7 +309,12 @@
         }
         term_names.sort();
         return term_names.join(", ") + " Term";
-      }
+      },
+      current_sports: {
+        get () {
+          return this.sports[this.type];
+        }
+      },
     },
     watch: {
       advisors: function() {

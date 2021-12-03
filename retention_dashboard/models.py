@@ -304,10 +304,7 @@ class DataPoint(models.Model):
 
     @staticmethod
     def filter_by_sports(data_queryset, sport_code_filter):
-        if sport_code_filter == "no_sport":
-            return data_queryset.filter(sports=None)
-        else:
-            return data_queryset.filter(sports__sport_code=sport_code_filter)
+        return data_queryset.filter(sports__sport_code=sport_code_filter)
 
     @staticmethod
     def filter_by_advisor(data_queryset, advisor_netid, advisor_type):
