@@ -30,7 +30,7 @@ def create_initial_data():
     a7 = Advisor.objects.create(advisor_name="John Prine",
                                 advisor_netid="jprine",
                                 advisor_type=5)
-    
+
     sport1 = Sport.objects.create(sport_code=1)
     sport2 = Sport.objects.create(sport_code=2)
     sport3 = Sport.objects.create(sport_code=3)

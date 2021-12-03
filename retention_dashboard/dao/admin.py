@@ -261,7 +261,7 @@ class UploadDataDao():
                         row = record["row"]
                         sport_code_str = row.get("sport_code")
                         sport_codes = (sport_code_str.split(",")
-                                    if sport_code_str else [])
+                                       if sport_code_str else [])
                         for code in sport_codes:
                             sport_code, _ = Sport.objects.get_or_create(
                                 sport_code=code)

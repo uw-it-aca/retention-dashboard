@@ -162,7 +162,7 @@ class Sport(models.Model):
                 "International": list(inter),
                 "ISS": list(iss),
                 "Tacoma": list(tacoma),
-                "Athletic": list(athletic)}   
+                "Athletic": list(athletic)}
 
 
 class DataPoint(models.Model):

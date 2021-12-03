@@ -112,10 +112,10 @@ class AdvisorListView(RESTDispatch):
         advisors = Advisor.get_all_advisors()
         return self.json_response(content=advisors)
 
+
 @method_decorator(group_required(settings.ALLOWED_USERS_GROUP),
                   name='dispatch')
 class SportListView(RESTDispatch):
     def get(self, request):
         sports = Sport.get_all_sports()
         return self.json_response(content=sports)
-

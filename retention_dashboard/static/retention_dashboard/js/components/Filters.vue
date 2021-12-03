@@ -100,7 +100,7 @@
           class="rd-keyword-filter"
           label="Keyword"
         >
-          <b-form-input v-model="keyword_filter" size="sm" placeholder="Name, #, NetID" />
+          <b-form-input v-model="keyword_filter" size="sm" placeholder="Student name, #, NetID" />
         </b-form-group>
       </b-col>
     </b-row>
