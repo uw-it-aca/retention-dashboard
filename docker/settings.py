@@ -44,6 +44,7 @@ if os.getenv('ENV') == 'prod':
     INTERNATIONAL_USERS_GROUP = "u_acadev_retention-prod-international"
     ISS_USERS_GROUP = "u_acadev_retention-prod-iss"
     TACOMA_USERS_GROUP = "u_acadev_retention-prod-tacoma"
+    ATHLETIC_USERS_GROUP = "u_acadev_retention-prod-athletic"
     RAD_DATA_BUCKET_NAME = 'canvas-analytics'
 elif os.getenv('ENV') == 'eval':
     ALLOWED_USERS_GROUP = 'u_acadev_retention-test'
@@ -54,6 +55,7 @@ elif os.getenv('ENV') == 'eval':
     INTERNATIONAL_USERS_GROUP = ALLOWED_USERS_GROUP
     ISS_USERS_GROUP = ALLOWED_USERS_GROUP
     TACOMA_USERS_GROUP = ALLOWED_USERS_GROUP
+    ATHLETIC_USERS_GROUP = ALLOWED_USERS_GROUP
     RAD_DATA_BUCKET_NAME = 'canvas-analytics-test'
 elif os.getenv("ENV") == "localdev":
     DEBUG = True
