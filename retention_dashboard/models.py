@@ -46,9 +46,10 @@ class Week(models.Model):
         try:
             term = sis_term_id.split("-")[1].lower()
         except IndexError:
-            pass
+            raise ValueError(f"Unable to determine term for "
+                             f"sis_term_id={sis_term_id}")
         try:
-            Week.term_to_quarter_number(term)
+            return Week.term_to_quarter_number(term)
         except ValueError:
             raise ValueError(f"Unable to determine quarter number for "
                              f"sis_term_id={sis_term_id}")
