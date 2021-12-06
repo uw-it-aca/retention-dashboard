@@ -13,6 +13,8 @@ class TestDataPoint(TestCase):
         self.assertEqual(DataPoint.get_data_type_by_text("EOP"), 2)
         self.assertEqual(DataPoint.get_data_type_by_text("International"), 3)
         self.assertEqual(DataPoint.get_data_type_by_text("ISS"), 4)
+        self.assertEqual(DataPoint.get_data_type_by_text("Tacoma"), 5)
+        self.assertEqual(DataPoint.get_data_type_by_text("Athletic"), 6)
         with self.assertRaises(ValueError):
             DataPoint.get_data_type_by_text("UNKNOWN TYPE")
 

@@ -2,13 +2,14 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import os
+import json
 from django.conf import settings
 from django.utils.decorators import method_decorator
 from uw_saml.decorators import group_required
 from retention_dashboard.views.api import RESTDispatch
 from retention_dashboard.dao.data import FilterDataDao
 from retention_dashboard.dao.auth import get_type_authorizations
-from retention_dashboard.models import Advisor, Week
+from retention_dashboard.models import Advisor, Week, Sport
 
 
 @method_decorator(group_required(settings.ALLOWED_USERS_GROUP),
@@ -59,6 +60,7 @@ class FilteredDataView(RESTDispatch):
         premajor_filter = request.GET.get("premajor_filter", None)
         stem_filter = request.GET.get("stem_filter", None)
         freshman_filter = request.GET.get("freshman_filter", None)
+        sport_filter = request.GET.get("sport_filter", None)
         if premajor_filter == "true":
             premajor_filter = True
         if stem_filter == "true":
@@ -90,7 +92,8 @@ class FilteredDataView(RESTDispatch):
                                         advisor_filter=advisor_filter,
                                         summer_filters=summer_filters,
                                         stem_filter=stem_filter,
-                                        freshman_filter=freshman_filter)
+                                        freshman_filter=freshman_filter,
+                                        sport_filter=sport_filter)
 
         response_data = []
         try:
@@ -109,3 +112,15 @@ class AdvisorListView(RESTDispatch):
     def get(self, request):
         advisors = Advisor.get_all_advisors()
         return self.json_response(content=advisors)
+
+
+@method_decorator(group_required(settings.ALLOWED_USERS_GROUP),
+                  name='dispatch')
+class SportListView(RESTDispatch):
+    def get(self, request):
+        week_dict = json.loads(request.GET.get("week"))
+        week_number = week_dict["number"]
+        quarter = week_dict["quarter"]
+        year = week_dict["year"]
+        sports = Sport.get_all_sports(week_number, quarter, year)
+        return self.json_response(content=sports)
