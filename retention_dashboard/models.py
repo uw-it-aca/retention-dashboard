@@ -177,7 +177,7 @@ class Sport(models.Model):
                 "International": list(inter),
                 "ISS": list(iss),
                 "Tacoma": list(tacoma),
-                "Athletic": list(athletic)}
+                "Athletics": list(athletic)}
 
 
 class DataPoint(models.Model):
@@ -186,7 +186,7 @@ class DataPoint(models.Model):
                     (UploadTypes.international, "International"),
                     (UploadTypes.iss, "ISS"),
                     (UploadTypes.tacoma, "Tacoma"),
-                    (UploadTypes.athletic, "Athletic"))
+                    (UploadTypes.athletic, "Athletics"))
     type = models.PositiveSmallIntegerField(choices=TYPE_CHOICES)
     week = models.ForeignKey("Week", on_delete=models.PROTECT)
     student_name = models.TextField()
@@ -339,7 +339,8 @@ class DataPoint(models.Model):
                 "is_premajor": self.premajor,
                 "is_freshman": self.is_freshman,
                 "is_stem": self.is_stem,
-                "summer_term_string": self.get_summer_string()
+                "summer_term_string": self.get_summer_string(),
+                "class_code": self.class_code
                 }
         if self.advisor is not None:
             resp["advisor_name"] = self.advisor.advisor_name
@@ -388,4 +389,4 @@ class Advisor(models.Model):
                 "International": list(inter),
                 "ISS": list(iss),
                 "Tacoma": list(tacoma),
-                "Athletic": list(athletic)}
+                "Athletics": list(athletic)}

@@ -42,5 +42,5 @@ def get_type_authorizations(request):
     if is_tacoma_authorized(request):
         types.append("Tacoma")
     if is_athletic_authorized(request):
-        types.append("Athletic")
+        types.append("Athletics")
     return types
