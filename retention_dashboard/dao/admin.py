@@ -164,6 +164,10 @@ class UploadDataDao():
                 logging.error(err)
                 continue
             for upload_type in upload_types:
+                if upload_type != UploadTypes.athletic and \
+                        row.get("class_code") not in ["0", "1", "2", "3", "4"]:
+                    # only include non-undergrads for athletics
+                    continue
                 advisor_netid = row.get("staff_id")
                 advisor_name = row.get("adviser_name")
                 advisor = None
@@ -190,6 +194,7 @@ class UploadDataDao():
                 dp.student_name = row.get("student_name_lowc")
                 dp.student_number = row.get("student_no")
                 dp.netid = row.get("uw_netid")
+                dp.class_code = row.get("class_code")
                 dp.premajor = row.get("premajor")
                 dp.is_stem = row.get("stem")
                 dp.is_freshman = row.get("incoming_freshman")

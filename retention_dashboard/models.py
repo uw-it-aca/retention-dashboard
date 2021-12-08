@@ -111,35 +111,35 @@ class Sport(models.Model):
             49: "CORNER BACK FBL",
             51: "INACTIVE BASEBL",
             52: "INACTIVE SOFTBL",
-            53: "INACTIVE BASKET",
-            54: "INACTIVE BASKET",
-            55: "INACTIVE CREWV",
-            56: "INACTIVE CREWV",
+            53: "INACTIVE BASKET M",
+            54: "INACTIVE BASKET W",
+            55: "INACTIVE CREWV M",
+            56: "INACTIVE CREWV W",
             57: "INACTIVE FTBALL",
-            59: "INACTIVE GOLF",
-            60: "INACTIVE GOLF",
+            59: "INACTIVE GOLF M",
+            60: "INACTIVE GOLF W",
             62: "INACTIVE GYMN",
             63: "INACTIVE SOC",
             64: "INACT SOCCER W",
-            65: "INACTIVE SWIM",
-            66: "INACTIVE SWIM",
-            67: "INACTIVE TENNIS",
-            68: "INACTIVE TENNIS",
-            69: "INACTIVE TRACK",
-            70: "INACTIVE TRACK",
+            65: "INACTIVE SWIM M",
+            66: "INACTIVE SWIM W",
+            67: "INACTIVE TENNIS M",
+            68: "INACTIVE TENNIS W",
+            69: "INACTIVE TRACK M",
+            70: "INACTIVE TRACK W",
             72: "INACTIVE VOLBL",
-            73: "INACTIVE CCNTRY",
-            74: "INACTIVE CCNTRY",
+            73: "INACTIVE CCNTRY M",
+            74: "INACTIVE CCNTRY W",
             75: "INACT TR IND M",
             76: "INACT TR IND W",
-            77: "INACTIVE CREMN",
-            78: "INACTIVE CREWN",
+            77: "INACTIVE CREMN M",
+            78: "INACTIVE CREWN W",
             96: "REC W A AID",
             97: "REC NO A AID",
             98: "N REC W ATH AID",
             99: "N REC NO A AID",
             30: "SAND VOLLEYBL-W",
-            80: "INACT SAND VLB n"
+            80: "INACT SAND VLB"
         }
         return descs[self.sport_code]
 
@@ -192,6 +192,7 @@ class DataPoint(models.Model):
     student_name = models.TextField()
     student_number = models.IntegerField()
     netid = models.CharField(max_length=12)
+    class_code = models.CharField(max_length=2, null=True)
     premajor = models.BooleanField()
     is_stem = models.BooleanField(default=False)
     is_freshman = models.BooleanField(default=False)

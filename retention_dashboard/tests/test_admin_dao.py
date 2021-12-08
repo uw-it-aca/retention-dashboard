@@ -245,9 +245,21 @@ class TestUploadDataDao(TestCase):
             'sign_in': '-3.4', 'stem': '0',
             'incoming_freshman': '0', 'premajor': '0', 'eop': '0',
             'international': '0', 'isso': '0', 'campus_code': '2',
-            'summer': 'Full', 'sport_code': '7'}
+            'summer': 'Full', 'class_code': '2', 'sport_code': '7'}
+        mock_row_2 = {
+            'uw_netid': 'javerage', 'student_no': '12435463',
+            'student_name_lowc': 'Average,Joe',
+            'activity': '-2.0',
+            'assignments': '-1.3',
+            'grades': '-2.35',
+            'pred': '', 'adviser_name': '', 'adviser_type': '', 'staff_id': '',
+            'sign_in': '-3.4', 'stem': '0',
+            'incoming_freshman': '0', 'premajor': '0', 'eop': '1',
+            'international': '0', 'isso': '0', 'campus_code': '2',
+            'summer': 'Full', 'class_code': '8', 'sport_code': '7'}
         mock_dict_reader_cls.return_value = [
-            mock_row_1
+            mock_row_1,
+            mock_row_2
         ]
         dao = UploadDataDao()
         mock_rad_document = ""
@@ -255,14 +267,16 @@ class TestUploadDataDao(TestCase):
         mock_advisor_cls.objects.get = MagicMock(return_value=mock_adviser)
         record_by_upload = dao.parse_rad_document(mock_rad_document)
         # assertions
-        self.assertEqual(mock_datapoint_cls.call_count, 2)
+        self.assertEqual(mock_datapoint_cls.call_count, 3)
         self.assertEqual(mock_advisor_cls.objects.get.call_count, 2)
         self.assertEqual(
             record_by_upload,
             {5: [{'datapoint': mock_datapoint_cls.return_value,
                   'row': mock_row_1}],
              6: [{'datapoint': mock_datapoint_cls.return_value,
-                  'row': mock_row_1}]}
+                  'row': mock_row_1},
+                 {'datapoint': mock_datapoint_cls.return_value,
+                  'row': mock_row_2}]}
         )
 
 
