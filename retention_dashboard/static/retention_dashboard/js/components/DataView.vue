@@ -182,7 +182,7 @@
     },
     data: function() {
       return {
-        eop_fields: [
+        standard_fields: [
           {
             key: 'student_name',
             label: "Student Name",
@@ -228,42 +228,6 @@
             sortable: true
           }
         ],
-        standard_fields: [
-          {
-            key: 'student_name',
-            label: "Student Name",
-            sortable: true
-          },
-          {
-            key: 'student_number',
-            label: "Student Number",
-          },
-          {
-            key: 'signin_score',
-            label: 'Sign-Ins',
-            sortable: true
-          },
-          {
-            key: 'activity_score',
-            label: 'Activity',
-            sortable: true
-          },
-          {
-            key: 'assignment_score',
-            label: 'Assignments',
-            sortable: true
-          },
-          {
-            key: 'grade_score',
-            label: 'Grades',
-            sortable: true
-          },
-          {
-            key: 'is_premajor',
-            label: 'Pre-Major',
-            sortable: true
-          }
-        ],
         items: [],
         isBusy: false,
         csv_data: "",
@@ -287,49 +251,6 @@
             "activity_score",
             "assignment_score",
             "grade_score",
-            "is_premajor",
-            "is_freshman",
-            "is_stem",
-            "signin_score"
-          ],
-          summer_fields: [
-            "student_last_name",
-            "student_first_name",
-            "student_number",
-            "netid",
-            "activity_score",
-            "assignment_score",
-            "grade_score",
-            "is_premajor",
-            "summer_term_string",
-            "is_freshman",
-            "is_stem",
-            "signin_score"
-          ],
-          fields_eop: [
-            "student_last_name",
-            "student_first_name",
-            "student_number",
-            "netid",
-            "activity_score",
-            "assignment_score",
-            "grade_score",
-            "priority_score",
-            "is_premajor",
-            "advisor_name",
-            "advisor_netid",
-            "is_freshman",
-            "is_stem",
-            "signin_score"
-          ],
-          summer_fields_eop: [
-            "student_last_name",
-            "student_first_name",
-            "student_number",
-            "netid",
-            "activity_score",
-            "assignment_score",
-            "grade_score",
             "priority_score",
             "is_premajor",
             "advisor_name",
@@ -338,44 +259,41 @@
             "is_freshman",
             "is_stem",
             "signin_score"
-          ]
+          ],
         }
       };
     },
     computed: {
       fields (){
         var fields;
-        if (this.current_file === "EOP"){
-          fields = this.eop_fields;
+        if (this.current_file === "Athletics"){
+          fields = this.standard_fields.filter(
+            item => !(item.key == "advisor_name"));
         } else if (this.current_file === "ISS"){
-          fields = this.eop_fields.filter(
+          fields = this.standard_fields.filter(
             item => !(item.key == "is_premajor"));
+        } else if (this.current_file == "Premajor" ||
+          this.current_file == "International" ||
+          this.current_file == "ISS" ||
+          this.current_file == "Tacoma") {
+          fields = this.standard_fields.filter(
+            item => !(item.key == "priority_score") &&
+              !(item.key == "advisor_name"));
         } else {
           fields = this.standard_fields;
+        }
+        if (!this.is_summer) {
+          fields = fields.filter(
+            item => !(item.key == "summer_term_string"));
         }
         return fields;
       },
       download_fields () {
-        if (this.current_file === "EOP"){
-          if(this.is_summer){
-            return this.download.summer_fields_eop;
-          } else {
-            return this.download.fields_eop;
-          }
-        } else if (this.current_file === "ISS"){
-          if(this.is_summer){
-            return this.download.summer_fields_eop.filter(
-              item => !(item.key == "is_premajor"));
-          } else {
-            return this.download.fields_eop.filter(
-              item => !(item.key == "is_premajor"));
-          }
+        if(this.is_summer){
+          return this.download.fields;
         } else {
-          if(this.is_summer){
-            return this.download.summer_fields;
-          } else {
-            return this.download.fields;
-          }
+          return this.download.fields.filter(
+            item => !(item.key == "summer_term_string"));
         }
       },
       filename (){
