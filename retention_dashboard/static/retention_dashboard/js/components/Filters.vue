@@ -49,8 +49,9 @@
       <b-col class="col">
         <range-filter filter-name="Grades" filter-store="filters/set_grade_filter" />
       </b-col>
-      <b-col v-if="show_type" class="col">
+      <b-col class="col">
         <b-form-group
+          v-if="show_type"
           class="rd-student-filters"
           label="Student Type"
           label-class="rd-vis-hidden"

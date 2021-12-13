@@ -335,20 +335,20 @@ class DataPoint(models.Model):
 
     def get_class_desc(self):
         class_codes_map = {
-            "0": "Pending",
-            "1": "Freshman",
-            "2": "Sophomore",
-            "3": "Junior",
-            "4": "Senior",
-            "5": "5th-Year",
-            "6": "Non-Matriculated",
-            "8": "Graduate",
-            "11": "1st Year Professional",
-            "12": "2nd Year Professional",
-            "13": "3rd Year Professional",
-            "14": "4th Year Professional",
+            0: "Pending",
+            1: "Freshman",
+            2: "Sophomore",
+            3: "Junior",
+            4: "Senior",
+            5: "5th-Year",
+            6: "Non-Matriculated",
+            8: "Graduate",
+            11: "1st Year Professional",
+            12: "2nd Year Professional",
+            13: "3rd Year Professional",
+            14: "4th Year Professional",
         }
-        return class_codes_map.get(self.class_code)
+        return class_codes_map.get(int(self.class_code))
 
     def json_data(self):
         first, last = self.get_first_last_name()
@@ -386,9 +386,10 @@ class DataPoint(models.Model):
         class_standings = {}
         for dp in dps:
             class_standings[dp.class_code] = \
-                {"class_code": dp.class_code,
+                {"class_code": int(dp.class_code),
                  "class_desc": dp.get_class_desc()}
-        return class_standings.values()
+        return sorted(class_standings.values(),
+                      key=lambda i: i['class_code'])
 
     @classmethod
     def get_all_class_standings(cls, week_number, quarter, year):
