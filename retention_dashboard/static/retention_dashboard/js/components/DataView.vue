@@ -108,6 +108,15 @@
         <span>{{ row.item.student_last_name }}, {{ row.item.student_first_name }}</span>
         <div class="rd-student-meta">
           {{ row.item.netid }}
+         <div>
+          <small>
+            <b-badge>{{ row.item.class_desc }}</b-badge>
+            <b-badge v-if="row.item.is_eop">EOP</b-badge>
+            <b-badge v-if="row.item.is_international">International</b-badge>
+            <b-badge v-if="row.item.is_stem">Stem</b-badge>
+            <b-badge v-if="row.item.is_athlete">Athlete</b-badge>
+          </small>
+         </div>
         </div>
         <div v-if="is_summer" class="rd-student-meta rd-italic">
           {{ row.item.summer_term_string }}
@@ -132,11 +141,6 @@
       <template v-slot:cell(signin_score)="row">
         <span v-if="row.item.signin_score === -99">No data</span>
         <span v-else>{{ row.item.signin_score }}</span>
-      </template>
-
-      <template v-slot:cell(is_premajor)="row">
-        <span v-if="row.item.is_premajor === true"><b-icon icon="check2-square" scale="1.5" /><span class="sr-only">{{ row.item.is_premajor }}</span></span>
-        <span v-else class="sr-only">{{ row.item.is_premajor }}</span>
       </template>
 
       <template v-slot:cell(priority_score)="row">
@@ -218,11 +222,6 @@
             sortable: true
           },
           {
-            key: 'is_premajor',
-            label: 'Pre-Major',
-            sortable: true
-          },
-          {
             key: 'advisor_name',
             label: 'Adviser',
             sortable: true
@@ -252,11 +251,9 @@
             "assignment_score",
             "grade_score",
             "priority_score",
-            "is_premajor",
             "advisor_name",
             "advisor_netid",
             "summer_term_string",
-            "is_freshman",
             "is_stem",
             "signin_score"
           ],
@@ -269,9 +266,6 @@
         if (this.current_file === "Athletics"){
           fields = this.standard_fields.filter(
             item => !(item.key == "advisor_name"));
-        } else if (this.current_file === "ISS"){
-          fields = this.standard_fields.filter(
-            item => !(item.key == "is_premajor"));
         } else if (this.current_file == "Premajor" ||
           this.current_file == "International" ||
           this.current_file == "ISS" ||
@@ -347,6 +341,9 @@
         if(this.signins_filter.length > 0){
           params['signins_filters'] = this.signins_filter;
         }
+        if(this.class_standing_filter){
+          params['class_standing_filter'] = this.class_standing_filter;
+        }
         if(this.sport_filter){
           params['sport_filter'] = this.sport_filter;
         }
@@ -367,6 +364,7 @@
           this.current_file +
           this.summer_filter +
           this.signins_filter +
+          this.class_standing_filter +
           this.sport_filter
         );
       },
@@ -384,6 +382,8 @@
         advisor_filter: state => state.filters.filters.advisor_filter,
         summer_filter: state => state.filters.filters.summer_filter,
         signins_filter: state => state.filters.filters.signins_filter,
+        class_standing_filter: state =>
+          state.filters.filters.class_standing_filter,
         sport_filter: state => state.filters.filters.sport_filter
       })
     },
@@ -392,7 +392,6 @@
         var vue = this;
         csv.forEach(function(item){
           item["student_number"] = Number(item["student_number"]);
-
           item['priority_score'] = vue.get_rounded(item['priority_score']);
           item['signin_score'] = vue.get_rounded(item['signin_score']);
           item['activity_score'] = vue.get_rounded(item['activity_score']);

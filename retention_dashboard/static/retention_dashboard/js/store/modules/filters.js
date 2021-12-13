@@ -11,7 +11,8 @@ const state = {
     prediction_filter: [],
     advisor_filter: "all",
     summer_filter: [],
-    sport_filter: "all"
+    sport_filter: "all",
+    class_standing_filter: "all"
   }
 
 };
@@ -90,6 +91,12 @@ const actions = {
   set_sport_filter ({ commit }, value) {
     commit('set_filters', {
       'type': 'sport_filter',
+      'value': value
+    });
+  },
+  set_class_standing_filter ({ commit }, value) {
+    commit('set_filters', {
+      'type': 'class_standing_filter',
       'value': value
     });
   },

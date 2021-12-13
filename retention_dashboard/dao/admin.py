@@ -195,9 +195,15 @@ class UploadDataDao():
                 dp.student_number = row.get("student_no")
                 dp.netid = row.get("uw_netid")
                 dp.class_code = row.get("class_code")
-                dp.premajor = row.get("premajor")
+                dp.campus_code = row.get("campus_code")
                 dp.is_stem = row.get("stem")
                 dp.is_freshman = row.get("incoming_freshman")
+                upload_types = self.get_upload_types(row)
+                dp.premajor = bool(UploadTypes.premajor in upload_types)
+                dp.eop = bool(UploadTypes.eop in upload_types)
+                dp.iss = bool(UploadTypes.iss in upload_types)
+                dp.international = bool(
+                    UploadTypes.international in upload_types)
                 if row.get("activity"):
                     dp.activity_score = row.get("activity")
                 if row.get("assignments"):
