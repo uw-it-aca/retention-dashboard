@@ -110,11 +110,11 @@
           {{ row.item.netid }}
          <div>
           <small>
-            <b-badge>{{ row.item.class_desc }}</b-badge>
-            <b-badge v-if="row.item.is_eop">EOP</b-badge>
-            <b-badge v-if="row.item.is_international">International</b-badge>
-            <b-badge v-if="row.item.is_stem">Stem</b-badge>
-            <b-badge v-if="row.item.is_athlete">Athlete</b-badge>
+            <b-badge variant="light">{{ row.item.class_desc }}</b-badge>
+            <b-badge variant="light" v-if="row.item.is_eop">EOP</b-badge>
+            <b-badge variant="light" v-if="row.item.is_international">International</b-badge>
+            <b-badge variant="light" v-if="row.item.is_stem">Stem</b-badge>
+            <b-badge variant="light" v-if="row.item.is_athlete">Athlete</b-badge>
           </small>
          </div>
         </div>
