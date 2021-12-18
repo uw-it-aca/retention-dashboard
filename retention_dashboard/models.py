@@ -385,9 +385,10 @@ class DataPoint(models.Model):
             .order_by("class_code")
         class_standings = {}
         for dp in dps:
-            class_standings[dp.class_code] = \
-                {"class_code": int(dp.class_code),
-                 "class_desc": dp.get_class_desc()}
+            if dp.class_code:
+                class_standings[dp.class_code] = \
+                    {"class_code": int(dp.class_code),
+                     "class_desc": dp.get_class_desc()}
         return sorted(class_standings.values(),
                       key=lambda i: i['class_code'])
 
