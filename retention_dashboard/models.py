@@ -207,7 +207,7 @@ class DataPoint(models.Model):
     signin_score = models.FloatField(default=0.0)
     upload = models.ForeignKey("Upload", on_delete=models.CASCADE)
     advisor = models.ForeignKey("Advisor", on_delete=models.PROTECT, null=True)
-    sports = models.ManyToManyField("Sport", null=True)
+    sports = models.ManyToManyField("Sport")
     has_a_term = models.BooleanField(default=False)
     has_b_term = models.BooleanField(default=False)
     has_full_term = models.BooleanField(default=False)
