@@ -38,47 +38,50 @@ def gen_stu_num():
     return ''.join(random.choice(string.digits) for x in range(7))
 
 
-advisors = [("Fred Johnson", "fj123"),
-            ("Emily Santos-Bacca", "esb99"),
-            ("Basia Murton", "bm8567"),
-            (names.get_full_name(), gen_netid()),
-            (names.get_full_name(), gen_netid()),
-            (names.get_full_name(), gen_netid()),
-            (names.get_full_name(), gen_netid()),
-            (names.get_full_name(), gen_netid()),
-            (names.get_full_name(), gen_netid()),
-            (names.get_full_name(), gen_netid()),
-            (names.get_full_name(), gen_netid()),
-            (names.get_full_name(), gen_netid()),
-            (names.get_full_name(), gen_netid()),
-            (names.get_full_name(), gen_netid()),
-            (names.get_full_name(), gen_netid())]
+advisors = [("Fred Johnson", "eop"),
+            ("Emily Santos-Bacca", "eop"),
+            (names.get_full_name(), "eop"),
+            (names.get_full_name(), "eop"),
+            (names.get_full_name(), "eop"),
+            (names.get_full_name(), "eop"),
+            (names.get_full_name(), "eop"),
+            (names.get_full_name(), "eop"),
+            ("Basia Murton", "iss"),
+            (names.get_full_name(), "iss"),
+            (names.get_full_name(), "iss"),
+            (names.get_full_name(), "iss"),
+            (names.get_full_name(), "iss"),
+            (names.get_full_name(), "iss"),
+            (names.get_full_name(), "iss")]
 
 
 def get_row(row, headers):
-    stu_num = gen_stu_num()
-    netid = gen_netid()
-    name = names.get_full_name()
-    premajor = row['premajor']
-    acti = row['activity']
-    assi = row['assignments']
-    grade = row['grades']
+    uw_netid = gen_netid()
+    student_no = gen_stu_num()
+    student_name_lowc = names.get_full_name()
+    advisor_name, _ = random.choice(advisors)
+    activity = row['activity']
+    assignments = row['assignments']
+    grades = row['grades']
     pred = row['pred']
-    freshman = row['incoming_freshman']
-    stem = row['stem']
+    adviser_name = advisor_name
+    adviser_type = row['adviser_type']
+    staff_id = row['staff_id']
     sign_in = row['sign_in']
+    stem = row['stem']
+    incoming_freshman = row['incoming_freshman']
+    premajor = row['premajor']
+    eop = row['eop']
+    international = row['international']
+    isso = row['isso']
+    campus_code = row['campus_code']
+    summer = row['summer']
+    class_code = row['class_code']
+    sport_code = row['sport_code']
 
-    advisor_name, advisor_netid = random.choice(advisors)
-    if "summer" in headers:
-        summer = row['summer']
-        if "adviser_name" in headers:
-            return [netid, stu_num, name, premajor, acti, assi, grade, summer,
-                    pred, advisor_name, advisor_netid, sign_in, stem, freshman]
-        return [netid, stu_num, name, premajor, acti, assi, grade, summer,
-                pred, sign_in, stem, freshman]
-    else:
-        if "adviser_name" in headers:
-            return [netid, stu_num, name, premajor, acti, assi, grade, pred,
-                    advisor_name, advisor_netid, sign_in, stem, freshman]
-        return [netid, stu_num, name, premajor, acti, assi, grade, pred,
-                sign_in, stem, freshman]
+    return [
+        uw_netid, student_no, student_name_lowc, activity, 
+        assignments, grades, pred, adviser_name, adviser_type, staff_id, 
+        sign_in, stem, incoming_freshman, premajor, eop, international, isso, 
+        campus_code, summer, class_code, sport_code
+    ]
