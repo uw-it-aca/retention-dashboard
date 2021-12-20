@@ -66,6 +66,7 @@ elif os.getenv("ENV") == "localdev":
     INTERNATIONAL_USERS_GROUP = ALLOWED_USERS_GROUP
     ISS_USERS_GROUP = ALLOWED_USERS_GROUP
     TACOMA_USERS_GROUP = ALLOWED_USERS_GROUP
+    ATHLETIC_USERS_GROUP = ALLOWED_USERS_GROUP
     MOCK_SAML_ATTRIBUTES = {
         'uwnetid': ['javerage'],
         'affiliations': ['student', 'member', 'alum', 'staff', 'employee'],
