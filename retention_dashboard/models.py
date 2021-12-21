@@ -16,14 +16,10 @@ class Week(models.Model):
     year = models.IntegerField()
 
     def json_data(self):
-        display_string = "{} {}: Week {}".format(self.get_quarter_display(),
-                                                 self.year,
-                                                 self.number)
         return {"value": self.id,
                 "year": self.year,
                 "quarter": self.get_quarter_display(),
-                "number": self.number,
-                "text": display_string}
+                "number": self.number}
 
     @classmethod
     def term_to_quarter_number(cls, term):
@@ -419,6 +415,15 @@ class Upload(models.Model):
     uploaded_by = models.CharField(max_length=12)
     created_on = models.DateTimeField(auto_now_add=True)
     week = models.ForeignKey("Week", on_delete=models.PROTECT)
+
+    def json_data(self):
+        return {"id": self.id,
+                "created_on": self.created_on.strftime("%d %B, %Y, %I%p"),
+                "uploaded_by": self.uploaded_by,
+                "type": self.get_type_display(),
+                "year": self.week.year,
+                "week": self.week.number,
+                "quarter": self.week.get_quarter_display()}
 
     class Meta:
         unique_together = ('type', 'week',)
