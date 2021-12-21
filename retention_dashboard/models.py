@@ -348,7 +348,8 @@ class DataPoint(models.Model):
             13: "3rd Year Professional",
             14: "4th Year Professional",
         }
-        return class_codes_map.get(int(self.class_code))
+        if self.class_code is not None:
+            return class_codes_map.get(int(self.class_code))
 
     def json_data(self):
         first, last = self.get_first_last_name()
