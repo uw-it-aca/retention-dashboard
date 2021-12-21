@@ -130,9 +130,11 @@ class UploadDataDao():
             return [UploadTypes.iss]
         # if no adviser type is specified, derive the upload types from the
         # eop, international, isso, and campus_code columns
-        if bool(int(row.get("eop", 0))) is True:
+        if bool(int(row.get("eop", 0))) is True or \
+                bool(int(row.get("eop_student", 0))) is True:
             upload_types.append(UploadTypes.eop)
-        if bool(int(row.get("international", 0))) is True:
+        if bool(int(row.get("international", 0))) is True or \
+                bool(int(row.get("international_student", 0))) is True:
             upload_types.append(UploadTypes.international)
         if bool(int(row.get("isso", 0))) is True:
             upload_types.append(UploadTypes.iss)
@@ -164,8 +166,10 @@ class UploadDataDao():
                 logging.error(err)
                 continue
             for upload_type in upload_types:
-                if upload_type != UploadTypes.athletic and \
-                        row.get("class_code") not in ["0", "1", "2", "3", "4"]:
+                if (upload_type != UploadTypes.athletic and
+                        row.get("class_code") is not None and
+                        row.get("class_code") not in
+                        ["0", "1", "2", "3", "4"]):
                     # only include non-undergrads for athletics
                     continue
                 advisor_netid = row.get("staff_id")
