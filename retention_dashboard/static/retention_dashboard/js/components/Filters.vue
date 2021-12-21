@@ -1,8 +1,7 @@
 <template>
   <span>
     <b-row class="rd-filters-container justify-content-center">
-      <b-col order="1" />
-      <b-col v-if="show_pred" class="col-6 col-md-2 rd-filter-border" order="3" order-md="2">
+      <b-col v-if="show_pred" class="col">
         <b-form-group
           label="Priority"
           aria-controls="data_table"
@@ -38,28 +37,19 @@
           </b-form-select>
         </b-form-group>
       </b-col>
-      <b-col class="col-12 col-md-auto" order="2" order-md="3">
-        <b-row>
-          <b-col class="col rd-filter-border">
-            <range-filter filter-name="Sign-Ins" filter-store="filters/set_signins_filter" />
-          </b-col>
-          <b-col class="col rd-filter-border">
-            <range-filter filter-name="Activity" filter-store="filters/set_activity_filter" />
-          </b-col>
-          <b-col class="col rd-filter-border">
-            <range-filter filter-name="Assignments" filter-store="filters/set_assignment_filter" />
-          </b-col>
-          <b-col class="col">
-            <range-filter filter-name="Grades" filter-store="filters/set_grade_filter" />
-          </b-col>
-        </b-row>
-        <b-row>
-          <div class="rd-form-note">
-            <span class="rd-form-key"><strong>Low</strong> -5 to -3</span><span class="rd-form-key"><strong class="rd-label">Average</strong> -2.9 to +2.9</span><span><strong>High</strong> +3 to +5</span>
-          </div>
-        </b-row>
+      <b-col class="col">
+        <range-filter filter-name="Sign-Ins" filter-store="filters/set_signins_filter" />
       </b-col>
-      <b-col class="col-6 col-md-2 rd-filter-border-end" order="4">
+      <b-col class="col">
+        <range-filter filter-name="Activity" filter-store="filters/set_activity_filter" />
+      </b-col>
+      <b-col class="col">
+        <range-filter filter-name="Assignments" filter-store="filters/set_assignment_filter" />
+      </b-col>
+      <b-col class="col">
+        <range-filter filter-name="Grades" filter-store="filters/set_grade_filter" />
+      </b-col>
+      <b-col class="col">
         <b-form-group
           v-if="show_type"
           class="rd-student-filters"
@@ -78,9 +68,46 @@
                 Includes students in pre-science, pre-engineering and related pre-majors.
               </b-popover></span>
           </b-form-checkbox>
-          <b-form-checkbox v-model="freshman_filter">
-            Is Freshman
-          </b-form-checkbox>
+        </b-form-group>
+        <b-form-group
+          label="Class"
+        >
+          <b-form-select
+            id="class_standing_filter"
+            v-model="class_standing_filter"
+            class="rd-class-filter"
+            :options="current_class_codes"
+            value-field="class_code"
+            text-field="class_desc"
+            size="sm"
+          >
+            <template v-slot:first>
+              <b-form-select-option :value="'all'">
+                ALL STUDENTS
+              </b-form-select-option>
+            </template>
+          </b-form-select>
+        </b-form-group>
+      </b-col>
+      <b-col class="col">
+        <b-form-group
+          label="Sport"
+        >
+          <b-form-select
+            id="sport_filter"
+            v-model="sport_filter"
+            class="rd-sports-filter"
+            :options="current_sports"
+            value-field="sport_code"
+            text-field="sport_desc"
+            size="sm"
+          >
+            <template v-slot:first>
+              <b-form-select-option :value="'all'">
+                ALL STUDENTS
+              </b-form-select-option>
+            </template>
+          </b-form-select>
         </b-form-group>
         <b-form-group
           class="rd-keyword-filter"
@@ -89,7 +116,11 @@
           <b-form-input v-model="keyword_filter" size="sm" placeholder="Student name, #, NetID" />
         </b-form-group>
       </b-col>
-      <b-col order="5" />
+    </b-row>
+    <b-row>
+      <div class="rd-form-note">
+        <span class="rd-form-key"><strong>Low</strong> -5 to -3</span><span class="rd-form-key"><strong class="rd-label">Average</strong> -2.9 to +2.9</span><span><strong>High</strong> +3 to +5</span>
+      </div>
     </b-row>
     <div class="rd-table-container">
       <span class="rd-file-select">
@@ -180,6 +211,22 @@
           this.$store.dispatch('advisors/set_advisors', value);
         }
       },
+      sports: {
+        get () {
+          return this.$store.state.sports.sports;
+        },
+        set (value) {
+          this.$store.dispatch('sports/set_sports', value);
+        }
+      },
+      class_codes: {
+        get () {
+          return this.$store.state.class_standings.class_codes;
+        },
+        set (value) {
+          this.$store.dispatch('class_standings/set_class_codes', value);
+        }
+      },
       prediction_filter: {
         get () {
           return this.$store.state.filters.filters.prediction_filter;
@@ -204,12 +251,12 @@
           this.$store.dispatch('filters/set_stem_filter', value);
         }
       },
-      freshman_filter: {
+      class_standing_filter: {
         get () {
-          return this.$store.state.filters.filters.freshman_filter;
+          return this.$store.state.filters.filters.class_standing_filter;
         },
         set (value) {
-          this.$store.dispatch('filters/set_freshman_filter', value);
+          this.$store.dispatch('filters/set_class_standing_filter', value);
         }
       },
       advisor_filter: {
@@ -226,6 +273,14 @@
         },
         set (value) {
           this.$store.dispatch('filters/set_summer_filter', value);
+        }
+      },
+      sport_filter: {
+        get () {
+          return this.$store.state.filters.filters.sport_filter;
+        },
+        set (value) {
+          this.$store.dispatch('filters/set_sport_filter', value);
         }
       },
       keyword_filter: {
@@ -278,27 +333,38 @@
         }
         term_names.sort();
         return term_names.join(", ") + " Term";
-      }
+      },
+      current_sports: {
+        get () {
+          return this.sports[this.type];
+        }
+      },
+      current_class_codes: {
+        get () {
+          return this.class_codes[this.type];
+        }
+      },
     },
     watch: {
       advisors: function() {
-        if(this.type == "EOP"){
-          this.current_advisors = this.advisors["EOP"];
-        } else if (this.type == "ISS") {
-          this.current_advisors = this.advisors["ISS"];
+        if(["ISS", "EOP"].includes(this.type)){
+          this.current_advisors = this.advisors[this.type];
         }
       },
       currentweek: function(){
         this.selectWeek(this.currentweek);
+        this.get_sports();
+        this.get_class_standings();
       },
       type: function(){
         this.advisor_filter = "all";
+        this.sport_filter = "all";
+        this.class_standing_filter = "all";
         this.selectPage(this.type);
         if(this.type === "EOP"){
           this.get_advisors();
         } else if (this.type === "ISS"){
           this.stem_filter = false;
-          this.freshman_filter = false;
           this.premajor_filter = false;
           this.get_advisors();
         }
@@ -325,7 +391,7 @@
       },
       get_weeks(){
         var vue = this;
-        axios.get('/api/v1/weeks/')
+        return axios.get('/api/v1/weeks/')
           .then(function(response){
             vue.weeks = response.data;
           });
@@ -343,6 +409,28 @@
           .then(function(response){
             vue.advisors = response.data;
           });
+      },
+      get_sports(){
+        let week_num = this.weeks.filter(e => e.value == this.currentweek)[0];
+        var vue = this;
+        axios.get('/api/v1/sports/', {
+          params: {
+            week: week_num
+          }
+        }).then(function(response){
+          vue.sports = response.data;
+        });
+      },
+      get_class_standings(){
+        let week_num = this.weeks.filter(e => e.value == this.currentweek)[0];
+        var vue = this;
+        axios.get('/api/v1/class-standings/', {
+          params: {
+            week: week_num
+          }
+        }).then(function(response){
+          vue.class_codes = response.data;
+        });
       }
     }
   };
@@ -355,18 +443,8 @@
   /* filter styles */
 
   .rd-filters-container {
-    margin: auto;
+    margin: 0 10rem;
     padding: 0 0 1rem;
-
-    .rd-filter-border {
-      border: 1px $grey-border solid;
-      border-style: none solid none none;
-    }
-
-    .rd-filter-border-end {
-      border: 1px $grey-border solid;
-      border-style: none none none solid;
-    }
 
     fieldset .rd-keyword-filter {
       margin-right: 0;
@@ -397,6 +475,20 @@
 
   }
 
+  .rd-filters-container > [class*='col']::before {
+    background: $grey-border;
+    bottom: 0;
+    content: ' ';
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 1px;
+  }
+
+  .rd-filters-container > [class*='col']:first-child::before {
+    display: none;
+  }
+
   .rd-filters-container fieldset legend {
     font-weight: bold;
   }
@@ -425,11 +517,6 @@
     /* small screen filter styles */
 
     .rd-filters-container {
-      .rd-filter-border,
-      .rd-filter-border-end {
-        border-style: none;
-      }
-
       fieldset {
         margin: 0;
         padding: 0;

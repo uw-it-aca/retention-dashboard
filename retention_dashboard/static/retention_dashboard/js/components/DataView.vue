@@ -108,6 +108,15 @@
         <span>{{ row.item.student_last_name }}, {{ row.item.student_first_name }}</span>
         <div class="rd-student-meta">
           {{ row.item.netid }}
+         <div>
+          <small>
+            <b-badge variant="light">{{ row.item.class_desc }}</b-badge>
+            <b-badge variant="light" v-if="row.item.is_eop">EOP</b-badge>
+            <b-badge variant="light" v-if="row.item.is_international">International</b-badge>
+            <b-badge variant="light" v-if="row.item.is_stem">Stem</b-badge>
+            <b-badge variant="light" v-if="row.item.is_athlete">Athlete</b-badge>
+          </small>
+         </div>
         </div>
         <div v-if="is_summer" class="rd-student-meta rd-italic">
           {{ row.item.summer_term_string }}
@@ -132,11 +141,6 @@
       <template v-slot:cell(signin_score)="row">
         <span v-if="row.item.signin_score === -99">No data</span>
         <span v-else>{{ row.item.signin_score }}</span>
-      </template>
-
-      <template v-slot:cell(is_premajor)="row">
-        <span v-if="row.item.is_premajor === true"><b-icon icon="check2-square" scale="1.5" /><span class="sr-only">{{ row.item.is_premajor }}</span></span>
-        <span v-else class="sr-only">{{ row.item.is_premajor }}</span>
       </template>
 
       <template v-slot:cell(priority_score)="row">
@@ -182,7 +186,7 @@
     },
     data: function() {
       return {
-        eop_fields: [
+        standard_fields: [
           {
             key: 'student_name',
             label: "Student Name",
@@ -218,49 +222,8 @@
             sortable: true
           },
           {
-            key: 'is_premajor',
-            label: 'Pre-Major',
-            sortable: true
-          },
-          {
             key: 'advisor_name',
             label: 'Adviser',
-            sortable: true
-          }
-        ],
-        standard_fields: [
-          {
-            key: 'student_name',
-            label: "Student Name",
-            sortable: true
-          },
-          {
-            key: 'student_number',
-            label: "Student Number",
-          },
-          {
-            key: 'signin_score',
-            label: 'Sign-Ins',
-            sortable: true
-          },
-          {
-            key: 'activity_score',
-            label: 'Activity',
-            sortable: true
-          },
-          {
-            key: 'assignment_score',
-            label: 'Assignments',
-            sortable: true
-          },
-          {
-            key: 'grade_score',
-            label: 'Grades',
-            sortable: true
-          },
-          {
-            key: 'is_premajor',
-            label: 'Pre-Major',
             sortable: true
           }
         ],
@@ -287,95 +250,44 @@
             "activity_score",
             "assignment_score",
             "grade_score",
-            "is_premajor",
-            "is_freshman",
-            "is_stem",
-            "signin_score"
-          ],
-          summer_fields: [
-            "student_last_name",
-            "student_first_name",
-            "student_number",
-            "netid",
-            "activity_score",
-            "assignment_score",
-            "grade_score",
-            "is_premajor",
-            "summer_term_string",
-            "is_freshman",
-            "is_stem",
-            "signin_score"
-          ],
-          fields_eop: [
-            "student_last_name",
-            "student_first_name",
-            "student_number",
-            "netid",
-            "activity_score",
-            "assignment_score",
-            "grade_score",
             "priority_score",
-            "is_premajor",
-            "advisor_name",
-            "advisor_netid",
-            "is_freshman",
-            "is_stem",
-            "signin_score"
-          ],
-          summer_fields_eop: [
-            "student_last_name",
-            "student_first_name",
-            "student_number",
-            "netid",
-            "activity_score",
-            "assignment_score",
-            "grade_score",
-            "priority_score",
-            "is_premajor",
             "advisor_name",
             "advisor_netid",
             "summer_term_string",
-            "is_freshman",
             "is_stem",
             "signin_score"
-          ]
+          ],
         }
       };
     },
     computed: {
       fields (){
         var fields;
-        if (this.current_file === "EOP"){
-          fields = this.eop_fields;
-        } else if (this.current_file === "ISS"){
-          fields = this.eop_fields.filter(
-            item => !(item.key == "is_premajor"));
+        if (this.current_file === "Athletics"){
+          fields = this.standard_fields.filter(
+            item => !(item.key == "advisor_name"));
+        } else if (this.current_file == "Premajor" ||
+          this.current_file == "International" ||
+          this.current_file == "ISS" ||
+          this.current_file == "Tacoma") {
+          fields = this.standard_fields.filter(
+            item => !(item.key == "priority_score") &&
+              !(item.key == "advisor_name"));
         } else {
           fields = this.standard_fields;
+        }
+        if (!this.is_summer) {
+          fields = fields.filter(
+            item => !(item.key == "summer_term_string"));
         }
         return fields;
       },
       download_fields () {
-        if (this.current_file === "EOP"){
-          if(this.is_summer){
-            return this.download.summer_fields_eop;
-          } else {
-            return this.download.fields_eop;
-          }
-        } else if (this.current_file === "ISS"){
-          if(this.is_summer){
-            return this.download.summer_fields_eop.filter(
-              item => !(item.key == "is_premajor"));
-          } else {
-            return this.download.fields_eop.filter(
-              item => !(item.key == "is_premajor"));
-          }
+        if(this.is_summer){
+          return this.download.fields;
         } else {
-          if(this.is_summer){
-            return this.download.summer_fields;
-          } else {
-            return this.download.fields;
-          }
+          return this.download.fields.filter(
+            item => !(item.key == "summer_term_string"));
         }
       },
       filename (){
@@ -429,23 +341,31 @@
         if(this.signins_filter.length > 0){
           params['signins_filters'] = this.signins_filter;
         }
+        if(this.class_standing_filter){
+          params['class_standing_filter'] = this.class_standing_filter;
+        }
+        if(this.sport_filter){
+          params['sport_filter'] = this.sport_filter;
+        }
         return params;
       },
       filter_trigger () {
-        return (
-          this.assignment_filter,
-          this.grade_filter,
-          this.activity_filter,
-          this.prediction_filter,
-          this.premajor_filter,
-          this.stem_filter,
-          this.freshman_filter,
-          this.keyword_filter,
-          this.advisor_filter,
-          this.current_week,
-          this.current_file,
-          this.summer_filter,
-          this.signins_filter
+        return ("" +
+          this.assignment_filter +
+          this.grade_filter +
+          this.activity_filter +
+          this.prediction_filter +
+          this.premajor_filter +
+          this.stem_filter +
+          this.freshman_filter +
+          this.keyword_filter +
+          this.advisor_filter +
+          this.current_week +
+          this.current_file +
+          this.summer_filter +
+          this.signins_filter +
+          this.class_standing_filter +
+          this.sport_filter
         );
       },
       ...Vuex.mapState({
@@ -462,6 +382,9 @@
         advisor_filter: state => state.filters.filters.advisor_filter,
         summer_filter: state => state.filters.filters.summer_filter,
         signins_filter: state => state.filters.filters.signins_filter,
+        class_standing_filter: state =>
+          state.filters.filters.class_standing_filter,
+        sport_filter: state => state.filters.filters.sport_filter
       })
     },
     watch: {
@@ -469,7 +392,6 @@
         var vue = this;
         csv.forEach(function(item){
           item["student_number"] = Number(item["student_number"]);
-
           item['priority_score'] = vue.get_rounded(item['priority_score']);
           item['signin_score'] = vue.get_rounded(item['signin_score']);
           item['activity_score'] = vue.get_rounded(item['activity_score']);

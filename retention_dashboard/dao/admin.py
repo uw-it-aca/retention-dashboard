@@ -5,7 +5,7 @@ import csv
 import logging
 from io import StringIO
 from retention_dashboard.models import Week, DataPoint, Advisor, Upload, \
-    UploadTypes
+    UploadTypes, Sport
 from django.conf import settings
 from django.db import transaction
 from google.cloud import storage
@@ -130,18 +130,25 @@ class UploadDataDao():
             return [UploadTypes.iss]
         # if no adviser type is specified, derive the upload types from the
         # eop, international, isso, and campus_code columns
-        if bool(int(row.get("eop", 0))) is True:
+        if bool(int(row.get("eop", 0))) is True or \
+                bool(int(row.get("eop_student", 0))) is True:
             upload_types.append(UploadTypes.eop)
-        if bool(int(row.get("international", 0))) is True:
+        if bool(int(row.get("international", 0))) is True or \
+                bool(int(row.get("international_student", 0))) is True:
             upload_types.append(UploadTypes.international)
         if bool(int(row.get("isso", 0))) is True:
             upload_types.append(UploadTypes.iss)
         if int(row.get("campus_code", 0)) == 2:
             upload_types.append(UploadTypes.tacoma)
-        # premajor only if not any other classification
+
+        # premajor only if not any other classification, excluding athletics
         if len(upload_types) == 0 and \
                 bool(int(row.get("premajor", 0))) is True:
             upload_types.append(UploadTypes.premajor)
+
+        if row.get("sport_code", None):
+            upload_types.append(UploadTypes.athletic)
+
         if not upload_types:
             raise ValueError(f"Unknown upload type for row: {row}")
         return upload_types
@@ -151,7 +158,7 @@ class UploadDataDao():
                                 delimiter=',')
 
         advisor_dict = {}
-        dp_by_upload = {}
+        record_by_upload = {}
         for _, row in enumerate(reader):
             try:
                 upload_types = self.get_upload_types(row)
@@ -159,6 +166,12 @@ class UploadDataDao():
                 logging.error(err)
                 continue
             for upload_type in upload_types:
+                if (upload_type != UploadTypes.athletic and
+                        row.get("class_code") is not None and
+                        row.get("class_code") not in
+                        ["0", "1", "2", "3", "4"]):
+                    # only include non-undergrads for athletics
+                    continue
                 advisor_netid = row.get("staff_id")
                 advisor_name = row.get("adviser_name")
                 advisor = None
@@ -185,9 +198,16 @@ class UploadDataDao():
                 dp.student_name = row.get("student_name_lowc")
                 dp.student_number = row.get("student_no")
                 dp.netid = row.get("uw_netid")
-                dp.premajor = row.get("premajor")
+                dp.class_code = row.get("class_code")
+                dp.campus_code = row.get("campus_code")
                 dp.is_stem = row.get("stem")
                 dp.is_freshman = row.get("incoming_freshman")
+                upload_types = self.get_upload_types(row)
+                dp.premajor = bool(UploadTypes.premajor in upload_types)
+                dp.eop = bool(UploadTypes.eop in upload_types)
+                dp.iss = bool(UploadTypes.iss in upload_types)
+                dp.international = bool(
+                    UploadTypes.international in upload_types)
                 if row.get("activity"):
                     dp.activity_score = row.get("activity")
                 if row.get("assignments"):
@@ -202,11 +222,12 @@ class UploadDataDao():
                 dp.has_a_term = has_a
                 dp.has_b_term = has_b
                 dp.has_full_term = has_full
-                if dp_by_upload.get(upload_type):
-                    dp_by_upload[upload_type].append(dp)
+                record = {'datapoint': dp, 'row': row}
+                if record_by_upload.get(upload_type):
+                    record_by_upload[upload_type].append(record)
                 else:
-                    dp_by_upload[upload_type] = [dp]
-        return dp_by_upload
+                    record_by_upload[upload_type] = [record]
+        return record_by_upload
 
     def process_rad_upload(self, rad_file_name, rad_document, user, week=None):
 
@@ -223,9 +244,9 @@ class UploadDataDao():
                 year=year
             )
 
-        dp_by_upload = self.parse_rad_document(rad_document)
+        record_by_upload = self.parse_rad_document(rad_document)
 
-        for upload_type, dps in dp_by_upload.items():
+        for upload_type, records in record_by_upload.items():
             try:
                 (Upload.objects.filter(week=week)
                                .filter(type=upload_type)
@@ -241,7 +262,8 @@ class UploadDataDao():
                                                    type=upload_type,
                                                    week=week,
                                                    uploaded_by=user)
-                    for dp in dps:
+                    for record in records:
+                        dp = record['datapoint']
                         if upload.type:
                             dp.type = upload.type
                         if upload.week:
@@ -249,7 +271,17 @@ class UploadDataDao():
                         if upload:
                             dp.upload = upload
                         dp.upload = upload
-                    DataPoint.objects.bulk_create(dps)
-                logging.info(f"Upload {len(dps)} datapoints for "
+                        dp.save()
+                        # update sport affiliations after ids have been created
+                        row = record["row"]
+                        sport_code_str = row.get("sport_code")
+                        sport_codes = (sport_code_str.split(",")
+                                       if sport_code_str else [])
+                        for code in sport_codes:
+                            sport_code, _ = Sport.objects.get_or_create(
+                                sport_code=code)
+                            dp.sports.add(sport_code)
+                        dp.save()
+                logging.info(f"Upload {len(records)} datapoints for "
                              f"term={week.quarter}, week={week.number}, "
                              f"type={upload_type}")

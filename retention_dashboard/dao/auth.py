@@ -25,6 +25,10 @@ def is_tacoma_authorized(request):
     return is_member_of_group(request, settings.TACOMA_USERS_GROUP)
 
 
+def is_athletic_authorized(request):
+    return is_member_of_group(request, settings.ATHLETIC_USERS_GROUP)
+
+
 def get_type_authorizations(request):
     types = []
     if is_premajor_authorized(request):
@@ -37,4 +41,6 @@ def get_type_authorizations(request):
         types.append("ISS")
     if is_tacoma_authorized(request):
         types.append("Tacoma")
+    if is_athletic_authorized(request):
+        types.append("Athletics")
     return types
