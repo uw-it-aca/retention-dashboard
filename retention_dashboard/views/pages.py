@@ -6,7 +6,6 @@ from django.contrib.auth.decorators import login_required
 from uw_saml.utils import get_user
 from uw_saml.decorators import group_required
 from django.conf import settings
-from retention_dashboard.models import Week, Upload
 from django.utils.decorators import method_decorator
 from retention_dashboard.views.api.forms import GCSForm, LocalDataForm
 
@@ -36,11 +35,6 @@ class AdminView(PageView):
 
     def get_context_data(self, **kwargs):
         context = {}
-        context['weeks'] = Week.objects.all().order_by('year',
-                                                       'quarter',
-                                                       'number')
-        context['uploads'] = Upload.objects.all().order_by(
-                'week__year', 'week__quarter', 'week__number', 'type')
         context['debug'] = settings.DEBUG
         context['localdataform'] = LocalDataForm()
         context['gcsform'] = GCSForm()

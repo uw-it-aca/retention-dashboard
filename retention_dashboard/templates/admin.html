@@ -5,6 +5,75 @@
   <script>
     $(document).ready(function() {
 
+      var csrf = jQuery("[name=csrfmiddlewaretoken]").val();
+
+      // load weeks and uploads
+      $.ajax({
+          url: "/api/admin/week/list/",
+          method: "GET",
+          dataType: 'json',
+          headers: {
+            'X-CSRFToken': csrf
+          },
+        }).done(function (response) {
+          response.forEach(week => {
+            var row = document.getElementById('week-table').insertRow();
+            var cell1 = row.insertCell();
+            cell1.innerHTML = "<td>" + week.year + "</td>";
+            var cell2 = row.insertCell();
+            cell2.innerHTML = "<td>" + week.quarter + "</td>";
+            var cell3 = row.insertCell();
+            cell3.innerHTML = "<td>" + week.number + "</td>";
+          });
+        })
+
+        $.ajax({
+          url: "/api/admin/upload/list/",
+          method: "GET",
+          dataType: 'json',
+          headers: {
+            'X-CSRFToken': csrf
+          },
+        }).done(function (response) {
+          response.forEach(upload => {
+            var row = document.getElementById('upload-table').insertRow();
+            var cell1 = row.insertCell();
+            cell1.innerHTML = "<td>" + upload.created_on + "</td>";
+            var cell2 = row.insertCell();
+            cell2.innerHTML = "<td>" + upload.uploaded_by + "</td>";
+            var cell3 = row.insertCell();
+            cell3.innerHTML = "<td>" + upload.type + "</td>";
+            var cell4 = row.insertCell();
+            cell4.innerHTML = "<td>" + upload.year + " - " + upload.quarter + " - Week " + upload.week + "</td>";
+            var cell5 = row.insertCell();
+            cell5.innerHTML = '<button class="delete" value="' + upload.id + '">x</button>';
+          });
+
+          $(".delete").click(function (e) {
+            e.preventDefault();
+            var upload_id = $(e.target).val();
+            $.ajax({
+              url: "/api/admin/dataset/" + upload_id + "/",
+              method: "DELETE",
+              contentType: false,
+              processData: false,
+              dataType: 'json',
+              headers: {
+                'X-CSRFToken': csrf
+              },
+              beforeSend: function (xhr) {
+                toggleDisabled(true);
+              }
+            }).done(function (response) {
+              toggleDisabled(false);
+              alert('Deleted')
+              location.reload()
+            }).fail(function (response){
+              toggleDisabled(false);
+            });
+          });
+        })
+
       function toggleDisabled(disabled) {
         // load mock data form
         $("#mock_data").prop( "disabled", disabled);
@@ -26,8 +95,7 @@
 
       $("#mock_data").click(function (e) {
         e.preventDefault();
-        var csrf = jQuery("[name=csrfmiddlewaretoken]").val();
-
+ 
         $.ajax({
           url: "/api/admin/mock_data/",
           method: "PUT",
@@ -50,8 +118,7 @@
 
       $("#gcs_data_form").submit(function (e) {
         e.preventDefault();
-        var csrf = jQuery("[name=csrfmiddlewaretoken]").val(),
-                data = new FormData();
+        var data = new FormData();
         data.append('gcs_file', $('#id_gcs_file').val());
 
         $.ajax({
@@ -84,7 +151,6 @@
 
       $("#local_data_form").submit(function (e) {
         e.preventDefault();
-        var csrf = jQuery("[name=csrfmiddlewaretoken]").val()
         var data = new FormData();
         data.append('local_upload_week',  
                     $("#id_local_upload_week").val());
@@ -114,34 +180,9 @@
         });
       });
 
-      $(".delete").click(function (e) {
-        e.preventDefault();
-        var upload_id = $(e.target).val(),
-                csrf = jQuery("[name=csrfmiddlewaretoken]").val();
-        $.ajax({
-          url: "/api/admin/dataset/" + upload_id + "/",
-          method: "DELETE",
-          contentType: false,
-          processData: false,
-          dataType: 'json',
-          headers: {
-            'X-CSRFToken': csrf
-          },
-          beforeSend: function (xhr) {
-            toggleDisabled(true);
-          }
-        }).done(function (response) {
-          toggleDisabled(false);
-          alert('Deleted')
-          location.reload()
-        }).fail(function (response){
-          toggleDisabled(false);
-        });
-      })
-
       $("#week_form").submit(function (e) {
         e.preventDefault();
-        var csrf = jQuery("[name=csrfmiddlewaretoken]").val();
+
         $.ajax({
           url: "/api/admin/week/",
           method: "POST",
@@ -211,17 +252,9 @@
       <p>Deleting a upload will delete all data associated with it, so this
          has user facing consequences. Should only be needed if a file is
          erroneously uploaded or reloaded do to a data change.</p>
-      <table>
+      <table id="upload-table" border="1">
         <tr><th>Date</th><th>User</th><th>Type</th><th>Week</th><th>Delete</th></tr>
-        {% for upload in uploads %}
-          <tr>
-            <td>{{upload.created_on}}</td>
-            <td>{{upload.uploaded_by}}</td>
-            <td>{{upload.get_type_display}}</td>
-            <td>{{ upload.week.year }} - {{ upload.week.get_quarter_display }} - Week {{ upload.week.number }}</td>
-            <td><button class="delete" value="{{ upload.id }}">x</button></td>
-          </tr>
-        {% endfor %}
+        <!-- content gets put here -->
       </table>
     </div>
   </div>
@@ -248,11 +281,9 @@
     </div>
     <div>
       <h3>Existing Weeks</h3>
-      <table border="1">
+      <table id="week-table" border="1">
         <tr><th>Year</th><th>Quarter</th><th>Week</th></tr>
-        {% for week in weeks %}
-          <tr><td>{{ week.year }}</td><td>{{ week.get_quarter_display }}</td><td>{{ week.number }}</td></tr>
-        {% endfor %}
+        <!-- content gets put here -->
       </table>
     </div>
   </div>
