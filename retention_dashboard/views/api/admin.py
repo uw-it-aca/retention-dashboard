@@ -120,3 +120,24 @@ class MockDataAdmin(RESTDispatch):
             call_command('loaddata', 'mock_data.json')
             return self.json_response({"loaded": True})
         return self.error_response(status=400)
+
+
+@method_decorator(group_required(settings.ALLOWED_USERS_GROUP),
+                  name='dispatch')
+class UploadListAdmin(RESTDispatch):
+
+    def get(self, request):
+        uploads = list(Upload.objects.all().order_by(
+            'week__year', 'week__quarter', 'week__number', 'type'))
+        context = [upload.json_data() for upload in uploads]
+        return self.json_response(content=context)
+
+
+@method_decorator(group_required(settings.ALLOWED_USERS_GROUP),
+                  name='dispatch')
+class WeekListAdmin(RESTDispatch):
+
+    def get(self, request):
+        weeks = Week.objects.all().order_by('year', 'quarter', 'number')
+        context = [week.json_data() for week in weeks]
+        return self.json_response(content=context)
