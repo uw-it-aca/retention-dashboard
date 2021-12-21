@@ -127,8 +127,9 @@ class MockDataAdmin(RESTDispatch):
 class UploadListAdmin(RESTDispatch):
 
     def get(self, request):
-        uploads = list(Upload.objects.all().order_by(
-            'week__year', 'week__quarter', 'week__number', 'type'))
+        uploads = Upload.objects.all().order_by(
+            'week__year', 'week__quarter',
+            'week__number', 'type').defer('file')
         context = [upload.json_data() for upload in uploads]
         return self.json_response(content=context)
 
