@@ -16,10 +16,14 @@ class Week(models.Model):
     year = models.IntegerField()
 
     def json_data(self):
+        display_string = "{} {}: Week {}".format(self.get_quarter_display(),
+                                                 self.year,
+                                                 self.number)
         return {"value": self.id,
                 "year": self.year,
                 "quarter": self.get_quarter_display(),
-                "number": self.number}
+                "number": self.number,
+                "text": display_string}
 
     @classmethod
     def term_to_quarter_number(cls, term):
