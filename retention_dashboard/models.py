@@ -192,8 +192,12 @@ class DataPoint(models.Model):
     student_name = models.TextField()
     student_number = models.IntegerField()
     netid = models.CharField(max_length=12)
+    campus_code = models.CharField(max_length=2, null=True)
     class_code = models.CharField(max_length=2, null=True)
     premajor = models.BooleanField()
+    eop = models.BooleanField(default=False)
+    iss = models.BooleanField(default=False)
+    international = models.BooleanField(default=False)
     is_stem = models.BooleanField(default=False)
     is_freshman = models.BooleanField(default=False)
     priority_score = models.FloatField(null=True)
@@ -203,7 +207,7 @@ class DataPoint(models.Model):
     signin_score = models.FloatField(default=0.0)
     upload = models.ForeignKey("Upload", on_delete=models.CASCADE)
     advisor = models.ForeignKey("Advisor", on_delete=models.PROTECT, null=True)
-    sports = models.ManyToManyField("Sport", null=True)
+    sports = models.ManyToManyField("Sport")
     has_a_term = models.BooleanField(default=False)
     has_b_term = models.BooleanField(default=False)
     has_full_term = models.BooleanField(default=False)
@@ -305,6 +309,10 @@ class DataPoint(models.Model):
         return data_queryset.filter(is_stem=is_stem)
 
     @staticmethod
+    def filter_by_class_standing(data_queryset, class_standing_filter):
+        return data_queryset.filter(class_code=class_standing_filter)
+
+    @staticmethod
     def filter_by_sports(data_queryset, sport_code_filter):
         return data_queryset.filter(sports__sport_code=sport_code_filter)
 
@@ -325,6 +333,23 @@ class DataPoint(models.Model):
             term_list.append("Full")
         return ', '.join(map(str, term_list))
 
+    def get_class_desc(self):
+        class_codes_map = {
+            0: "Pending",
+            1: "Freshman",
+            2: "Sophomore",
+            3: "Junior",
+            4: "Senior",
+            5: "5th-Year",
+            6: "Non-Matriculated",
+            8: "Graduate",
+            11: "1st Year Professional",
+            12: "2nd Year Professional",
+            13: "3rd Year Professional",
+            14: "4th Year Professional",
+        }
+        return class_codes_map.get(int(self.class_code))
+
     def json_data(self):
         first, last = self.get_first_last_name()
         resp = {"student_first_name": first,
@@ -337,16 +362,54 @@ class DataPoint(models.Model):
                 "grade_score": self.grade_score,
                 "signin_score": self.signin_score,
                 "is_premajor": self.premajor,
+                "is_eop": self.eop,
+                "is_iss": self.iss,
+                "is_international": self.international,
                 "is_freshman": self.is_freshman,
                 "is_stem": self.is_stem,
+                "is_athlete": self.sports.exists(),
                 "summer_term_string": self.get_summer_string(),
-                "class_code": self.class_code
+                "class_desc": self.get_class_desc(),
+                "campus_code": self.campus_code
                 }
         if self.advisor is not None:
             resp["advisor_name"] = self.advisor.advisor_name
             resp["advisor_netid"] = self.advisor.advisor_netid
 
         return resp
+
+    @classmethod
+    def get_class_standing_by_type(cls, datapoint_type, week):
+        dps = DataPoint.objects.filter(type=datapoint_type) \
+            .filter(week=week) \
+            .order_by("class_code")
+        class_standings = {}
+        for dp in dps:
+            if dp.class_code:
+                class_standings[dp.class_code] = \
+                    {"class_code": int(dp.class_code),
+                     "class_desc": dp.get_class_desc()}
+        return sorted(class_standings.values(),
+                      key=lambda i: i['class_code'])
+
+    @classmethod
+    def get_all_class_standings(cls, week_number, quarter, year):
+        week = Week.objects.filter(
+            number=week_number,
+            quarter=Week.term_to_quarter_number(quarter),
+            year=year).get()
+        prem = cls.get_class_standing_by_type(1, week)
+        eop = cls.get_class_standing_by_type(2, week)
+        inter = cls.get_class_standing_by_type(3, week)
+        iss = cls.get_class_standing_by_type(4, week)
+        tacoma = cls.get_class_standing_by_type(5, week)
+        athletic = cls.get_class_standing_by_type(6, week)
+        return {"Premajor": list(prem),
+                "EOP": list(eop),
+                "International": list(inter),
+                "ISS": list(iss),
+                "Tacoma": list(tacoma),
+                "Athletics": list(athletic)}
 
 
 class Upload(models.Model):

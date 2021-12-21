@@ -12,7 +12,8 @@ from retention_dashboard.views.api.data import (DataView,
                                                 DataAuthView,
                                                 FilteredDataView,
                                                 AdvisorListView,
-                                                SportListView)
+                                                SportListView,
+                                                ClassStandingListView)
 
 
 urlpatterns = [
@@ -21,6 +22,8 @@ urlpatterns = [
             name="advisor_view"),
     re_path(r'api/v1/sports/', SportListView.as_view(),
             name="sport_view"),
+    re_path(r'api/v1/class-standings/', ClassStandingListView.as_view(),
+            name="class_standing_view"),
     re_path(r'api/v1/data_auth/', DataAuthView.as_view(),
             name="data_auth_view"),
     re_path(r'api/v1/filtered_data/', FilteredDataView.as_view(),

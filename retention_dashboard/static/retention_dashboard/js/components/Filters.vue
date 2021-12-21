@@ -49,8 +49,9 @@
       <b-col class="col">
         <range-filter filter-name="Grades" filter-store="filters/set_grade_filter" />
       </b-col>
-      <b-col v-if="show_type" class="col">
+      <b-col class="col">
         <b-form-group
+          v-if="show_type"
           class="rd-student-filters"
           label="Student Type"
           label-class="rd-vis-hidden"
@@ -67,14 +68,29 @@
                 Includes students in pre-science, pre-engineering and related pre-majors.
               </b-popover></span>
           </b-form-checkbox>
-          <b-form-checkbox v-model="freshman_filter">
-            Is Freshman
-          </b-form-checkbox>
+        </b-form-group>
+        <b-form-group
+          label="Class"
+        >
+          <b-form-select
+            id="class_standing_filter"
+            v-model="class_standing_filter"
+            class="rd-class-filter"
+            :options="current_class_codes"
+            value-field="class_code"
+            text-field="class_desc"
+            size="sm"
+          >
+            <template v-slot:first>
+              <b-form-select-option :value="'all'">
+                ALL STUDENTS
+              </b-form-select-option>
+            </template>
+          </b-form-select>
         </b-form-group>
       </b-col>
       <b-col class="col">
         <b-form-group
-          v-if="current_sports && current_sports.length"
           label="Sport"
         >
           <b-form-select
@@ -203,6 +219,14 @@
           this.$store.dispatch('sports/set_sports', value);
         }
       },
+      class_codes: {
+        get () {
+          return this.$store.state.class_standings.class_codes;
+        },
+        set (value) {
+          this.$store.dispatch('class_standings/set_class_codes', value);
+        }
+      },
       prediction_filter: {
         get () {
           return this.$store.state.filters.filters.prediction_filter;
@@ -227,12 +251,12 @@
           this.$store.dispatch('filters/set_stem_filter', value);
         }
       },
-      freshman_filter: {
+      class_standing_filter: {
         get () {
-          return this.$store.state.filters.filters.freshman_filter;
+          return this.$store.state.filters.filters.class_standing_filter;
         },
         set (value) {
-          this.$store.dispatch('filters/set_freshman_filter', value);
+          this.$store.dispatch('filters/set_class_standing_filter', value);
         }
       },
       advisor_filter: {
@@ -315,6 +339,11 @@
           return this.sports[this.type];
         }
       },
+      current_class_codes: {
+        get () {
+          return this.class_codes[this.type];
+        }
+      },
     },
     watch: {
       advisors: function() {
@@ -325,16 +354,17 @@
       currentweek: function(){
         this.selectWeek(this.currentweek);
         this.get_sports();
+        this.get_class_standings();
       },
       type: function(){
         this.advisor_filter = "all";
         this.sport_filter = "all";
+        this.class_standing_filter = "all";
         this.selectPage(this.type);
         if(this.type === "EOP"){
           this.get_advisors();
         } else if (this.type === "ISS"){
           this.stem_filter = false;
-          this.freshman_filter = false;
           this.premajor_filter = false;
           this.get_advisors();
         }
@@ -389,6 +419,17 @@
           }
         }).then(function(response){
           vue.sports = response.data;
+        });
+      },
+      get_class_standings(){
+        let week_num = this.weeks.filter(e => e.value == this.currentweek)[0];
+        var vue = this;
+        axios.get('/api/v1/class-standings/', {
+          params: {
+            week: week_num
+          }
+        }).then(function(response){
+          vue.class_codes = response.data;
         });
       }
     }

@@ -9,7 +9,7 @@ from uw_saml.decorators import group_required
 from retention_dashboard.views.api import RESTDispatch
 from retention_dashboard.dao.data import FilterDataDao
 from retention_dashboard.dao.auth import get_type_authorizations
-from retention_dashboard.models import Advisor, Week, Sport
+from retention_dashboard.models import Advisor, Week, Sport, DataPoint
 
 
 @method_decorator(group_required(settings.ALLOWED_USERS_GROUP),
@@ -61,6 +61,7 @@ class FilteredDataView(RESTDispatch):
         stem_filter = request.GET.get("stem_filter", None)
         freshman_filter = request.GET.get("freshman_filter", None)
         sport_filter = request.GET.get("sport_filter", None)
+        class_standing_filter = request.GET.get("class_standing_filter", None)
         if premajor_filter == "true":
             premajor_filter = True
         if stem_filter == "true":
@@ -81,19 +82,20 @@ class FilteredDataView(RESTDispatch):
 
         dao = FilterDataDao()
         data_points = dao.get_filtered_data(
-                                        type, week,
-                                        text_filter=text_filter,
-                                        grade_filters=grade_filters,
-                                        assignment_filters=assignment_filters,
-                                        priority_filters=priority_filters,
-                                        activity_filters=activity_filters,
-                                        signins_filters=signins_filters,
-                                        premajor_filter=premajor_filter,
-                                        advisor_filter=advisor_filter,
-                                        summer_filters=summer_filters,
-                                        stem_filter=stem_filter,
-                                        freshman_filter=freshman_filter,
-                                        sport_filter=sport_filter)
+                                type, week,
+                                text_filter=text_filter,
+                                grade_filters=grade_filters,
+                                assignment_filters=assignment_filters,
+                                priority_filters=priority_filters,
+                                activity_filters=activity_filters,
+                                signins_filters=signins_filters,
+                                premajor_filter=premajor_filter,
+                                advisor_filter=advisor_filter,
+                                summer_filters=summer_filters,
+                                stem_filter=stem_filter,
+                                freshman_filter=freshman_filter,
+                                sport_filter=sport_filter,
+                                class_standing_filter=class_standing_filter)
 
         response_data = []
         try:
@@ -124,3 +126,16 @@ class SportListView(RESTDispatch):
         year = week_dict["year"]
         sports = Sport.get_all_sports(week_number, quarter, year)
         return self.json_response(content=sports)
+
+
+@method_decorator(group_required(settings.ALLOWED_USERS_GROUP),
+                  name='dispatch')
+class ClassStandingListView(RESTDispatch):
+    def get(self, request):
+        week_dict = json.loads(request.GET.get("week"))
+        week_number = week_dict["number"]
+        quarter = week_dict["quarter"]
+        year = week_dict["year"]
+        class_standings = DataPoint.get_all_class_standings(
+            week_number, quarter, year)
+        return self.json_response(content=class_standings)
