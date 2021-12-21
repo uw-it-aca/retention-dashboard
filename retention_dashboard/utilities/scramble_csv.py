@@ -80,8 +80,8 @@ def get_row(row, headers):
     sport_code = row['sport_code']
 
     return [
-        uw_netid, student_no, student_name_lowc, activity, 
-        assignments, grades, pred, adviser_name, adviser_type, staff_id, 
-        sign_in, stem, incoming_freshman, premajor, eop, international, isso, 
+        uw_netid, student_no, student_name_lowc, activity,
+        assignments, grades, pred, adviser_name, adviser_type, staff_id,
+        sign_in, stem, incoming_freshman, premajor, eop, international, isso,
         campus_code, summer, class_code, sport_code
     ]
