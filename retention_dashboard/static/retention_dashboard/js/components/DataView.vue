@@ -161,9 +161,8 @@
       v-model="currentPage"
       align="right"
       class="pagination-sm"
-      :total-rows="rows"
+      :total-rows="rowCount"
       :per-page="perPage"
-      aria-controls="data_table"
       first-number
       last-number
     />
