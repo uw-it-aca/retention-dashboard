@@ -47,6 +47,8 @@ class DataAuthView(RESTDispatch):
                   name='dispatch')
 class FilteredDataView(RESTDispatch):
     def get(self, request):
+        current_page = int(request.GET.get("current_page"))
+        per_page = int(request.GET.get("per_page"))
         week = request.GET.get("week", None)
         type = request.GET.get("type", None)
         text_filter = request.GET.get("text_filter", None)
@@ -97,11 +99,18 @@ class FilteredDataView(RESTDispatch):
                                 sport_filter=sport_filter,
                                 class_standing_filter=class_standing_filter)
 
+        row_count = len(data_points)
+
+        # paginate
+        page_start = per_page * (current_page - 1)
+        page_end = page_start + per_page
+        data_points = data_points[page_start:page_end]
+
         response_data = []
         try:
             for point in data_points:
                 response_data.append(point.json_data())
-            return self.json_response(content={"count": len(data_points),
+            return self.json_response(content={"count": row_count,
                                                "is_summer": is_summer,
                                                "rows": response_data})
         except TypeError:

@@ -3,7 +3,7 @@
     <b-row class="rd-listactions-container">
       <b-col>
         <p role="alert">
-          Table contains <span class="rd-student-count">{{ selected_count }}</span> students:
+          Table contains <span class="rd-student-count">{{ rowCount }}</span> students:
           <b-link v-b-modal.email-modal class="rd-action-link">
             get e-mail addresses
           </b-link> or
@@ -34,9 +34,8 @@
         v-model="currentPage"
         align="right"
         class="pagination-sm"
-        :total-rows="rows"
+        :total-rows="rowCount"
         :per-page="perPage"
-        aria-controls="data_table"
         first-number
         last-number
       />
@@ -49,8 +48,6 @@
       :busy="isBusy"
       :items="items"
       :fields="fields"
-      :per-page="perPage"
-      :current-page="currentPage"
       :sort-compare="customSorting"
       sort-icon-left
     >
@@ -232,6 +229,7 @@
         csv_data: "",
         perPage: 50,
         currentPage: 1,
+        rowCount: 0,
         selected: {},
         low_min: -5,
         low_max: -3,
@@ -293,9 +291,6 @@
       filename (){
         return this.$store.state.current_file;
       },
-      rows (){
-        return this.items.length;
-      },
       selected_count (){
         return this.items.length;
       },
@@ -347,6 +342,8 @@
         if(this.sport_filter){
           params['sport_filter'] = this.sport_filter;
         }
+        params['current_page'] = this.currentPage;
+        params['per_page'] = this.perPage;
         return params;
       },
       filter_trigger () {
@@ -365,7 +362,9 @@
           this.summer_filter +
           this.signins_filter +
           this.class_standing_filter +
-          this.sport_filter
+          this.sport_filter +
+          this.currentPage + 
+          this.perPage
         );
       },
       ...Vuex.mapState({
@@ -478,6 +477,7 @@
             vue.isBusy = false;
             vue.csv_data = response.data.rows;
             vue.is_summer = response.data.is_summer;
+            vue.rowCount = response.data.count;
           }
         }).catch(() => {
           vue.isBusy = false;
