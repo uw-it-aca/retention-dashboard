@@ -62,7 +62,8 @@ def create_initial_data():
         upload=upload,
         advisor=a1,
         is_stem=False,
-        signin_score=2.1)
+        signin_score=2.1,
+        class_code="1")
     dp1.sports.set([sport1, sport3])
     dp1.save()
 
@@ -80,7 +81,8 @@ def create_initial_data():
         upload=upload,
         advisor=a2,
         is_stem=True,
-        signin_score=-2.)
+        signin_score=-2.,
+        class_code="1")
     dp2.sports.set([sport2])
     dp2.save()
 
@@ -98,7 +100,8 @@ def create_initial_data():
         upload=upload,
         advisor=a2,
         is_stem=False,
-        signin_score=3.1)
+        signin_score=3.1,
+        class_code="1")
     dp3.sports.set([sport3])
 
     dp4 = DataPoint.objects.create(
@@ -114,7 +117,8 @@ def create_initial_data():
         grade_score=-3,
         upload=upload,
         is_stem=False,
-        signin_score=2.1)
+        signin_score=2.1,
+        class_code="2")
     dp4.sports.set([sport4])
     dp4.save()
 
@@ -132,7 +136,8 @@ def create_initial_data():
         upload=upload,
         advisor=a2,
         is_stem=False,
-        signin_score=-4.1)
+        signin_score=-4.1,
+        class_code="3")
     dp5.sports.set([sport5])
     dp5.save()
 
@@ -150,7 +155,8 @@ def create_initial_data():
         upload=upload,
         advisor=a2,
         is_stem=False,
-        signin_score=-4.1)
+        signin_score=-4.1,
+        class_code="3")
     dp6.sports.set([sport6])
     dp6.save()
 
@@ -168,7 +174,8 @@ def create_initial_data():
         upload=upload,
         advisor=a2,
         is_stem=False,
-        signin_score=-4.1)
+        signin_score=-4.1,
+        class_code="4")
     dp7.sports.set([sport7])
     dp7.save()
 
@@ -186,7 +193,8 @@ def create_initial_data():
         upload=upload,
         advisor=a3,
         is_stem=False,
-        signin_score=2.1)
+        signin_score=2.1,
+        class_code="4")
     dp8.sports.set([sport8])
     dp8.save()
 
@@ -204,7 +212,8 @@ def create_initial_data():
         upload=upload,
         advisor=a6,
         is_stem=False,
-        signin_score=3.2)
+        signin_score=3.2,
+        class_code="4")
     dp9.sports.set([sport9])
     dp9.save()
 
@@ -222,7 +231,8 @@ def create_initial_data():
         upload=upload,
         advisor=a6,
         is_stem=False,
-        signin_score=3.8)
+        signin_score=3.8,
+        class_code="8")
     dp10.sports.set([sport10])
     dp10.save()
 
@@ -240,6 +250,7 @@ def create_initial_data():
         upload=upload,
         advisor=a7,
         is_stem=False,
-        signin_score=4.5)
+        signin_score=4.5,
+        class_code="8")
     dp11.sports.set([sport11])
     dp11.save()
