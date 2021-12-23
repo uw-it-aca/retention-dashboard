@@ -256,6 +256,7 @@
             "is_iss",
             "is_eop",
             "is_international",
+            "is_athlete",
             "campus_code",
             "class_desc"
           ],
