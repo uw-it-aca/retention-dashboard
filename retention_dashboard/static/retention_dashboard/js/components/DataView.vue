@@ -49,7 +49,9 @@
       :busy="isBusy"
       :items="items"
       :fields="fields"
-      :sort-compare="customSorting"
+      :no-local-sorting="true"
+      :sort-by.sync="sortBy"
+      :sort-desc.sync="sortDesc"
       sort-icon-left
     >
       <template v-slot:head(priority_score)="data">
@@ -229,6 +231,8 @@
         isDownloading: false,
         perPage: 50,
         currentPage: 1,
+        sortBy: "student_name",
+        sortDesc: false,
         rowCount: 0,
         selected: {},
         low_min: -5,
@@ -351,6 +355,8 @@
         }
         params['current_page'] = this.currentPage;
         params['per_page'] = this.perPage;
+        params['sort_by'] = this.sortBy;
+        params['sort_desc'] = this.sortDesc;
         return params;
       },
       ...Vuex.mapState({
