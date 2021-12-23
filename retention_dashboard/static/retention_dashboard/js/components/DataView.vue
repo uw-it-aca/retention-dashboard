@@ -10,6 +10,7 @@
           <b-link id="csv_download" class="rd-action-link" @click="get_csv_file">
             download results
           </b-link>
+          <b-spinner v-show="isDownloading" label="Spinning" small />
         </p>
         <b-modal id="email-modal" title="Copy E-Mail Addresses" ok-title="Done" ok-only>
           <div class="container rd-copy-email">
@@ -225,6 +226,7 @@
         ],
         items: [],
         isBusy: false,
+        isDownloading: false,
         perPage: 50,
         currentPage: 1,
         rowCount: 0,
@@ -429,7 +431,6 @@
       },
       get_csv_file() {
         var vue = this;
-
         // remove pagination to download all data
         let csv_filter_params = this.filter_params;
         delete csv_filter_params['per_page'];
@@ -445,8 +446,8 @@
         csv_string += "\n";
 
         // Data
+        this.isDownloading = true;
         this.download_data(csv_filter_params).then(function(response){
-          console.log(response.data.rows);
           vue.format_data(response.data.rows).forEach(function(item){
             var row_string = "";
             fields.forEach(function(field){
@@ -462,6 +463,9 @@
             });
             //remove trailing comma
             csv_string += row_string.slice(0, -1) + "\n";
+            vue.isDownloading = false;
+          }).catch(() => {
+            vue.isDownloading = false;
           });
           hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv_string);
           hiddenElement.target = '_blank';
