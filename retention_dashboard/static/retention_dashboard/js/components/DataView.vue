@@ -257,7 +257,7 @@
             "is_eop",
             "is_international",
             "campus_code",
-            "campus_desc"
+            "class_desc"
           ],
         }
       };
