@@ -464,13 +464,13 @@
             //remove trailing comma
             csv_string += row_string.slice(0, -1) + "\n";
             vue.isDownloading = false;
-          }).catch(() => {
-            vue.isDownloading = false;
-          });
+          })
           hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv_string);
           hiddenElement.target = '_blank';
           hiddenElement.download = 'rentention_export_'+timestamp+'.csv';
           hiddenElement.click();
+        }).catch(() => {
+          vue.isDownloading = false;
         });
       },
       get_rounded(num_string){
