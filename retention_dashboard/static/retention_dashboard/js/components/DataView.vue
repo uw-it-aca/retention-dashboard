@@ -7,7 +7,7 @@
           <b-link v-b-modal.email-modal class="rd-action-link">
             get e-mail addresses
           </b-link> or
-          <b-link id="csv_download" class="rd-action-link" @click="download_filtered">
+          <b-link id="csv_download" class="rd-action-link" @click="get_csv_file">
             download results
           </b-link>
         </p>
@@ -225,7 +225,6 @@
         ],
         items: [],
         isBusy: false,
-        csv_data: "",
         perPage: 50,
         currentPage: 1,
         rowCount: 0,
@@ -244,15 +243,21 @@
             "student_first_name",
             "student_number",
             "netid",
+            "advisor_name",
+            "advisor_netid",
             "activity_score",
             "assignment_score",
             "grade_score",
+            "signin_score",
             "priority_score",
-            "advisor_name",
-            "advisor_netid",
             "summer_term_string",
             "is_stem",
-            "signin_score"
+            "is_premajor",
+            "is_iss",
+            "is_eop",
+            "is_international",
+            "campus_code",
+            "campus_desc"
           ],
         }
       };
@@ -345,27 +350,6 @@
         params['per_page'] = this.perPage;
         return params;
       },
-      filter_trigger () {
-        return ("" +
-          this.assignment_filter +
-          this.grade_filter +
-          this.activity_filter +
-          this.prediction_filter +
-          this.premajor_filter +
-          this.stem_filter +
-          this.freshman_filter +
-          this.keyword_filter +
-          this.advisor_filter +
-          this.current_week +
-          this.current_file +
-          this.summer_filter +
-          this.signins_filter +
-          this.class_standing_filter +
-          this.sport_filter +
-          this.currentPage + 
-          this.perPage
-        );
-      },
       ...Vuex.mapState({
         current_week: state => state.dataselect.current_week,
         current_file: state => state.dataselect.current_file,
@@ -386,20 +370,9 @@
       })
     },
     watch: {
-      csv_data: function (csv){
-        var vue = this;
-        csv.forEach(function(item){
-          item["student_number"] = Number(item["student_number"]);
-          item['priority_score'] = vue.get_rounded(item['priority_score']);
-          item['signin_score'] = vue.get_rounded(item['signin_score']);
-          item['activity_score'] = vue.get_rounded(item['activity_score']);
-          item['assignment_score'] = vue.get_rounded(item['assignment_score']);
-          item['grade_score'] = vue.get_rounded(item['grade_score']);
-        });
-        this.items = csv;
-      },
-      filter_trigger: function () {
-        this.run_filters();
+      filter_params: function () {
+        if (this.current_file && this.current_week)
+          this.get_page();
       },
     },
     methods: {
@@ -419,9 +392,49 @@
         });
         return emails;
       },
-      download_filtered() {
-        var to_download = this.items,
-            hiddenElement = document.createElement('a'),
+      format_data(rows) {
+        var vue = this;
+        rows.forEach(function(item){
+          item["student_number"] = Number(item["student_number"]);
+          item['priority_score'] = vue.get_rounded(item['priority_score']);
+          item['signin_score'] = vue.get_rounded(item['signin_score']);
+          item['activity_score'] = vue.get_rounded(item['activity_score']);
+          item['assignment_score'] = vue.get_rounded(item['assignment_score']);
+          item['grade_score'] = vue.get_rounded(item['grade_score']);
+        });
+        return rows;
+      },
+      download_data(downloadParams) {
+        return axios({
+          method: 'get',
+          url: "/api/v1/filtered_data/",
+          paramsSerializer: function (params) {
+            return qs.stringify(params, {arrayFormat: 'repeat'});
+          },
+          params: downloadParams,
+        })
+      },
+      get_page(){
+        var vue = this;
+        this.isBusy = true;
+        this.download_data(this.filter_params).then(function(response){
+          vue.isBusy = false;
+          vue.is_summer = response.data.is_summer;
+          vue.rowCount = response.data.count;
+          vue.items = vue.format_data(response.data.rows);
+        }).catch(() => {
+          vue.isBusy = false;
+        });
+      },
+      get_csv_file() {
+        var vue = this;
+
+        // remove pagination to download all data
+        let csv_filter_params = this.filter_params;
+        delete csv_filter_params['per_page'];
+        delete csv_filter_params['current_page'];
+
+        var hiddenElement = document.createElement('a'),
             timestamp = Math.round(Date.now()/1000),
             csv_string = "";
 
@@ -429,58 +442,30 @@
         var fields = this.download_fields;
         csv_string += fields.join(",");
         csv_string += "\n";
+
         // Data
-        to_download.forEach(function(item){
-
-          var row_string = "";
-          fields.forEach(function(field){
-            if (item[field] === null || item[field] === -99 ) {
-              row_string += "NA,";
-            } else if (field === "summer_term_string") {
-              var term_string = item[field].replace(/ /g,'');
-              term_string = term_string.replace(/,/g,'-');
-              row_string += term_string + ",";
-            } else {
-              row_string += JSON.stringify(item[field]) + ",";
-            }
+        this.download_data(csv_filter_params).then(function(response){
+          console.log(response.data.rows);
+          vue.format_data(response.data.rows).forEach(function(item){
+            var row_string = "";
+            fields.forEach(function(field){
+              if (item[field] === null || item[field] === -99 ) {
+                row_string += "NA,";
+              } else if (field === "summer_term_string") {
+                var term_string = item[field].replace(/ /g,'');
+                term_string = term_string.replace(/,/g,'-');
+                row_string += term_string + ",";
+              } else {
+                row_string += JSON.stringify(item[field]) + ",";
+              }
+            });
+            //remove trailing comma
+            csv_string += row_string.slice(0, -1) + "\n";
           });
-          //remove trailing comma
-          csv_string += row_string.slice(0, -1) + "\n";
-        });
-
-        hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv_string);
-        hiddenElement.target = '_blank';
-        hiddenElement.download = 'rentention_export_'+timestamp+'.csv';
-        hiddenElement.click();
-      },
-      run_filters(){
-        var vue = this,
-            query_token = Date.now();
-        this.request_id = query_token;
-        if(this.current_file &&
-          this.current_file.length < 1 || this.current_week.length < 1){
-          // don't fire ajax unless week and type are set
-          return;
-        }
-        this.isBusy = true;
-
-        axios({
-          method: 'get',
-          url: "/api/v1/filtered_data/",
-          paramsSerializer: function (params) {
-            return qs.stringify(params, {arrayFormat: 'repeat'});
-          },
-          params: this.filter_params,
-        }).then(function(response){
-          if(query_token === vue.request_id){
-            vue.isBusy = false;
-            vue.csv_data = response.data.rows;
-            vue.is_summer = response.data.is_summer;
-            vue.rowCount = response.data.count;
-          }
-        }).catch(() => {
-          vue.isBusy = false;
-          vue.csv_data = [];
+          hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv_string);
+          hiddenElement.target = '_blank';
+          hiddenElement.download = 'rentention_export_'+timestamp+'.csv';
+          hiddenElement.click();
         });
       },
       get_rounded(num_string){
@@ -569,8 +554,6 @@
   .aat-processing-text {
     color: $uw-purple !important;
   }
-
-
 
   /* Prediction scores */
   .rd-pred-score {

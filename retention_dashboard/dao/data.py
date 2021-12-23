@@ -21,8 +21,8 @@ class FilterDataDao():
                           priority_filters=None, premajor_filter=None,
                           text_filter=None, advisor_filter=None,
                           summer_filters=None, stem_filter=None,
-                          freshman_filter=None,  signins_filters=None,
-                          sport_filter=None, class_standing_filter=None):
+                          signins_filters=None, sport_filter=None,
+                          class_standing_filter=None):
         dataset = DataPoint.get_data_by_type_week(type, week)
         if grade_filters:
             dataset = DataPoint.filter_by_ranges(dataset,
@@ -48,8 +48,6 @@ class FilterDataDao():
             dataset = DataPoint.filter_by_premajor(dataset, premajor_filter)
         if stem_filter:
             dataset = DataPoint.filter_by_stem(dataset, stem_filter)
-        if freshman_filter:
-            dataset = DataPoint.filter_by_freshman(dataset, freshman_filter)
 
         if text_filter:
             dataset = DataPoint.filter_by_text(dataset, text_filter)

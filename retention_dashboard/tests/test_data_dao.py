@@ -69,12 +69,6 @@ class TestFilterDataDao(TestCase):
         data = dao.get_filtered_data("Premajor", self.week, stem_filter=True)
         self.assertEqual(len(data), 1)
 
-    def test_freshman_filter(self):
-        dao = FilterDataDao()
-        data = dao.get_filtered_data("Premajor", self.week,
-                                     freshman_filter=True)
-        self.assertEqual(len(data), 4)
-
     def test_signins_filter(self):
         dao = FilterDataDao()
         data = dao.get_filtered_data("Premajor", self.week,
