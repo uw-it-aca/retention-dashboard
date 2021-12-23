@@ -105,15 +105,15 @@
         <span>{{ row.item.student_last_name }}, {{ row.item.student_first_name }}</span>
         <div class="rd-student-meta">
           {{ row.item.netid }}
-         <div>
-          <small>
-            <b-badge variant="light">{{ row.item.class_desc }}</b-badge>
-            <b-badge variant="light" v-if="row.item.is_eop">EOP</b-badge>
-            <b-badge variant="light" v-if="row.item.is_international">International</b-badge>
-            <b-badge variant="light" v-if="row.item.is_stem">Stem</b-badge>
-            <b-badge variant="light" v-if="row.item.is_athlete">Athlete</b-badge>
-          </small>
-         </div>
+          <div>
+            <small>
+              <b-badge variant="light">{{ row.item.class_desc }}</b-badge>
+              <b-badge v-if="row.item.is_eop" variant="light">EOP</b-badge>
+              <b-badge v-if="row.item.is_international" variant="light">International</b-badge>
+              <b-badge v-if="row.item.is_stem" variant="light">Stem</b-badge>
+              <b-badge v-if="row.item.is_athlete" variant="light">Athlete</b-badge>
+            </small>
+          </div>
         </div>
         <div v-if="is_summer" class="rd-student-meta rd-italic">
           {{ row.item.summer_term_string }}
@@ -412,7 +412,7 @@
             return qs.stringify(params, {arrayFormat: 'repeat'});
           },
           params: downloadParams,
-        })
+        });
       },
       get_page(){
         var vue = this;
