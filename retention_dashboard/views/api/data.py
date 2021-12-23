@@ -49,6 +49,8 @@ class FilteredDataView(RESTDispatch):
     def get(self, request):
         current_page = request.GET.get("current_page", None)
         per_page = request.GET.get("per_page", None)
+        sort_by = request.GET.get("sort_by", None)
+        sort_desc = request.GET.get("sort_desc", None)
         week = request.GET.get("week", None)
         type = request.GET.get("type", None)
         text_filter = request.GET.get("text_filter", None)
@@ -67,6 +69,8 @@ class FilteredDataView(RESTDispatch):
             premajor_filter = True
         if stem_filter == "true":
             stem_filter = True
+        if sort_desc == "true":
+            sort_desc = True
 
         if week is None or type is None:
             return self.error_response(status=400)
@@ -97,6 +101,11 @@ class FilteredDataView(RESTDispatch):
 
         row_count = len(data_points)
 
+        # sort in code since the django doesn't support sorting by properties
+        if sort_by and sort_desc:
+            sort_column = f"-{sort_by}" if sort_desc is True else sort_by
+            data_points = data_points.order_by(sort_column)
+
         # paginate
         if per_page and current_page:
             per_page = int(per_page)
@@ -106,9 +115,10 @@ class FilteredDataView(RESTDispatch):
             data_points = data_points[page_start:page_end]
 
         response_data = []
+        for point in data_points:
+            response_data.append(point.json_data())
+
         try:
-            for point in data_points:
-                response_data.append(point.json_data())
             return self.json_response(content={"count": row_count,
                                                "is_summer": is_summer,
                                                "rows": response_data})
