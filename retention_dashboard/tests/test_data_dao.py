@@ -69,12 +69,6 @@ class TestFilterDataDao(TestCase):
         data = dao.get_filtered_data("Premajor", self.week, stem_filter=True)
         self.assertEqual(len(data), 1)
 
-    def test_freshman_filter(self):
-        dao = FilterDataDao()
-        data = dao.get_filtered_data("Premajor", self.week,
-                                     freshman_filter=True)
-        self.assertEqual(len(data), 4)
-
     def test_signins_filter(self):
         dao = FilterDataDao()
         data = dao.get_filtered_data("Premajor", self.week,
@@ -83,6 +77,39 @@ class TestFilterDataDao(TestCase):
         data = dao.get_filtered_data("Premajor", self.week,
                                      signins_filters=["avg"])
         self.assertEqual(len(data), 3)
+
+    def test_class_standing_filter(self):
+        dao = FilterDataDao()
+        data = dao.get_filtered_data("Premajor", self.week,
+                                     class_standing_filter="1")
+        self.assertEqual(len(data), 3)
+        data = dao.get_filtered_data("Premajor", self.week,
+                                     class_standing_filter="2")
+        self.assertEqual(len(data), 1)
+        data = dao.get_filtered_data("Premajor", self.week,
+                                     class_standing_filter="3")
+        self.assertEqual(len(data), 1)
+        data = dao.get_filtered_data("Premajor", self.week,
+                                     class_standing_filter="4")
+        self.assertEqual(len(data), 0)
+        data = dao.get_filtered_data("EOP", self.week,
+                                     class_standing_filter="4")
+        self.assertEqual(len(data), 1)
+        data = dao.get_filtered_data("International", self.week,
+                                     class_standing_filter="4")
+        self.assertEqual(len(data), 1)
+        data = dao.get_filtered_data("ISS", self.week,
+                                     class_standing_filter="4")
+        self.assertEqual(len(data), 1)
+        data = dao.get_filtered_data("ISS", self.week,
+                                     class_standing_filter="8")
+        self.assertEqual(len(data), 1)
+        data = dao.get_filtered_data("Tacoma", self.week,
+                                     class_standing_filter="8")
+        self.assertEqual(len(data), 1)
+        data = dao.get_filtered_data("Athletics", self.week,
+                                     class_standing_filter="8")
+        self.assertEqual(len(data), 0)
 
     def test_get_advisors(self):
         advisors = Advisor.get_all_advisors()

@@ -199,7 +199,6 @@ class DataPoint(models.Model):
     iss = models.BooleanField(default=False)
     international = models.BooleanField(default=False)
     is_stem = models.BooleanField(default=False)
-    is_freshman = models.BooleanField(default=False)
     priority_score = models.FloatField(null=True)
     activity_score = models.FloatField(null=True)
     assignment_score = models.FloatField(null=True)
@@ -301,10 +300,6 @@ class DataPoint(models.Model):
         return data_queryset.filter(premajor=is_premajor)
 
     @staticmethod
-    def filter_by_freshman(data_queryset, is_freshman):
-        return data_queryset.filter(is_freshman=is_freshman)
-
-    @staticmethod
     def filter_by_stem(data_queryset, is_stem):
         return data_queryset.filter(is_stem=is_stem)
 
@@ -366,7 +361,6 @@ class DataPoint(models.Model):
                 "is_eop": self.eop,
                 "is_iss": self.iss,
                 "is_international": self.international,
-                "is_freshman": self.is_freshman,
                 "is_stem": self.is_stem,
                 "is_athlete": self.sports.exists(),
                 "summer_term_string": self.get_summer_string(),
