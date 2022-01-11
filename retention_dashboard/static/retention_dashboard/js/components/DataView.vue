@@ -277,7 +277,6 @@
             item => !(item.key == "advisor_name"));
         } else if (this.current_file == "Premajor" ||
           this.current_file == "International" ||
-          this.current_file == "ISS" ||
           this.current_file == "Tacoma") {
           fields = this.standard_fields.filter(
             item => !(item.key == "priority_score") &&
