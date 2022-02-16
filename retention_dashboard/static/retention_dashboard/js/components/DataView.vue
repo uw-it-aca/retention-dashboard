@@ -306,7 +306,7 @@
       },
       email_list_text () {
         var selected = this.get_filtered_emails();
-        return selected.join(", ");
+        return selected.join("; ");
       },
       filter_params () {
         const params = {};
