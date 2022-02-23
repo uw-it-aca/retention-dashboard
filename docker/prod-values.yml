@@ -60,10 +60,12 @@ externalSecrets:
           property: django-secret
         - name: storage-bucket-name
           property: storage-bucket-name
-        - name: storage-project-id
-          property: storage-project-id
         - name: ga-key
           property: ga-key
+    - name: retention.uw.edu-shared-secrets
+      externalKey: axdd/kv/data/retention/shared/secrets
+        - name: storage-project-id
+          property: storage-project-id
     - name: retention.uw.edu-sql-secrets
       externalKey: axdd/kv/data/retention/prod/sql-secrets
       data:
@@ -126,7 +128,7 @@ environmentVariablesSecrets:
     secretKey: storage-bucket-name
   storageProjectId:
     name: STORAGE_PROJECT_ID
-    secretName: retention.uw.edu-secrets
+    secretName: retention.uw.edu-shared-secrets
     secretKey: storage-project-id
   samlSPCert:
     name: SP_CERT

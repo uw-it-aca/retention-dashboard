@@ -39,7 +39,7 @@ TEMPLATES = [
     }
 ]
 
-if os.getenv("ENV") == "localdev":
+if os.getenv('ENV') == 'localdev':
     DEBUG = True
     ALLOWED_USERS_GROUP = 'u_test_group'
     ADMIN_USERS_GROUP = ALLOWED_USERS_GROUP
@@ -58,12 +58,12 @@ if os.getenv("ENV") == "localdev":
         'isMemberOf': ['u_test_group', 'u_admin_group'],
     }
     DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
-    MEDIA_ROOT = os.getenv('IMPORT_DATA_ROOT', '/app/data')
+    MEDIA_ROOT = os.getenv('MEDIA_ROOT', '/app/rad_data')
 else:
     DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
     GS_PROJECT_ID = os.getenv('STORAGE_PROJECT_ID', '')
     GS_BUCKET_NAME = os.getenv('STORAGE_BUCKET_NAME', '')
-    GS_LOCATION = os.path.join(os.getenv('IMPORT_DATA_ROOT', ''))
+    GS_LOCATION = os.getenv('STORAGE_LOCATION', 'rad_data')
     GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
         '/gcs/credentials.json')
 
@@ -76,8 +76,7 @@ else:
         ISS_USERS_GROUP = "u_acadev_retention-prod-iss"
         TACOMA_USERS_GROUP = "u_acadev_retention-prod-tacoma"
         ATHLETIC_USERS_GROUP = "u_acadev_retention-prod-athletic"
-        #RAD_DATA_BUCKET_NAME = 'canvas-analytics'
-    elif os.getenv('ENV') == 'eval':
+    else:
         ALLOWED_USERS_GROUP = 'u_acadev_retention-test'
         # ADMIN_USERS_GROUP = 'u_acadev_retention-test-admin'
         ADMIN_USERS_GROUP = ALLOWED_USERS_GROUP
@@ -87,5 +86,5 @@ else:
         ISS_USERS_GROUP = ALLOWED_USERS_GROUP
         TACOMA_USERS_GROUP = ALLOWED_USERS_GROUP
         ATHLETIC_USERS_GROUP = ALLOWED_USERS_GROUP
-        #RAD_DATA_BUCKET_NAME = 'canvas-analytics-test'
+
     GA_KEY = os.getenv("GA_KEY")
