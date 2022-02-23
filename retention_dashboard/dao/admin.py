@@ -31,7 +31,7 @@ def get_term_and_week_from_filename(rad_file_name):
 
 
 class StorageDao():
-    def get_files_list(self, path="rad_data/"):
+    def get_files_list(self, path=''):
         """
         Returns list of file names at the given path.
 
