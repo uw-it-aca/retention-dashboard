@@ -7,7 +7,7 @@ from uw_saml.utils import get_user
 from uw_saml.decorators import group_required
 from django.conf import settings
 from django.utils.decorators import method_decorator
-from retention_dashboard.views.api.forms import GCSForm, LocalDataForm
+from retention_dashboard.views.api.forms import StorageForm, LocalDataForm
 
 
 class PageView(TemplateView):
@@ -37,5 +37,5 @@ class AdminView(PageView):
         context = {}
         context['debug'] = settings.DEBUG
         context['localdataform'] = LocalDataForm()
-        context['gcsform'] = GCSForm()
+        context['gcsform'] = StorageForm()
         return context

@@ -10,8 +10,8 @@ from uw_saml.decorators import group_required
 from userservice.user import get_original_user
 from retention_dashboard.models import Week, Upload
 from retention_dashboard.views.api import RESTDispatch
-from retention_dashboard.views.api.forms import GCSForm, LocalDataForm
-from retention_dashboard.dao.admin import GCSDataDao, UploadDataDao
+from retention_dashboard.views.api.forms import StorageForm, LocalDataForm
+from retention_dashboard.dao.admin import StorageDao, UploadDataDao
 
 
 @method_decorator(group_required(settings.ADMIN_USERS_GROUP),
@@ -84,15 +84,16 @@ class LocalDataAdmin(RESTDispatch):
 @method_decorator(group_required(settings.ADMIN_USERS_GROUP),
                   name='dispatch')
 @method_decorator(csrf_exempt, name='dispatch')
-class GCSDataAdmin(RESTDispatch):
+class StorageDataAdmin(RESTDispatch):
 
     def post(self, request):
-        form = GCSForm(request.POST, request.FILES)
+        form = StorageForm(request.POST, request.FILES)
         if form.is_valid():
             try:
                 rad_file_name = request.POST.get("gcs_file")
-                gcs_dao = GCSDataDao()
-                rad_document = gcs_dao.download_from_gcs_bucket(rad_file_name)
+                storage_dao = StorageDao()
+                rad_document = storage_dao.download_from_bucket(
+                    rad_file_name)
                 user = get_original_user(request)
                 UploadDataDao().process_rad_upload(
                                             rad_file_name, rad_document, user)

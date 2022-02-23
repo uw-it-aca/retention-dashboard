@@ -1,4 +1,4 @@
-FROM gcr.io/uwit-mci-axdd/django-container:1.3.0 as app-prewebpack-container
+FROM gcr.io/uwit-mci-axdd/django-container:1.3.8 as app-prewebpack-container
 
 USER root
 
@@ -11,8 +11,6 @@ ADD --chown=acait:acait setup.py /app/
 ADD --chown=acait:acait requirements.txt /app/
 
 RUN . /app/bin/activate && pip install -r requirements.txt
-RUN . /app/bin/activate && pip install psycopg2
-RUN . /app/bin/activate && pip install django-webpack-loader
 
 ADD --chown=acait:acait . /app/
 ADD --chown=acait:acait docker/ project/
@@ -29,7 +27,7 @@ COPY --chown=acait:acait --from=wpack /app/retention_dashboard/static/retention_
 COPY --chown=acait:acait --from=wpack /app/retention_dashboard/static/ /static/
 COPY --chown=acait:acait --from=wpack /app/retention_dashboard/static/webpack-stats.json /app/retention_dashboard/static/webpack-stats.json
 
-FROM gcr.io/uwit-mci-axdd/django-test-container:1.3.0 as app-test-container
+FROM gcr.io/uwit-mci-axdd/django-test-container:1.3.8 as app-test-container
 
 COPY --from=app-container /app/ /app/
 COPY --from=app-container /static/ /static/
