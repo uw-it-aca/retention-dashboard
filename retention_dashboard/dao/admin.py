@@ -75,7 +75,7 @@ class StorageDao():
         """
         with default_storage.open(url_key, mode='r') as f:
             content = f.read()
-            return content.decode('utf-8')
+            return content
 
 
 class UploadDataDao():
