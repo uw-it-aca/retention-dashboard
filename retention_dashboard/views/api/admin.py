@@ -96,7 +96,7 @@ class StorageDataAdmin(RESTDispatch):
                     rad_file_name)
                 user = get_original_user(request)
                 UploadDataDao().process_rad_upload(
-                                            rad_file_name, rad_document, user)
+                    rad_file_name, rad_document, user)
             except ValueError as err:
                 return self.error_response(
                     status=400,

@@ -3,7 +3,6 @@
 
 import csv
 import logging
-from io import StringIO
 from retention_dashboard.models import (
     Week, DataPoint, Advisor, Upload, UploadTypes, Sport)
 from django.conf import settings
@@ -129,8 +128,7 @@ class UploadDataDao():
         return upload_types
 
     def parse_rad_document(self, rad_document):
-        reader = csv.DictReader(StringIO(rad_document),
-                                delimiter=',')
+        reader = csv.DictReader(rad_document.splitlines())
 
         advisor_dict = {}
         record_by_upload = {}
