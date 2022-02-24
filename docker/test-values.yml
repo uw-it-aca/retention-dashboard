@@ -60,6 +60,7 @@ externalSecrets:
           property: ga-key
     - name: test.retention.uw.edu-shared-secrets
       externalKey: axdd/kv/data/retention/shared/secrets
+      data:
         - name: storage-project-id
           property: storage-project-id
     - name: test.retention.uw.edu-sql-secrets
