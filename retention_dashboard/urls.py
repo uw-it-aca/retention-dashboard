@@ -5,7 +5,7 @@ from django.urls import re_path
 from retention_dashboard.views.pages import LandingView, AdminView
 from retention_dashboard.views.api.admin import (MockDataAdmin,
                                                  LocalDataAdmin,
-                                                 GCSDataAdmin,
+                                                 StorageDataAdmin,
                                                  WeekAdmin,
                                                  WeekListAdmin,
                                                  UploadListAdmin)
@@ -37,8 +37,8 @@ urlpatterns = [
             MockDataAdmin.as_view(),
             name="mocK_admin_view"),
     re_path(r'^api/admin/gcs_data/$',
-            GCSDataAdmin.as_view(),
-            name="gcs_data_admin_view"),
+            StorageDataAdmin.as_view(),
+            name="storage_data_admin_view"),
     re_path(r'^api/admin/dataset/(?P<upload_id>[0-9]+)/',
             LocalDataAdmin.as_view(),
             name="dataset_admin_delete_view"),

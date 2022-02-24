@@ -1,8 +1,10 @@
 from .base_settings import *
+from google.oauth2 import service_account
+import os
 
 INSTALLED_APPS += [
+    'retention_dashboard.apps.RetentionDashboardConfig',
     'webpack_loader',
-    'retention_dashboard',
     'userservice'
 ]
 
@@ -36,28 +38,8 @@ TEMPLATES = [
         }
     }
 ]
-if os.getenv('ENV') == 'prod':
-    ALLOWED_USERS_GROUP = 'u_acadev_retention-prod'
-    ADMIN_USERS_GROUP = 'u_acadev_retention-prod-admin'
-    PREMAJOR_USERS_GROUP = "u_acadev_retention-prod-premajor"
-    EOP_USERS_GROUP = "u_acadev_retention-prod-eop"
-    INTERNATIONAL_USERS_GROUP = "u_acadev_retention-prod-international"
-    ISS_USERS_GROUP = "u_acadev_retention-prod-iss"
-    TACOMA_USERS_GROUP = "u_acadev_retention-prod-tacoma"
-    ATHLETIC_USERS_GROUP = "u_acadev_retention-prod-athletic"
-    RAD_DATA_BUCKET_NAME = 'canvas-analytics'
-elif os.getenv('ENV') == 'eval':
-    ALLOWED_USERS_GROUP = 'u_acadev_retention-test'
-    # ADMIN_USERS_GROUP = 'u_acadev_retention-test-admin'
-    ADMIN_USERS_GROUP = ALLOWED_USERS_GROUP
-    PREMAJOR_USERS_GROUP = ALLOWED_USERS_GROUP
-    EOP_USERS_GROUP = ALLOWED_USERS_GROUP
-    INTERNATIONAL_USERS_GROUP = ALLOWED_USERS_GROUP
-    ISS_USERS_GROUP = ALLOWED_USERS_GROUP
-    TACOMA_USERS_GROUP = ALLOWED_USERS_GROUP
-    ATHLETIC_USERS_GROUP = ALLOWED_USERS_GROUP
-    RAD_DATA_BUCKET_NAME = 'canvas-analytics-test'
-elif os.getenv("ENV") == "localdev":
+
+if os.getenv('ENV') == 'localdev':
     DEBUG = True
     ALLOWED_USERS_GROUP = 'u_test_group'
     ADMIN_USERS_GROUP = ALLOWED_USERS_GROUP
@@ -75,4 +57,34 @@ elif os.getenv("ENV") == "localdev":
                                'member@washington.edu'],
         'isMemberOf': ['u_test_group', 'u_admin_group'],
     }
-GA_KEY = os.getenv("GA_KEY")
+    DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
+    MEDIA_ROOT = os.getenv('MEDIA_ROOT', '/app/rad_data')
+else:
+    DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+    GS_PROJECT_ID = os.getenv('STORAGE_PROJECT_ID', '')
+    GS_BUCKET_NAME = os.getenv('STORAGE_BUCKET_NAME', '')
+    GS_LOCATION = os.getenv('STORAGE_LOCATION', 'rad_data')
+    GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
+        '/gcs/credentials.json')
+
+    if os.getenv('ENV') == 'prod':
+        ALLOWED_USERS_GROUP = 'u_acadev_retention-prod'
+        ADMIN_USERS_GROUP = 'u_acadev_retention-prod-admin'
+        PREMAJOR_USERS_GROUP = "u_acadev_retention-prod-premajor"
+        EOP_USERS_GROUP = "u_acadev_retention-prod-eop"
+        INTERNATIONAL_USERS_GROUP = "u_acadev_retention-prod-international"
+        ISS_USERS_GROUP = "u_acadev_retention-prod-iss"
+        TACOMA_USERS_GROUP = "u_acadev_retention-prod-tacoma"
+        ATHLETIC_USERS_GROUP = "u_acadev_retention-prod-athletic"
+    else:
+        ALLOWED_USERS_GROUP = 'u_acadev_retention-test'
+        # ADMIN_USERS_GROUP = 'u_acadev_retention-test-admin'
+        ADMIN_USERS_GROUP = ALLOWED_USERS_GROUP
+        PREMAJOR_USERS_GROUP = ALLOWED_USERS_GROUP
+        EOP_USERS_GROUP = ALLOWED_USERS_GROUP
+        INTERNATIONAL_USERS_GROUP = ALLOWED_USERS_GROUP
+        ISS_USERS_GROUP = ALLOWED_USERS_GROUP
+        TACOMA_USERS_GROUP = ALLOWED_USERS_GROUP
+        ATHLETIC_USERS_GROUP = ALLOWED_USERS_GROUP
+
+    GA_KEY = os.getenv("GA_KEY")

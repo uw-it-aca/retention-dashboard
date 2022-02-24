@@ -4,103 +4,78 @@
 import csv
 import logging
 from io import StringIO
-from retention_dashboard.models import Week, DataPoint, Advisor, Upload, \
-    UploadTypes, Sport
+from retention_dashboard.models import (
+    Week, DataPoint, Advisor, Upload, UploadTypes, Sport)
 from django.conf import settings
 from django.db import transaction
-from google.cloud import storage
-from google.cloud.exceptions import NotFound
+from django.core.files.storage import default_storage
 
 
-class GCSDataDao():
+def get_term_and_week_from_filename(rad_file_name):
+    """
+    Extracts term and week from RAD data file name
 
-    def get_gcs_client(self):
-        return storage.Client()
+    For example:
 
-    def get_gcs_timeout(self):
-        return getattr(settings, "GCS_TIMEOUT", 60)
+    "rad_data/2021-spring-week-10-rad-data.csv" -> "2021-spring", 10
+    """
+    try:
+        if rad_file_name.startswith("rad_data/"):
+            rad_file_name = rad_file_name.split("/")[1]
+        parts = rad_file_name.split("-")
+        term = f"{parts[0]}-{parts[1]}"
+        week = int(parts[3])
+    except IndexError:
+        raise ValueError(f"Unable to parse rad file name: {rad_file_name}")
+    return term, week
 
-    def get_gcs_bucket_name(self):
-        return getattr(settings, "RAD_DATA_BUCKET_NAME", "")
 
-    def get_files_list(self, path="rad_data/"):
+class StorageDao():
+    def get_files_list(self, path=''):
         """
-        Returns list of file names in a GCS bucket at the given path.
+        Returns list of file names at the given path.
 
         :param path: Path to list files at
         :type path: str
         """
-        gcs_client = self.get_gcs_client()
-        gcs_bucket_name = self.get_gcs_bucket_name()
-        bucket = gcs_client.get_bucket(gcs_bucket_name)
-        files = []
-        for blob in gcs_client.list_blobs(bucket, prefix=path):
-            if blob.name.endswith("csv"):
-                files.append(blob.name)
-        logging.debug(f"Found the following GCS bucket files: "
-                      f"{','.join(files)}")
-        return files
+        dirs, files = default_storage.listdir(path)
 
-    def get_latest_gcs_file(self):
+        filenames = []
+        for filename in files:
+            if filename.endswith('csv'):
+                filenames.append(filename)
+
+        logging.debug(f"Found the following bucket files: "
+                      f"{','.join(filenames)}")
+        return filenames
+
+    def get_latest_file(self):
         """
-        Return latest RAD file in GCS bucket
+        Return latest RAD file in bucket
         """
-        gcs_files = self.get_files_list()
         files = []
-        for gcs_file in gcs_files:
-            sis_term_id, week_num = \
-                self.get_term_and_week_from_filename(gcs_file)
+        for filename in self.get_files_list():
+            sis_term_id, week_num = get_term_and_week_from_filename(filename)
             year = sis_term_id.split("-")[0]
             quarter_num = Week.sis_term_to_quarter_number(sis_term_id)
-            file = {"year": year, "quarter_num": quarter_num,
-                    "week_num": week_num, "gcs_file": gcs_file}
-            files.append(file)
+            data = {"year": year, "quarter_num": quarter_num,
+                    "week_num": week_num, "gcs_file": filename}
+            files.append(data)
         files.sort(
                key=lambda i: f"{i['year']}{i['quarter_num']}{i['week_num']}",
                reverse=True)
         return files[0]["gcs_file"]
 
-    def download_from_gcs_bucket(self, url_key):
+    def download_from_bucket(self, url_key):
         """
-        Downloads file a given url_key path from the configured GCS bucket.
+        Downloads file a given url_key path from the configured bucket.
 
         :param url_key: Path of the content to upload
         :type url_key: str
-        :param content: Content to upload
-        :type content: str or file object
         """
-        gcs_client = self.get_gcs_client()
-        gcs_bucket_name = self.get_gcs_bucket_name()
-        bucket = gcs_client.get_bucket(gcs_bucket_name)
-        try:
-            blob = bucket.get_blob(
-                url_key,
-                timeout=self.get_gcs_timeout())
-            content = blob.download_as_string(
-                timeout=self.get_gcs_timeout())
-            if content:
-                return content.decode('utf-8')
-        except NotFound as ex:
-            logging.error(f"gcp {url_key}: {ex}")
-            raise
-
-    def get_term_and_week_from_filename(self, rad_file_name):
-        """
-        Extracts term and week from RAD data file name
-
-        For example:
-
-        "rad_data/2021-spring-week-10-rad-data.csv" -> "2021-spring", 10
-        """
-        try:
-            if rad_file_name.startswith("rad_data/"):
-                rad_file_name = rad_file_name.split("/")[1]
-            parts = rad_file_name.split("-")
-            term = f"{parts[0]}-{parts[1]}"
-            week = int(parts[3])
-        except IndexError:
-            raise ValueError(f"Unable to parse rad file name: {rad_file_name}")
-        return term, week
+        with default_storage.open(url_key, mode='r') as f:
+            content = f.read()
+            return content
 
 
 class UploadDataDao():
@@ -233,9 +208,8 @@ class UploadDataDao():
 
         if not week:
             # gcs upload
-            dao = GCSDataDao()
-            sis_term_id, week_num = \
-                dao.get_term_and_week_from_filename(rad_file_name)
+            sis_term_id, week_num = get_term_and_week_from_filename(
+                rad_file_name)
             year = int(sis_term_id.split("-")[0])
             quarter = Week.sis_term_to_quarter_number(sis_term_id)
             week, _ = Week.objects.get_or_create(

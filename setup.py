@@ -24,11 +24,9 @@ setup(
     install_requires=[
         'Django~=2.2',
         'UW-Django-SAML2~=1.5',
-        'django-webpack-loader==0.7.0',
+        'django-webpack-loader',
         'django-userservice~=3.1',
-        'google-cloud-storage~=1.37.1',
-        'google-api-core~=1.26.3',
-        'psycopg2>=2.8,<2.9',
+        'django-storages[google]>=1.10',
     ],
     license='Apache License, Version 2.0',
     description='A tool for interacting with retention analytics',
