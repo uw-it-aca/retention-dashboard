@@ -15,7 +15,7 @@ class TestStorageDao(TestCase):
     def test_download_from_bucket(self, mock_open):
         dao = StorageDao()
         content = dao.download_from_bucket("test_url_key")
-        mock_open.assert_called_with("test_url_key", mode="r")
+        mock_open.assert_called_with("test_url_key", mode="rb")
 
     @patch('retention_dashboard.dao.admin.default_storage.listdir')
     def test_get_files_list(self, mock_listdir):
