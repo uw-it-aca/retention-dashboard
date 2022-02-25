@@ -72,9 +72,9 @@ class StorageDao():
         :param url_key: Path of the content to upload
         :type url_key: str
         """
-        with default_storage.open(url_key, mode='r') as f:
+        with default_storage.open(url_key, mode='rb') as f:
             content = f.read()
-            return content
+            return content.decode('utf-8')
 
 
 class UploadDataDao():
