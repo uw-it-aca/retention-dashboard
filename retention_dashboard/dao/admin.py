@@ -5,7 +5,6 @@ import csv
 import logging
 from retention_dashboard.models import (
     Week, DataPoint, Advisor, Upload, UploadTypes, Sport)
-from django.conf import settings
 from django.db import transaction
 from django.core.files.storage import default_storage
 
@@ -112,6 +111,8 @@ class UploadDataDao():
             upload_types.append(UploadTypes.international)
         if bool(int(row.get("isso", 0))) is True:
             upload_types.append(UploadTypes.iss)
+        if bool(int(row.get("engineering", 0))) is True:
+            upload_types.append(UploadTypes.engineering)
         if int(row.get("campus_code", 0)) == 2:
             upload_types.append(UploadTypes.tacoma)
 
@@ -179,6 +180,7 @@ class UploadDataDao():
                 dp.premajor = bool(UploadTypes.premajor in upload_types)
                 dp.eop = bool(UploadTypes.eop in upload_types)
                 dp.iss = bool(UploadTypes.iss in upload_types)
+                dp.engineering = bool(UploadTypes.engineering in upload_types)
                 dp.international = bool(
                     UploadTypes.international in upload_types)
                 if row.get("activity"):

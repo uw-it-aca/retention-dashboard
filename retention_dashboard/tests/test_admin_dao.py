@@ -1,7 +1,6 @@
 # Copyright 2022 UW-IT, University of Washington
 # SPDX-License-Identifier: Apache-2.0
 
-import unittest
 from collections import OrderedDict
 from django.test import TestCase
 from mock import MagicMock, patch
@@ -14,7 +13,7 @@ class TestStorageDao(TestCase):
     @patch('retention_dashboard.dao.admin.default_storage.open')
     def test_download_from_bucket(self, mock_open):
         dao = StorageDao()
-        content = dao.download_from_bucket("test_url_key")
+        dao.download_from_bucket("test_url_key")
         mock_open.assert_called_with("test_url_key", mode="rb")
 
     @patch('retention_dashboard.dao.admin.default_storage.listdir')

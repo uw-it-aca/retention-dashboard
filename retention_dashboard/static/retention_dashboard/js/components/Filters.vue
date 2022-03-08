@@ -308,7 +308,9 @@
       },
       show_pred () {
         return (this.current_file === "EOP" ||
-          this.current_file == "ISS" || this.current_file == "Athletics");
+          this.current_file == "Engineering" ||
+          this.current_file == "ISS" ||
+          this.current_file == "Athletics");
       },
       show_type () {
         return (this.current_file != "ISS");
