@@ -372,7 +372,10 @@
         }
       },
       auth_list: function() {
-        this.type = this.auth_list[0];
+        if (!this.current_file)
+          this.type = this.auth_list[0];
+        else
+          this.type = this.current_file;
       },
     },
     mounted: function(){

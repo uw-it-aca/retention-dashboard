@@ -1,8 +1,16 @@
+const params = new Proxy(new URLSearchParams(window.location.search), {
+  get: (searchParams, prop) => searchParams.get(prop),
+});
+
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 const state = {
   current_year: '',
   current_quarter: '',
   current_week: '',
-  current_file: '',
+  current_file: (params.type ? capitalizeFirstLetter(params.type) : ''),
   is_summer: false
 };
 
