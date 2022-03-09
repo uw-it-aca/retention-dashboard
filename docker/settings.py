@@ -49,6 +49,7 @@ if os.getenv('ENV') == 'localdev':
     ISS_USERS_GROUP = ALLOWED_USERS_GROUP
     TACOMA_USERS_GROUP = ALLOWED_USERS_GROUP
     ATHLETIC_USERS_GROUP = ALLOWED_USERS_GROUP
+    ENGINEERING_USERS_GROUP = ALLOWED_USERS_GROUP
     MOCK_SAML_ATTRIBUTES = {
         'uwnetid': ['javerage'],
         'affiliations': ['student', 'member', 'alum', 'staff', 'employee'],
@@ -76,6 +77,7 @@ else:
         ISS_USERS_GROUP = "u_acadev_retention-prod-iss"
         TACOMA_USERS_GROUP = "u_acadev_retention-prod-tacoma"
         ATHLETIC_USERS_GROUP = "u_acadev_retention-prod-athletic"
+        ENGINEERING_USERS_GROUP = "u_acadev_retention-prod-engineering"
     else:
         ALLOWED_USERS_GROUP = 'u_acadev_retention-test'
         # ADMIN_USERS_GROUP = 'u_acadev_retention-test-admin'
@@ -86,5 +88,6 @@ else:
         ISS_USERS_GROUP = ALLOWED_USERS_GROUP
         TACOMA_USERS_GROUP = ALLOWED_USERS_GROUP
         ATHLETIC_USERS_GROUP = ALLOWED_USERS_GROUP
+        ENGINEERING_USERS_GROUP = ALLOWED_USERS_GROUP
 
     GA_KEY = os.getenv("GA_KEY")
