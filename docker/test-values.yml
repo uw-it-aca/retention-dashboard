@@ -39,7 +39,7 @@ cronjob:
     - name: auto-load-rad
       schedule: "0 14 * * 0" # At 7:00am PDT on Sunday
       command: ["/scripts/management_command.sh"]
-      args: ["upload_gcs_file"]
+      args: ["upload_file"]
 externalService:
   enabled: true
   name: retention-db
@@ -54,8 +54,15 @@ externalSecrets:
       data:
         - name: django-secret
           property: django-secret
+        - name: storage-bucket-name
+          property: storage-bucket-name
         - name: ga-key
           property: ga-key
+    - name: test.retention.uw.edu-shared-secrets
+      externalKey: axdd/kv/data/retention/shared/secrets
+      data:
+        - name: storage-project-id
+          property: storage-project-id
     - name: test.retention.uw.edu-sql-secrets
       externalKey: axdd/kv/data/retention/test/sql-secrets
       data:
@@ -103,12 +110,6 @@ environmentVariables:
     value: SAML
   - name: CLUSTER_CNAME
     value: test.retention.uw.edu
-  - name: SAML_FORCE_AUTHN
-    value: "True"
-  - name: SP_USE_2FA
-    value: "True"
-  - name: GOOGLE_APPLICATION_CREDENTIALS
-    value: "/gcs/credentials.json"
 environmentVariablesSecrets:
   gaKey:
     name: GA_KEY
@@ -118,6 +119,15 @@ environmentVariablesSecrets:
     name: DJANGO_SECRET
     secretName: test.retention.uw.edu-secrets
     secretKey: django-secret
+  storageBucketName:
+    name: STORAGE_BUCKET_NAME
+    secretName: test.retention.uw.edu-secrets
+    secretKey: storage-bucket-name
+  storageProjectId:
+    name: STORAGE_PROJECT_ID
+    secretName: test.retention.uw.edu-shared-secrets
+    secretKey: storage-project-id
+  samlSPCert:
   samlSPCert:
     name: SP_CERT
     secretName: test.retention.uw.edu-ic-certs

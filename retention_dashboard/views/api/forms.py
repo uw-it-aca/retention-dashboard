@@ -3,8 +3,7 @@
 
 import logging
 from django import forms
-from google.auth.exceptions import DefaultCredentialsError
-from retention_dashboard.dao.admin import GCSDataDao
+from retention_dashboard.dao.admin import StorageDao
 from retention_dashboard.models import Week
 
 
@@ -25,19 +24,19 @@ class LocalDataForm(forms.Form):
         self.fields['local_upload_week'].choices = week_choices
 
 
-class GCSForm(forms.Form):
+class StorageForm(forms.Form):
 
     gcs_file = forms.ChoiceField()
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         try:
-            dao = GCSDataDao()
-            gcs_rad_files = dao.get_files_list()
+            dao = StorageDao()
+            rad_files = dao.get_files_list()
             file_choices = []
-            for file_name in gcs_rad_files:
+            for file_name in rad_files:
                 file_choices.append((file_name, file_name))
             self.fields['gcs_file'].choices = file_choices
-        except DefaultCredentialsError as err:
+        except Exception as err:
             logging.error(err)
-            logging.error("Unable to load RAD GCS file choices")
+            logging.error("Unable to load RAD file choices")

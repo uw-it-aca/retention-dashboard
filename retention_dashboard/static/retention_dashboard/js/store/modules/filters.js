@@ -1,3 +1,7 @@
+const params = new Proxy(new URLSearchParams(window.location.search), {
+  get: (searchParams, prop) => searchParams.get(prop),
+});
+
 const state = {
   filters: {
     activity_filter: [],
@@ -7,7 +11,7 @@ const state = {
     premajor_filter: false,
     stem_filter: false,
     freshman_filter: false,
-    keyword_filter: "",
+    keyword_filter: (params.keyword ? params.keyword : ''),
     prediction_filter: [],
     advisor_filter: "all",
     summer_filter: [],

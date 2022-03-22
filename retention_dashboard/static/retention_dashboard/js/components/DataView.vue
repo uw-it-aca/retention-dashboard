@@ -115,6 +115,7 @@
               <b-badge v-if="row.item.is_international" variant="light">International</b-badge>
               <b-badge v-if="row.item.is_stem" variant="light">Stem</b-badge>
               <b-badge v-if="row.item.is_athlete" variant="light">Athlete</b-badge>
+              <b-badge v-if="row.item.is_engineering" variant="light">Engineering</b-badge>
             </small>
           </div>
         </div>
@@ -263,6 +264,7 @@
             "is_eop",
             "is_international",
             "is_athlete",
+            "is_engineering",
             "campus_code",
             "class_desc"
           ],
