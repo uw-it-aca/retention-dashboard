@@ -10,12 +10,16 @@ from retention_dashboard.views.api import RESTDispatch
 from retention_dashboard.dao.data import FilterDataDao
 from retention_dashboard.dao.auth import get_type_authorizations
 from retention_dashboard.models import Advisor, Week, Sport, DataPoint
+from logging import getLogger
+
+logger = getLogger(__name__)
 
 
 @method_decorator(group_required(settings.ALLOWED_USERS_GROUP),
                   name='dispatch')
 class DataView(RESTDispatch):
     def get(self, request, week, file, *args, **kwargs):
+        logger.info('load dataset, type: %s, week: %s' % (file, week))
         file_path = os.path.join(settings.BASE_DIR, "retention_dashboard/data",
                                  week,
                                  file)
@@ -71,6 +75,8 @@ class FilteredDataView(RESTDispatch):
             stem_filter = True
         if sort_desc == "true":
             sort_desc = True
+
+        logger.info('load filtered dataset, type: %s, week: %s' % (type, week))
 
         if week is None or type is None:
             return self.error_response(status=400)
