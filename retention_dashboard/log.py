@@ -18,4 +18,3 @@ class UserFilter(Filter):
             record.actas = "-"
 
         return True
-
