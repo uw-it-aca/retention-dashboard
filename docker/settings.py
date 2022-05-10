@@ -91,3 +91,75 @@ else:
         ENGINEERING_USERS_GROUP = ALLOWED_USERS_GROUP
 
     GA_KEY = os.getenv("GA_KEY")
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+
+        'add_user': {
+            '()': 'retention_dashboard.log.UserFilter'
+        },
+        'stdout_stream': {
+            '()': 'django.utils.log.CallbackFilter',
+            'callback': lambda record: record.levelno < logging.WARNING
+        },
+        'stderr_stream': {
+            '()': 'django.utils.log.CallbackFilter',
+            'callback': lambda record: record.levelno > logging.ERROR
+        }
+    },
+    'formatters': {
+        'retention_dashboard': {
+            'format': '%(levelname)-4s %(asctime)s %(user)s %(actas)s %(message)s [%(name)s]',
+            'datefmt': '[%Y-%m-%d %H:%M:%S]',
+        },
+    },
+    'handlers': {
+        'stdout': {
+            'class': 'logging.StreamHandler',
+            'stream': sys.stdout,
+            'filters': ['add_user', 'stdout_stream'],
+            'formatter': 'retention_dashboard',
+        },
+        'stderr': {
+            'class': 'logging.StreamHandler',
+            'stream': sys.stderr,
+            'filters': ['add_user', 'stderr_stream'],
+            'formatter': 'retention_dashboard',
+        },
+        'retention_dashboard': {
+            'filters': ['add_user', 'stdout_stream'],
+            'formatter': 'retention_dashboard',
+            'class': 'logging.StreamHandler',
+            'stream': sys.stdout,
+        },
+        'retention_dashboard_errors': {
+            'level': 'ERROR',
+            'filters': ['add_user', 'stderr_stream'],
+            'formatter': 'retention_dashboard',
+            'class': 'logging.StreamHandler',
+            'stream': sys.stderr,
+        },
+        'null': {
+            'class': 'logging.NullHandler',
+        },
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['stderr'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'retention_dashboard': {
+            'handlers': ['retention_dashboard', 'retention_dashboard_errors'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        '': {
+            'handlers': ['stdout', 'stderr'],
+            'level': 'INFO' if os.getenv('ENV', 'localdev') == 'prod' else 'DEBUG'
+        }
+    }
+}

@@ -74,18 +74,13 @@ externalSecrets:
           property: username
         - name: password
           property: password
-    - name: retention.uw.edu-uwca-certs
-      externalKey: axdd/kv/data/retention/prod/uwca-certs
-      data:
-        - name: retention.uw.edu-uwca.cert
-          property: retention.uw.edu-uwca.cert
-        - name: retention.uw.edu-uwca.key
-          property: retention.uw.edu-uwca.key
     - name: retention.uw.edu-ic-certs
       externalKey: axdd/kv/data/retention/prod/ic-certs
       data:
         - name: retention.uw.edu-ic.cert
           property: retention.uw.edu-ic.cert
+        - name: retention.uw.edu-ic.key
+          property: retention.uw.edu-ic.key
     - name: retention.uw.edu-uw-idp-cert
       externalKey: axdd/kv/data/idp-cert
       data:
@@ -101,9 +96,9 @@ instance: prod
 branch: develop
 certs:
   mounted: true
-  certPath: /certs/retention.uw.edu-uwca.cert
-  keyPath: /certs/retention.uw.edu-uwca.key
-  secretName: retention.uw.edu-uwca-certs
+  certPath: /certs/retention.uw.edu-ic.cert
+  keyPath: /certs/retention.uw.edu-ic.key
+  secretName: retention.uw.edu-ic-certs
 image:
   repository: gcr.io/uwit-mci-axdd/retention-dashboard
   tag: IMAGE_TAG
