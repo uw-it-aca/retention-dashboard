@@ -54,7 +54,7 @@ externalSecrets:
   enabled: true
   secrets:
     - name: retention.uw.edu-secrets
-      externalKey: axdd/kv/data/retention/prod/secrets
+      externalKey: retention/prod/secrets
       data:
         - name: django-secret
           property: django-secret
@@ -63,31 +63,31 @@ externalSecrets:
         - name: ga-key
           property: ga-key
     - name: retention.uw.edu-shared-secrets
-      externalKey: axdd/kv/data/retention/shared/secrets
+      externalKey: retention/shared/secrets
       data:
         - name: storage-project-id
           property: storage-project-id
     - name: retention.uw.edu-sql-secrets
-      externalKey: axdd/kv/data/retention/prod/sql-secrets
+      externalKey: retention/prod/sql-secrets
       data:
         - name: username
           property: username
         - name: password
           property: password
     - name: retention.uw.edu-ic-certs
-      externalKey: axdd/kv/data/retention/prod/ic-certs
+      externalKey: retention/prod/ic-certs
       data:
         - name: retention.uw.edu-ic.cert
           property: retention.uw.edu-ic.cert
         - name: retention.uw.edu-ic.key
           property: retention.uw.edu-ic.key
     - name: retention.uw.edu-uw-idp-cert
-      externalKey: axdd/kv/data/idp-cert
+      externalKey: idp-cert
       data:
         - name: uw-idp-cert
           property: cert
     - name: retention.uw.edu-gcs-credentials
-      externalKey: axdd/kv/data/retention/shared/gcs-credentials
+      externalKey: retention/shared/gcs-credentials
       data:
         - name: credentials.json
           property: credentials.json
@@ -99,9 +99,6 @@ certs:
   certPath: /certs/retention.uw.edu-ic.cert
   keyPath: /certs/retention.uw.edu-ic.key
   secretName: retention.uw.edu-ic-certs
-image:
-  repository: gcr.io/uwit-mci-axdd/retention-dashboard
-  tag: IMAGE_TAG
 environmentVariables:
   - name: ENV
     value: prod
