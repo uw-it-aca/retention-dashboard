@@ -113,6 +113,8 @@ class UploadDataDao():
             upload_types.append(UploadTypes.iss)
         if bool(int(row.get("engineering", 0))) is True:
             upload_types.append(UploadTypes.engineering)
+        if bool(int(row.get("informatics", 0))) is True:
+            upload_types.append(UploadTypes.informatics)
         if int(row.get("campus_code", 0)) == 2:
             upload_types.append(UploadTypes.tacoma)
 
@@ -181,6 +183,7 @@ class UploadDataDao():
                 dp.eop = bool(UploadTypes.eop in upload_types)
                 dp.iss = bool(UploadTypes.iss in upload_types)
                 dp.engineering = bool(UploadTypes.engineering in upload_types)
+                dp.informatics = bool(UploadTypes.informatics in upload_types)
                 dp.international = bool(
                     UploadTypes.international in upload_types)
                 if row.get("activity"):
