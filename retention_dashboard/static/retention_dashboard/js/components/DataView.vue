@@ -265,6 +265,7 @@
             "is_international",
             "is_athlete",
             "is_engineering",
+            "is_informatics",
             "campus_code",
             "class_desc"
           ],
@@ -274,7 +275,8 @@
     computed: {
       fields (){
         var fields;
-        if (this.current_file === "Athletics"){
+        if (this.current_file === "Athletics" ||
+          this.current_file === "Informatics"){
           fields = this.standard_fields.filter(
             item => !(item.key == "advisor_name"));
         } else if (this.current_file == "Premajor" ||

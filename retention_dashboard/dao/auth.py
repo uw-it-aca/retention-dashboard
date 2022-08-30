@@ -33,6 +33,10 @@ def is_engineering_authorized(request):
     return is_member_of_group(request, settings.ENGINEERING_USERS_GROUP)
 
 
+def is_informatics_authorized(request):
+    return is_member_of_group(request, settings.INFORMATICS_USERS_GROUP)
+
+
 def get_type_authorizations(request):
     types = []
     if is_premajor_authorized(request):
@@ -49,4 +53,6 @@ def get_type_authorizations(request):
         types.append("Athletics")
     if is_engineering_authorized(request):
         types.append("Engineering")
+    if is_informatics_authorized(request):
+        types.append("Informatics")
     return types

@@ -63,6 +63,7 @@ class UploadTypes():
     tacoma = 5
     athletic = 6
     engineering = 7
+    informatics = 8
 
 
 class Sport(models.Model):
@@ -188,7 +189,8 @@ class DataPoint(models.Model):
                     (UploadTypes.iss, "ISS"),
                     (UploadTypes.tacoma, "Tacoma"),
                     (UploadTypes.athletic, "Athletics"),
-                    (UploadTypes.engineering, "Engineering"))
+                    (UploadTypes.engineering, "Engineering"),
+                    (UploadTypes.informatics, "Informatics"))
     type = models.PositiveSmallIntegerField(choices=TYPE_CHOICES)
     week = models.ForeignKey("Week", on_delete=models.PROTECT)
     student_name = models.TextField()
@@ -202,6 +204,7 @@ class DataPoint(models.Model):
     international = models.BooleanField(default=False)
     is_stem = models.BooleanField(default=False)
     engineering = models.BooleanField(default=False)
+    informatics = models.BooleanField(default=False)
     priority_score = models.FloatField(null=True)
     activity_score = models.FloatField(null=True)
     assignment_score = models.FloatField(null=True)
@@ -367,6 +370,7 @@ class DataPoint(models.Model):
                 "is_stem": self.is_stem,
                 "is_athlete": self.sports.exists(),
                 "is_engineering": self.engineering,
+                "is_informatics": self.informatics,
                 "summer_term_string": self.get_summer_string(),
                 "class_desc": self.get_class_desc(),
                 "campus_code": self.campus_code
@@ -404,13 +408,15 @@ class DataPoint(models.Model):
         tacoma = cls.get_class_standing_by_type(5, week)
         athletic = cls.get_class_standing_by_type(6, week)
         engineering = cls.get_class_standing_by_type(7, week)
+        informatics = cls.get_class_standing_by_type(8, week)
         return {"Premajor": list(prem),
                 "EOP": list(eop),
                 "International": list(inter),
                 "ISS": list(iss),
                 "Tacoma": list(tacoma),
                 "Athletics": list(athletic),
-                "Engineering": list(engineering)}
+                "Engineering": list(engineering),
+                "Informatics": list(informatics)}
 
 
 class Upload(models.Model):
@@ -458,10 +464,12 @@ class Advisor(models.Model):
         tacoma = cls.get_advisor_by_type(5)
         athletic = cls.get_advisor_by_type(6)
         engineering = cls.get_advisor_by_type(7)
+        informatics = cls.get_advisor_by_type(8)
         return {"Premajor": list(prem),
                 "EOP": list(eop),
                 "International": list(inter),
                 "ISS": list(iss),
                 "Tacoma": list(tacoma),
                 "Athletics": list(athletic),
-                "Engineering": list(engineering)}
+                "Engineering": list(engineering),
+                "Informatics": list(informatics)}
