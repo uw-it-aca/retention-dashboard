@@ -41,6 +41,25 @@ class TestStorageDao(TestCase):
         self.assertEqual(dao.get_latest_file(),
                          "rad_data/2021-summer-week-1-rad-data.csv")
 
+        mock_listdir.return_value = ([], [
+            "rad_data/2020-autumn-week-10-rad-data.csv",
+            "rad_data/2022-spring-week-10-rad-data.csv",
+            "rad_data/2022-spring-week-11-rad-data.csv",
+            "rad_data/2022-spring-week-12-rad-data.csv",
+            "rad_data/2022-spring-week-1-rad-data.csv",
+            "rad_data/2022-spring-week-2-rad-data.csv",
+            "rad_data/2022-spring-week-3-rad-data.csv",
+            "rad_data/2022-spring-week-4-rad-data.csv",
+            "rad_data/2022-spring-week-5-rad-data.csv",
+            "rad_data/2022-spring-week-6-rad-data.csv",
+            "rad_data/2022-spring-week-7-rad-data.csv",
+            "rad_data/2022-spring-week-8-rad-data.csv",
+            "rad_data/2022-spring-week-9-rad-data.csv"
+            ])
+        dao = StorageDao()
+        self.assertEqual(dao.get_latest_file(),
+                         "rad_data/2022-spring-week-12-rad-data.csv")
+
     def test_get_term_and_week_from_filename(self):
         term, week = get_term_and_week_from_filename(
             "rad_data/2020-autumn-week-10-rad-data.csv")
