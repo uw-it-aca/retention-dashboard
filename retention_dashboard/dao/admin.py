@@ -60,7 +60,8 @@ class StorageDao():
                     "week_num": week_num, "gcs_file": filename}
             files.append(data)
         files.sort(
-               key=lambda i: f"{i['year']}{i['quarter_num']}{i['week_num']}",
+               key=lambda i: (int(i['year']), int(i['quarter_num']),
+                              int(i['week_num'])),
                reverse=True)
         return files[0]["gcs_file"]
 
