@@ -407,7 +407,7 @@
       format_data(rows) {
         var vue = this;
         rows.forEach(function(item){
-          item["student_number"] = Number(item["student_number"]);
+          item['student_number'] = Number(item['student_number']);
           item['priority_score'] = vue.get_rounded(item['priority_score']);
           item['signin_score'] = vue.get_rounded(item['signin_score']);
           item['activity_score'] = vue.get_rounded(item['activity_score']);
