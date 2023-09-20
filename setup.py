@@ -22,8 +22,8 @@ setup(
     author_email="aca-it@uw.edu",
     include_package_data=True,
     install_requires=[
-        'Django~=3.2',
-        'UW-Django-SAML2~=1.5',
+        'Django~=4.2',
+        'UW-Django-SAML2~=1.7',
         'django-webpack-loader==0.7.0',
         'django-userservice~=3.1',
         'django-storages[google]>=1.10',
