@@ -1,6 +1,6 @@
 ARG DJANGO_CONTAINER_VERSION=1.4.1
 
-FROM gcr.io/uwit-mci-axdd/django-container:${DJANGO_CONTAINER_VERSION} as app-prewebpack-container
+FROM us-docker.pkg.dev/uwit-mci-axdd/containers/django-container:${DJANGO_CONTAINER_VERSION} as app-prewebpack-container
 
 USER root
 
@@ -14,6 +14,8 @@ ADD --chown=acait:acait docker/ /app/project/
 RUN /app/bin/pip install -r requirements.txt
 RUN /app/bin/pip install psycopg2
 
+RUN . /app/bin/activate && python manage.py test
+
 FROM node:8.15.1-jessie AS wpack
 ADD . /app/
 WORKDIR /app/
@@ -26,7 +28,7 @@ COPY --chown=acait:acait --from=wpack /app/retention_dashboard/static/retention_
 COPY --chown=acait:acait --from=wpack /app/retention_dashboard/static/ /static/
 COPY --chown=acait:acait --from=wpack /app/retention_dashboard/static/webpack-stats.json /app/retention_dashboard/static/webpack-stats.json
 
-FROM gcr.io/uwit-mci-axdd/django-test-container:${DJANGO_CONTAINER_VERSION} as app-test-container
+FROM us-docker.pkg.dev/uwit-mci-axdd/containers/django-test-container:${DJANGO_CONTAINER_VERSION} as app-test-container
 
 COPY --from=app-container /app/ /app/
 COPY --from=app-container /static/ /static/
