@@ -62,6 +62,7 @@ if os.getenv('ENV') == 'localdev':
     DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
     MEDIA_ROOT = os.getenv('MEDIA_ROOT', '/app/rad_data')
 else:
+    CSRF_TRUSTED_ORIGINS = ['https://' + os.getenv('CLUSTER_CNAME')]
     DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
     GS_PROJECT_ID = os.getenv('STORAGE_PROJECT_ID', '')
     GS_BUCKET_NAME = os.getenv('STORAGE_BUCKET_NAME', '')
