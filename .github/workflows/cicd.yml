@@ -93,7 +93,7 @@ jobs:
             ${{ runner.os }}-buildx-
 
       - name: Build App Image
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v6
         with:
           target: app-container
           tags: ${{ needs.context.outputs.image_tag }}
