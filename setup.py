@@ -23,10 +23,12 @@ setup(
     include_package_data=True,
     install_requires=[
         'Django~=4.2',
-        'UW-Django-SAML2~=1.7',
+        'UW-Django-SAML2~=1.8',
         'django-webpack-loader==0.7.0',
-        'django-userservice~=3.1',
+        'django-userservice~=3.2',
         'django-storages[google]>=1.10',
+        'lxml==4.9.4',
+        'xmlsec==1.3.13'
     ],
     license='Apache License, Version 2.0',
     description='A tool for interacting with retention analytics',
