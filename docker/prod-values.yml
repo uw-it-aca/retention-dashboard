@@ -16,6 +16,9 @@ ingress:
     nginx.ingress.kubernetes.io/client-body-buffer-size: "16K"
     nginx.ingress.kubernetes.io/proxy-body-size: "50m"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "500"
+
+namespace:
+  enabled: true
 autoscaling:
   enabled: true
   minReplicas: 2
