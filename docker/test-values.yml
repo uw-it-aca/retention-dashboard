@@ -72,13 +72,6 @@ externalSecrets:
           property: username
         - name: password
           property: password
-    - name: test.retention.uw.edu-ic-certs
-      externalKey: retention/test/ic-certs
-      data:
-        - name: test.retention.uw.edu-ic.cert
-          property: test.retention.uw.edu-ic.cert
-        - name: test.retention.uw.edu-ic.key
-          property: test.retention.uw.edu-ic.key
     - name: test.retention.uw.edu-uw-idp-cert
       externalKey: idp-cert
       data:
@@ -92,11 +85,6 @@ externalSecrets:
 repo: retention-dashboard
 instance: test
 branch: develop
-certs:
-  mounted: true
-  certPath: /certs/test.retention.uw.edu-ic.cert
-  keyPath: /certs/test.retention.uw.edu-ic.key
-  secretName: test.retention.uw.edu-ic-certs
 environmentVariables:
   - name: ENV
     value: eval
@@ -121,11 +109,6 @@ environmentVariablesSecrets:
     name: STORAGE_PROJECT_ID
     secretName: test.retention.uw.edu-shared-secrets
     secretKey: storage-project-id
-  samlSPCert:
-  samlSPCert:
-    name: SP_CERT
-    secretName: test.retention.uw.edu-ic-certs
-    secretKey: test.retention.uw.edu-ic.cert
   samlIDPCert:
     name: IDP_CERT
     secretName: test.retention.uw.edu-uw-idp-cert

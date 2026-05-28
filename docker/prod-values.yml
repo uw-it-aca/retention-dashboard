@@ -84,13 +84,6 @@ externalSecrets:
           property: username
         - name: password
           property: password
-    - name: retention.uw.edu-ic-certs
-      externalKey: retention/prod/ic-certs
-      data:
-        - name: retention.uw.edu-ic.cert
-          property: retention.uw.edu-ic.cert
-        - name: retention.uw.edu-ic.key
-          property: retention.uw.edu-ic.key
     - name: retention.uw.edu-uw-idp-cert
       externalKey: idp-cert
       data:
@@ -104,11 +97,6 @@ externalSecrets:
 repo: retention-dashboard
 instance: prod
 branch: develop
-certs:
-  mounted: true
-  certPath: /certs/retention.uw.edu-ic.cert
-  keyPath: /certs/retention.uw.edu-ic.key
-  secretName: retention.uw.edu-ic-certs
 environmentVariables:
   - name: ENV
     value: prod
@@ -133,10 +121,6 @@ environmentVariablesSecrets:
     name: STORAGE_PROJECT_ID
     secretName: retention.uw.edu-shared-secrets
     secretKey: storage-project-id
-  samlSPCert:
-    name: SP_CERT
-    secretName: retention.uw.edu-ic-certs
-    secretKey: retention.uw.edu-ic.cert
   samlIDPCert:
     name: IDP_CERT
     secretName: retention.uw.edu-uw-idp-cert
