@@ -48,7 +48,7 @@ gcsCredentials:
   mounted: true
   secretName: retention.uw.edu-gcs-credentials
 cronjob:
-  enabled: true
+  enabled: false
   jobs:
     - name: auto-load-rad
       schedule: "0 14 * * 0" # At 7:00am PDT on Sunday
