@@ -1,24 +1,10 @@
-ingress:
-  enabled: true
-  tls:
-    retention-dashboard:
-      secretName: test.retention.uw.edu-ingress-cert
-      hosts:
-        - test.retention.uw.edu
-  hosts:
-    retention-dashboard:
-      host: test.retention.uw.edu
-      paths:
-        - "/"
-  annotations:
-    cert-manager.io/cluster-issuer: letsencrypt
-    nginx.ingress.kubernetes.io/client-body-buffer-size: "16K"
-    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
-    nginx.ingress.kubernetes.io/proxy-read-timeout: "500"
 gateway:
   enabled: true
   hostnames:
     - test.retention.uw.edu
+  requestTimeouts:
+    frontEnd: 60s
+    backEnd: 30s
   rateLimit:
     tokens: 10
     tokensPerFill: 10
