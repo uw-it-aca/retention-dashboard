@@ -1,8 +1,7 @@
 # Copyright 2026 UW-IT, University of Washington
 # SPDX-License-Identifier: Apache-2.0
 
-from retention_dashboard.models import Week, DataPoint, Upload, Advisor, \
-    Sport
+from retention_dashboard.models import Advisor, DataPoint, Sport, Upload, Week
 
 
 def create_initial_data():

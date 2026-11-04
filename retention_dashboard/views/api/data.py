@@ -1,16 +1,18 @@
 # Copyright 2026 UW-IT, University of Washington
 # SPDX-License-Identifier: Apache-2.0
 
-import os
 import json
+import os
+from logging import getLogger
+
 from django.conf import settings
 from django.utils.decorators import method_decorator
 from uw_saml.decorators import group_required
-from retention_dashboard.views.api import RESTDispatch
-from retention_dashboard.dao.data import FilterDataDao
+
 from retention_dashboard.dao.auth import get_type_authorizations
-from retention_dashboard.models import Advisor, Week, Sport, DataPoint
-from logging import getLogger
+from retention_dashboard.dao.data import FilterDataDao
+from retention_dashboard.models import Advisor, DataPoint, Sport, Week
+from retention_dashboard.views.api import RESTDispatch
 
 logger = getLogger(__name__)
 
@@ -19,7 +21,7 @@ logger = getLogger(__name__)
                   name='dispatch')
 class DataView(RESTDispatch):
     def get(self, request, week, file, *args, **kwargs):
-        logger.info('load dataset, type: %s, week: %s' % (file, week))
+        logger.info(f'load dataset, type: {file}, week: {week}')
         file_path = os.path.join(settings.BASE_DIR, "retention_dashboard/data",
                                  week,
                                  file)
@@ -76,7 +78,7 @@ class FilteredDataView(RESTDispatch):
         if sort_desc == "true":
             sort_desc = True
 
-        logger.info('load filtered dataset, type: %s, week: %s' % (type, week))
+        logger.info(f'load filtered dataset, type: {type}, week: {week}')
 
         if week is None or type is None:
             return self.error_response(status=400)

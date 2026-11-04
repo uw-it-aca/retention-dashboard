@@ -4,7 +4,7 @@
 import logging
 
 
-class RetentionLogger():
+class RetentionLogger:
 
     def __init__(self, logpath=None, level=logging.DEBUG):
         # Gets or creates a logger
@@ -35,7 +35,7 @@ class RetentionLogger():
         self.logger.info(msg, extra=extra)
 
     def warning(self, msg, extra=None):
-        self.logger.warn(msg, extra=extra)
+        self.logger.warning(msg, extra=extra)
 
     def error(self, msg, extra=None):
         self.logger.error(msg, extra=extra)

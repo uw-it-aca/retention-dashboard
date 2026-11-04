@@ -2,9 +2,13 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import logging
+
 from django import forms
+
 from retention_dashboard.dao.admin import StorageDao
 from retention_dashboard.models import Week
+
+logger = logging.getLogger(__name__)
 
 
 class LocalDataForm(forms.Form):
@@ -18,9 +22,9 @@ class LocalDataForm(forms.Form):
         week_choices = []
         for week in weeks:
             week_choices.append(
-                (week.id,
-                 f"{week.year} - {week.get_quarter_display()} "
-                 f"- Week {week.number}"))
+                (week.id, (
+                    f"{week.year} - {week.get_quarter_display()} "
+                    f"- Week {week.number}")))
         self.fields['local_upload_week'].choices = week_choices
 
 
@@ -38,5 +42,4 @@ class StorageForm(forms.Form):
                 file_choices.append((file_name, file_name))
             self.fields['gcs_file'].choices = file_choices
         except Exception as err:
-            logging.error(err)
-            logging.error("Unable to load RAD file choices")
+            logger.error(f"{err}, Unable to load RAD file choices")

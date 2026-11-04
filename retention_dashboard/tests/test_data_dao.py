@@ -2,10 +2,12 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import unittest
+
 from django.test import TestCase
+
 from retention_dashboard.dao.data import FilterDataDao
+from retention_dashboard.models import Advisor, Week
 from retention_dashboard.tests import create_initial_data
-from retention_dashboard.models import Week, Advisor
 
 
 class TestFilterDataDao(TestCase):

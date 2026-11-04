@@ -4,8 +4,8 @@
 import csv
 import random
 import string
-import names
 
+import names
 
 """
 Deidentifies data in analytics csv

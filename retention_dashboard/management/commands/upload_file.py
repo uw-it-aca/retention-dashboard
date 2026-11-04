@@ -1,8 +1,9 @@
 # Copyright 2026 UW-IT, University of Washington
 # SPDX-License-Identifier: Apache-2.0
 
-from retention_dashboard.dao.admin import StorageDao, UploadDataDao
 from django.core.management.base import BaseCommand
+
+from retention_dashboard.dao.admin import StorageDao, UploadDataDao
 
 
 class Command(BaseCommand):
