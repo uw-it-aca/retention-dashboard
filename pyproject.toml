@@ -1,0 +1,67 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "retention-dashboard"
+dynamic = ["version"]
+description = "An application for interacting with retention analytics"
+readme = "README.md"
+license = "Apache-2.0"
+authors = [
+    {name = "UWIT Student & Educational Technology Services", email = "aca-it@uw.edu"}
+]
+classifiers = [
+    "Environment :: Web Environment",
+    "Framework :: Django",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+]
+dependencies = [
+    "django~=5.2",
+    "uw-django-saml2~=1.8",
+    "django-webpack-loader==0.7.0",
+    "django-userservice~=3.2",
+    "django-storages[google]",
+    "psycopg[c]",
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff",
+]
+
+[tool.setuptools]
+packages = ["retention_dashboard"]
+include-package-data = true
+
+[tool.setuptools.dynamic]
+version = {file = "retention_dashboard/VERSION"}
+
+[tool.ruff]
+line-length = 88
+exclude = [
+    "retention_dashboard/migrations/*",
+]
+
+[tool.ruff.lint]
+ignore = [
+    "BLE001",  # allow broad Exception catches
+    "F841",    # allow assignment to unused variable
+    "RUF015",  # prefer `next(...)` over single element slice
+]
+
+[tool.coverage.run]
+source = ["retention_dashboard"]
+parallel = true
+omit = [
+     "retention_dashboard/migrations/*",
+     "retention_dashboard/tests/*"
+]
+
+[tool.coverage.paths]
+source = [
+    "retention_dashboard/",
+    "/app/retention_dashboard/",
+]

@@ -2,21 +2,25 @@
 # SPDX-License-Identifier: Apache-2.0
 
 from django.urls import re_path
-from retention_dashboard.views.pages import LandingView, AdminView
-from retention_dashboard.views.api.admin import (MockDataAdmin,
+
+from retention_dashboard.views.api.admin import (
                                                  LocalDataAdmin,
+                                                 MockDataAdmin,
                                                  StorageDataAdmin,
+                                                 UploadListAdmin,
                                                  WeekAdmin,
                                                  WeekListAdmin,
-                                                 UploadListAdmin)
-from retention_dashboard.views.api.data import (DataView,
-                                                WeekView,
-                                                DataAuthView,
-                                                FilteredDataView,
-                                                AdvisorListView,
-                                                SportListView,
-                                                ClassStandingListView)
-
+)
+from retention_dashboard.views.api.data import (
+                                                 AdvisorListView,
+                                                 ClassStandingListView,
+                                                 DataAuthView,
+                                                 DataView,
+                                                 FilteredDataView,
+                                                 SportListView,
+                                                 WeekView,
+)
+from retention_dashboard.views.pages import AdminView, LandingView
 
 urlpatterns = [
     re_path(r'api/v1/weeks/', WeekView.as_view(), name="week_view"),

@@ -2,7 +2,9 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import unittest
+
 from django.test import TestCase
+
 from retention_dashboard.models import DataPoint, Week
 
 

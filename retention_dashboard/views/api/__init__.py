@@ -2,14 +2,17 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import json
+
+from django.core.serializers.json import DjangoJSONEncoder
 from django.http import HttpResponse
 from django.views import View
-from django.core.serializers.json import DjangoJSONEncoder
 
 
 class RESTDispatch(View):
     @staticmethod
-    def json_response(content={}, status=200):
+    def json_response(content=None, status=200):
+        if content is None:
+            content = {}
         try:
             data = json.dumps(content,
                               sort_keys=True,
@@ -21,7 +24,9 @@ class RESTDispatch(View):
             return RESTDispatch().error_response(400)
 
     @staticmethod
-    def error_response(status, message='', content={}):
+    def error_response(status, message='', content=None):
+        if content is None:
+            content = {}
         content['error'] = str(message)
         return HttpResponse(json.dumps(content),
                             status=status,

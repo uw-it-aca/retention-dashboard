@@ -2,10 +2,15 @@
 # SPDX-License-Identifier: Apache-2.0
 
 from collections import OrderedDict
+from unittest.mock import MagicMock, patch
+
 from django.test import TestCase
-from mock import MagicMock, patch
+
 from retention_dashboard.dao.admin import (
-    StorageDao, UploadDataDao, get_term_and_week_from_filename)
+    StorageDao,
+    UploadDataDao,
+    get_term_and_week_from_filename,
+)
 
 
 class TestStorageDao(TestCase):

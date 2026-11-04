@@ -1,13 +1,14 @@
 # Copyright 2026 UW-IT, University of Washington
 # SPDX-License-Identifier: Apache-2.0
 
-from django.views.generic import TemplateView
-from django.contrib.auth.decorators import login_required
-from uw_saml.utils import get_user
-from uw_saml.decorators import group_required
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from retention_dashboard.views.api.forms import StorageForm, LocalDataForm
+from django.views.generic import TemplateView
+from uw_saml.decorators import group_required
+from uw_saml.utils import get_user
+
+from retention_dashboard.views.api.forms import LocalDataForm, StorageForm
 
 
 class PageView(TemplateView):
