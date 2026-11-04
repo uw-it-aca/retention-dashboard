@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 from django.db import models
-from django.db.models import Q, F
+from django.db.models import F, Q
 
 
 class Week(models.Model):
@@ -16,9 +16,7 @@ class Week(models.Model):
     year = models.IntegerField()
 
     def json_data(self):
-        display_string = "{} {}: Week {}".format(self.get_quarter_display(),
-                                                 self.year,
-                                                 self.number)
+        display_string = f"{self.get_quarter_display()} {self.year}: Week {self.number}"
         return {"value": self.id,
                 "year": self.year,
                 "quarter": self.get_quarter_display(),
@@ -55,7 +53,7 @@ class Week(models.Model):
                              f"sis_term_id={sis_term_id}")
 
 
-class UploadTypes():
+class UploadTypes:
     premajor = 1
     eop = 2
     international = 3
@@ -234,7 +232,7 @@ class DataPoint(models.Model):
             return [t for t in list(DataPoint.TYPE_CHOICES)
                     if t[1] == type_str][0][0]
         except IndexError:
-            raise ValueError("Unkown type {}".format(type_str))
+            raise ValueError(f"Unkown type {type_str}")
 
     @staticmethod
     def get_data_by_type_week(type, week):

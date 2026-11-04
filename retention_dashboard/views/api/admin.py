@@ -2,16 +2,18 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import traceback
+
 from django.conf import settings
+from django.core.management import call_command
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
-from django.core.management import call_command
-from uw_saml.decorators import group_required
 from userservice.user import get_original_user
-from retention_dashboard.models import Week, Upload
-from retention_dashboard.views.api import RESTDispatch
-from retention_dashboard.views.api.forms import StorageForm, LocalDataForm
+from uw_saml.decorators import group_required
+
 from retention_dashboard.dao.admin import StorageDao, UploadDataDao
+from retention_dashboard.models import Upload, Week
+from retention_dashboard.views.api import RESTDispatch
+from retention_dashboard.views.api.forms import LocalDataForm, StorageForm
 
 
 @method_decorator(group_required(settings.ADMIN_USERS_GROUP),

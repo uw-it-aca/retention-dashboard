@@ -3,10 +3,20 @@
 
 import csv
 import logging
-from retention_dashboard.models import (
-    Week, DataPoint, Advisor, Upload, UploadTypes, Sport)
-from django.db import transaction
+
 from django.core.files.storage import default_storage
+from django.db import transaction
+
+from retention_dashboard.models import (
+    Advisor,
+    DataPoint,
+    Sport,
+    Upload,
+    UploadTypes,
+    Week,
+)
+
+logger = logging.getLogger(__name__)
 
 
 def get_term_and_week_from_filename(rad_file_name):
@@ -28,7 +38,7 @@ def get_term_and_week_from_filename(rad_file_name):
     return term, week
 
 
-class StorageDao():
+class StorageDao:
     def get_files_list(self, path=''):
         """
         Returns list of file names at the given path.
@@ -36,15 +46,15 @@ class StorageDao():
         :param path: Path to list files at
         :type path: str
         """
-        dirs, files = default_storage.listdir(path)
+        _dirs, files = default_storage.listdir(path)
 
         filenames = []
         for filename in files:
             if filename.endswith('csv'):
                 filenames.append(filename)
 
-        logging.debug(f"Found the following bucket files: "
-                      f"{','.join(filenames)}")
+        logger.debug(f"Found the following bucket files: "
+                     f"{','.join(filenames)}")
         return filenames
 
     def get_latest_file(self):
@@ -77,7 +87,7 @@ class StorageDao():
             return content.decode('utf-8')
 
 
-class UploadDataDao():
+class UploadDataDao:
 
     def get_summer_terms_from_string(self, term_string):
         has_a = False
@@ -140,7 +150,7 @@ class UploadDataDao():
             try:
                 upload_types = self.get_upload_types(row)
             except ValueError as err:
-                logging.error(err)
+                logger.error(err)
                 continue
             for upload_type in upload_types:
                 if (upload_type != UploadTypes.athletic and
@@ -153,8 +163,7 @@ class UploadDataDao():
                 advisor_name = row.get("adviser_name")
                 advisor = None
                 if advisor_netid is not None and advisor_name is not None:
-                    advisor_key = "{}_{}".format(advisor_netid,
-                                                 upload_type)
+                    advisor_key = f"{advisor_netid}_{upload_type}"
                     if advisor_key not in advisor_dict:
                         try:
                             advisor = Advisor.objects.get(
@@ -229,10 +238,10 @@ class UploadDataDao():
                 (Upload.objects.filter(week=week)
                                .filter(type=upload_type)
                                .get())
-                logging.warning(f"Upload already exists for "
-                                f"term={week.quarter}, "
-                                f"week={week.number}, "
-                                f"type={upload_type}")
+                logger.warning(f"Upload already exists for "
+                               f"term={week.quarter}, "
+                               f"week={week.number}, "
+                               f"type={upload_type}")
                 continue
             except Upload.DoesNotExist:
                 with transaction.atomic():
@@ -260,6 +269,6 @@ class UploadDataDao():
                                 sport_code=code)
                             dp.sports.add(sport_code)
                         dp.save()
-                logging.info(f"Upload {len(records)} datapoints for "
-                             f"term={week.quarter}, week={week.number}, "
-                             f"type={upload_type}")
+                logger.info(f"Upload {len(records)} datapoints for "
+                            f"term={week.quarter}, week={week.number}, "
+                            f"type={upload_type}")

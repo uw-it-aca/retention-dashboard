@@ -4,7 +4,7 @@
 from retention_dashboard.models import DataPoint, Week
 
 
-class FilterDataDao():
+class FilterDataDao:
 
     def get_weeks_with_data(self):
         unique_weeks = DataPoint.objects.values('week').distinct().order_by(
